@@ -1,0 +1,271 @@
+{
+    "code": "buakaw99",
+    "name": "Buakaw99",
+    "owner": "0xNFTOWNER",
+    "origin_data": {
+        "origin_base_uri": "https://bk1nft.sixnetwork.io/ipfs/QmcovEcZxiM1M9gf3535jUCpbqFZSjc2hHuYnZEbWNmt5a",
+        "uri_retrieval_method": "BASE",
+        "origin_chain": "ethereum",
+        "origin_contract_address": "0x9F1CC70b11f4129d042d0037c2066d12E16d9a52",
+        "attribute_overriding": "CHAIN",
+        "metadata_format": "opensea",
+        "origin_attributes": [
+            {
+                "name": "background_l",
+                "data_type": "string",
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "trait_type": "Background L"
+                    }
+                }
+            },
+            {
+                "name": "background_r",
+                "data_type": "string",
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "trait_type": "Background R"
+                    }
+                }
+            },
+            {
+                "name": "plate_l",
+                "data_type": "string",
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "trait_type": "Plate L"
+                    }
+                }
+            },
+            {
+                "name": "plate_r",
+                "data_type": "string",
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "trait_type": "Plate R"
+                    }
+                }
+            },
+            {
+                "name": "body_l",
+                "data_type": "string",
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "trait_type": "Body L"
+                    }
+                }
+            },
+            {
+                "name": "body_r",
+                "data_type": "string",
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "trait_type": "Body R"
+                    }
+                }
+            },
+            {
+                "name": "head_l",
+                "data_type": "string",
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "trait_type": "Head L"
+                    }
+                }
+            },
+            {
+                "name": "head_r",
+                "data_type": "string",
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "trait_type": "Head R"
+                    }
+                }
+            },
+            {
+                "name": "clothes_l",
+                "data_type": "string",
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "trait_type": "Clothes L"
+                    }
+                }
+            },
+            {
+                "name": "clothes_r",
+                "data_type": "string",
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "trait_type": "Clothes R"
+                    }
+                }
+            },
+            {
+                "name": "extra_l",
+                "data_type": "string",
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "trait_type": "Extra L"
+                    }
+                }
+            },
+            {
+                "name": "extra_r",
+                "data_type": "string",
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "trait_type": "Extra R"
+                    }
+                }
+            },
+            {
+                "name": "hand_l",
+                "data_type": "string",
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "trait_type": "Hand L"
+                    }
+                }
+            },
+            {
+                "name": "hand_r",
+                "data_type": "string",
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "trait_type": "Hand R"
+                    }
+                }
+            },
+            {
+                "name": "influencer",
+                "data_type": "string",
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "trait_type": "Influencer"
+                    }
+                }
+            }
+        ]
+    },
+    "onchain_data": {
+        "reveal_required": true,
+        "reveal_secret": "",
+        "nft_attributes": [
+            {
+                "name": "expire_date",
+                "data_type": "number",
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "display_type": "date",
+                        "trait_type": "Expire Date"
+                    }
+                }
+            }
+        ],
+        "token_attributes": [
+            {
+                "name": "exclusive_party_access",
+                "data_type": "boolean",
+                "required": true,
+                "hidden_to_marketplace": true
+            },
+            {
+                "name": "first_discount_used",
+                "data_type": "boolean",
+                "required": true,
+                "hidden_to_marketplace": true,
+                "display_option": {
+                    "bool_true_value": "Yes",
+                    "bool_false_value": "_HIDDEN_",
+                    "opensea": {
+                        "display_type": "boolean",
+                        "trait_type": "First Discount Used"
+                    }
+                }
+            },
+            {
+                "name": "percent_discount_10",
+                "data_type": "number",
+                "default_mint_value": {
+                    "number_attribute_value": {
+                        "value": 10
+                    }
+                },
+                "required": true,
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "trait_type": "Available 10 Percent Discount",
+                        "max_value": 10,
+                        "display_type": "number"
+                    }
+                }
+            },
+            {
+                "name": "discount_percentage",
+                "data_type": "number",
+                "required": true,
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "trait_type": "Discount Percentage",
+                        "display_type": "boost_percentage"
+                    }
+                }
+            },
+            {
+                "name": "discount_amount",
+                "data_type": "number",
+                "required": true,
+                "display_value_field": "value",
+                "display_option": {
+                    "opensea": {
+                        "trait_type": "Discount",
+                        "display_type": "boost_number"
+                    }
+                }
+            }
+        ],
+        "actions": [
+            {
+                "name": "use10percentdiscount",
+                "desc": "Use 10% discount on purchase",
+                "when": "meta.GetNumber('percent_discount_10') > 0",
+                "then": [
+                    "meta.SetNumber('percent_discount_10',meta.GetNumber('percent_discount_10') - 1)",
+                    "meta.SetBoolean('first_discount_used', true)"
+                ]
+            }
+        ],
+        "on_off_switch": {
+            "active": true
+        },
+        "status": {
+            "first_mint_complete": false
+        },
+        "nft_attributes_value": [
+            {
+                "name": "expire_date",
+                "number_attribute_value": {
+                    "value": 1665009678
+                }
+            }
+        ]
+    }
+}

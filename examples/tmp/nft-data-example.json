@@ -1,0 +1,107 @@
+{
+    "nft_schema_code": "buakaw99",
+    "token_id": "2",
+    "token_owner": "0xTOKENOWNER",
+    "owner_address_type": "ORIGIN_ADDRESS",
+    "origin_image": "https://bk1nft.sixnetwork.io/ipfs/QmaBUdqTctVteajpoMVEpo55XEXe2YVwWDgeNi1UT47UKU/1.png",
+    "origin_attributes": [
+        {
+            "name": "background_l",
+            "string_attribute_value": {
+                "value": "L BG Ringside Golden"
+            }
+        },
+        {
+            "name": "background_r",
+            "string_attribute_value": {
+                "value": "R Tiger"
+            }
+        },
+        {
+            "name": "plate_l",
+            "string_attribute_value": {
+                "value": "L Banchamek Black"
+            }
+        },
+        {
+            "name": "plate_r",
+            "string_attribute_value": {
+                "value": "R Banchamek Golden"
+            }
+        },
+        {
+            "name": "body_l",
+            "string_attribute_value": {
+                "value": "L Body Normal Gentleman"
+            }
+        },
+        {
+            "name": "head_l",
+            "string_attribute_value": {
+                "value": "L NON HEAD"
+            }
+        },
+        {
+            "name": "clothes_l",
+            "string_attribute_value": {
+                "value": "L Robe Golden"
+            }
+        },
+        {
+            "name": "extra_l",
+            "string_attribute_value": {
+                "value": "L NO EXTRA"
+            }
+        },
+        {
+            "name": "hand_l",
+            "string_attribute_value": {
+                "value": "L Glove Black BV"
+            }
+        },
+        {
+            "name": "influencer",
+            "string_attribute_value": {
+                "value": "Teerawat Yioyim"
+            }
+        }
+    ],
+    "onchain_attributes": [
+        {
+            "name": "exclusive_party_access",
+            "boolean_attribute_value": {
+                "value": true
+            }
+        },
+        {
+            "name": "percent_discount_10",
+            "number_attribute_value": {
+                "value": 10
+            }
+        },
+        {
+            "name": "discount_percentage",
+            "number_attribute_value": {
+                "value": 10
+            }
+        },
+        {
+            "name": "first_discount_used",
+            "boolean_attribute_value": {
+                "value": false
+            }
+        },
+        {
+            "name": "discount_amount",
+            "number_attribute_value": {
+                "value": 10
+            }
+        },
+        {
+            "name": "influencer",
+            "string_attribute_value": {
+                "value": "Teerawat Yioyim"
+            }
+        }
+    ]
+}
