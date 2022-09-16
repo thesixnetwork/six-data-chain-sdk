@@ -5,7 +5,7 @@ interface ISyncState {
 }
 
 interface IConnect {
-    apiUrl?: string,
+    apiUrl: string,
 }
 /**
  * @description This class is used to connect to the API node for query data
@@ -26,10 +26,8 @@ export class APIClient {
      */
     async connect(param: IConnect = {
         apiUrl: "http://localhost:1317"
-        
     }) {
-        if(param.apiUrl)
-            this.apiUrl = param.apiUrl
+        this.apiUrl = param.apiUrl
         
         this.apiNFTMngr = new ApiNftMngr({
             baseUrl: this.apiUrl
