@@ -1,0 +1,10 @@
+
+# ignore local env
+*/terraform-fivenet.tfvars
+*/terraform-sixnet.tfvars
+*/.terraform.lock.hcl
+
+# ignore dependency
+*node_modules
+*dist
+.env*
