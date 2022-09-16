@@ -4,10 +4,10 @@
 
 ## SIX DATACHAIN SDK
 This project is Six Data Chain Client it use for send transactions and query data from chain
-> it Support JS AND TS !
+> It support JS & TS !
 
 ------
-## SET UP PROJECT 
+## INSTALLATION TO YOUR PROJECT
 ```
 npm i six-data-chain-sdk
 
@@ -20,7 +20,7 @@ yarn add six-data-chain-sdk
 You can try example in this link [SIX DATACHAIN EXAMPLE](https://github.com/thesixnetwork/six-data-chain-sdk/tree/main/examples)
 
 ------
-## SDK FLOW
+## LIBRARY STRUCTURE
 <img src="https://raw.githubusercontent.com/thesixnetwork/six-data-chain-sdk/pre-release-prepare-doc/public/libFlow.png?token=GHSAT0AAAAAABWFUV4KDYS5EEWKEKBBTYQWYZEFAWA" width="800"/>
 
 -----
