@@ -1,5 +1,4 @@
-import { OfflineSigner, EncodeObject } from "@cosmjs/proto-signing";
-import { Secp256k1HdWallet, createMultisigThresholdPubkey, encodeSecp256k1Pubkey, makeCosmoshubPath, pubkeyToAddress, AminoMsg, } from "@cosmjs/amino";
+import { OfflineSigner } from "@cosmjs/proto-signing";
 import {DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 
 export class Accounts {

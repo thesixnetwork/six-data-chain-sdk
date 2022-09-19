@@ -3,7 +3,6 @@ import { OfflineSigner, EncodeObject } from "@cosmjs/proto-signing";
 import { txClient as sixnftNftmngrClient } from "../modules/sixnft.nftmngr/module/index"
 import { MsgCreateNFTSchema, MsgCreateMetadata, MsgPerformActionByAdmin } from "../modules/sixnft.nftmngr/module/types/nftmngr/tx"
 import { SignAndBroadcastOptions, ITxClientRes } from "../modules/sixnft.nftmngr/module/index"
-// import { txClient as sixnftNftAdminClient } from "../modules/sixnft.admin/module/index"
 import { MsgGrantPermission, MsgRevokePermission, MsgMint, MsgBurn } from "../modules/sixnft.admin/module/types/admin/tx"
 interface IConnect {
     rpcUrl: string,
@@ -135,7 +134,7 @@ export class RPCClient {
         // const client = await sixnftNftmngrClient(this.accountSigner!, { addr: this.rpc })
         const signOptions = this.getDefaultSignAndBroadcastOptions(customSignOptions);
         // console.log("client",client)
-        return await this.client!.signAndBroadcast(txs, {fee:this.defaultSignOptions.fee});
+        return await this.client!.signAndBroadcast(txs, {fee:signOptions.fee});
     }
 
     private getDefaultSignAndBroadcastOptions(customSignOptions?: SignAndBroadcastOptions) {

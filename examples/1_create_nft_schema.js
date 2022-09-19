@@ -6,7 +6,6 @@ const main = async () => {
     // get wallet address
     const address = (await accountSigner.getAccounts())[0].address
     await sixDataChainConnector.rpcClient.connect({
-        // rpcUrl: "http://35.213.145.135:26657",
         rpcUrl: "http://localhost:26657",
         accountSigner: accountSigner
     })
