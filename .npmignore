@@ -1,3 +1,4 @@
-./src
-./public
-./examples
+node_modules
+src
+public
+examples

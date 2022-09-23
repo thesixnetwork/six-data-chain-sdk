@@ -1,10 +1,10 @@
 const {BASE64,SixDataChainConnector} = require("six-data-chain-sdk");
 
 const main = async() => {
-    const sixDataChainConnector = new SixDataChainConnector()
-    await sixDataChainConnector.apiClient.connect({apiUrl:"http://localhost:1317"})
-    
-    const allNFTSchema = await sixDataChainConnector.apiClient.queryNftSchemaAll()//.catch(e=>{console.log(e)})
+    const sixConnector = new SixDataChainConnector("http://127.0.0.1")
+    const apiClient = await sixConnector.connectAPIClient()
+
+    const allNFTSchema = await apiClient.nftmngrModule.queryNftSchemaAll()//.catch(e=>{console.log(e)})
     console.log(JSON.stringify(allNFTSchema.data))
 }
 main()

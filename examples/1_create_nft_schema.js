@@ -1,22 +1,18 @@
 const { BASE64, SixDataChainConnector } = require("six-data-chain-sdk");
 const exampleSchema = require("./tmp/nft-schema-example.json")
 const main = async () => {
-    const sixDataChainConnector = new SixDataChainConnector()
-    const accountSigner = await sixDataChainConnector.accounts.privateKeyToAccount("pk or mnomic", { prefix: "6nft" })
-    // get wallet address
+    const sixConnector = new SixDataChainConnector("http://127.0.0.1")
+    const accountSigner = await sixConnector.accounts.privateKeyToAccount("pk or mnomic")
     const address = (await accountSigner.getAccounts())[0].address
-    await sixDataChainConnector.rpcClient.connect({
-        rpcUrl: "http://localhost:26657",
-        accountSigner: accountSigner
-    })
+    const rpcClient = await sixDataChainConnector.connectRPCClient(accountSigner)
 
     const encodeBase64Schema = BASE64.encode(JSON.stringify(exampleSchema))
-    const msg = await sixDataChainConnector.rpcClient.buildMsgCreateNFTSchema({
+    const msg = await rpcClient.nftmngrModule.msgCreateNFTSchema({
         creator: address,
         nftSchemaBase64: encodeBase64Schema
     })
 
-    const txResponse = await sixDataChainConnector.rpcClient.boardCastTx([msg])
+    const txResponse = await rpcClient.nftmngrModule.signAndBroadcast([msg])
     console.log(txResponse)
 
 }

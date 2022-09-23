@@ -9,3 +9,4 @@
 *dist
 .env*
 ./examples
+**/.DS_Store
