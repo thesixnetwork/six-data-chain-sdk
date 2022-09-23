@@ -1,4 +1,4 @@
-const { BASE64, SixDataChainConnector } = require("six-data-chain-sdk");
+const { BASE64, SixDataChainConnector } = require("@sixnetwork/six-data-chain-sdk");
 const exampleSchema = require("./tmp/nft-schema-example.json")
 const main = async () => {
     const sixConnector = new SixDataChainConnector("http://127.0.0.1")
