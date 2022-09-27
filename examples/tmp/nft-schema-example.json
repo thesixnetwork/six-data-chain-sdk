@@ -1,162 +1,62 @@
 {
-    "code": "buakaw99",
-    "name": "Buakaw99",
+    "code": "sixnetwork.nftexpo",
+    "name": "NFTexpoRinkeby",
     "owner": "0xNFTOWNER",
     "origin_data": {
-        "origin_base_uri": "https://bk1nft.sixnetwork.io/ipfs/QmcovEcZxiM1M9gf3535jUCpbqFZSjc2hHuYnZEbWNmt5a",
+        "origin_base_uri": "https://dryotus.definix.com/ipfs/QmZc4kPjvz4M4SpNfRZme2gcVzbMQjDt76GsxvLqSexT8R/",
         "uri_retrieval_method": "BASE",
-        "origin_chain": "ethereum",
-        "origin_contract_address": "0x9F1CC70b11f4129d042d0037c2066d12E16d9a52",
+        "origin_chain": "RINKEBY",
+        "origin_contract_address": "0x7e1b6D669200723C60782768C74E903A46C98112",
         "attribute_overriding": "CHAIN",
         "metadata_format": "opensea",
         "origin_attributes": [
             {
-                "name": "background_l",
+                "name": "background",
                 "data_type": "string",
                 "display_value_field": "value",
                 "display_option": {
                     "opensea": {
-                        "trait_type": "Background L"
+                        "trait_type": "Background"
                     }
                 }
             },
             {
-                "name": "background_r",
+                "name": "moon",
                 "data_type": "string",
                 "display_value_field": "value",
                 "display_option": {
                     "opensea": {
-                        "trait_type": "Background R"
+                        "trait_type": "Moon"
                     }
                 }
             },
             {
-                "name": "plate_l",
+                "name": "plate",
                 "data_type": "string",
                 "display_value_field": "value",
                 "display_option": {
                     "opensea": {
-                        "trait_type": "Plate L"
+                        "trait_type": "Plate"
                     }
                 }
             },
             {
-                "name": "plate_r",
+                "name": "tail",
                 "data_type": "string",
                 "display_value_field": "value",
                 "display_option": {
                     "opensea": {
-                        "trait_type": "Plate R"
+                        "trait_type": "Tail"
                     }
                 }
             },
             {
-                "name": "body_l",
+                "name": "whale",
                 "data_type": "string",
                 "display_value_field": "value",
                 "display_option": {
                     "opensea": {
-                        "trait_type": "Body L"
-                    }
-                }
-            },
-            {
-                "name": "body_r",
-                "data_type": "string",
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "trait_type": "Body R"
-                    }
-                }
-            },
-            {
-                "name": "head_l",
-                "data_type": "string",
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "trait_type": "Head L"
-                    }
-                }
-            },
-            {
-                "name": "head_r",
-                "data_type": "string",
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "trait_type": "Head R"
-                    }
-                }
-            },
-            {
-                "name": "clothes_l",
-                "data_type": "string",
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "trait_type": "Clothes L"
-                    }
-                }
-            },
-            {
-                "name": "clothes_r",
-                "data_type": "string",
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "trait_type": "Clothes R"
-                    }
-                }
-            },
-            {
-                "name": "extra_l",
-                "data_type": "string",
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "trait_type": "Extra L"
-                    }
-                }
-            },
-            {
-                "name": "extra_r",
-                "data_type": "string",
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "trait_type": "Extra R"
-                    }
-                }
-            },
-            {
-                "name": "hand_l",
-                "data_type": "string",
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "trait_type": "Hand L"
-                    }
-                }
-            },
-            {
-                "name": "hand_r",
-                "data_type": "string",
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "trait_type": "Hand R"
-                    }
-                }
-            },
-            {
-                "name": "influencer",
-                "data_type": "string",
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "trait_type": "Influencer"
+                        "trait_type": "Whale"
                     }
                 }
             }
@@ -165,92 +65,206 @@
     "onchain_data": {
         "reveal_required": true,
         "reveal_secret": "",
-        "nft_attributes": [
-            {
-                "name": "expire_date",
-                "data_type": "number",
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "display_type": "date",
-                        "trait_type": "Expire Date"
-                    }
-                }
-            }
-        ],
+        "nft_attributes": [],
         "token_attributes": [
             {
-                "name": "exclusive_party_access",
-                "data_type": "boolean",
-                "required": true,
-                "hidden_to_marketplace": true
-            },
-            {
-                "name": "first_discount_used",
-                "data_type": "boolean",
-                "required": true,
-                "hidden_to_marketplace": true,
-                "display_option": {
-                    "bool_true_value": "Yes",
-                    "bool_false_value": "_HIDDEN_",
-                    "opensea": {
-                        "display_type": "boolean",
-                        "trait_type": "First Discount Used"
-                    }
-                }
-            },
-            {
-                "name": "percent_discount_10",
-                "data_type": "number",
+                "name": "points",
                 "default_mint_value": {
                     "number_attribute_value": {
-                        "value": 10
+                        "value": 0
                     }
                 },
-                "required": true,
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "trait_type": "Available 10 Percent Discount",
-                        "max_value": 10,
-                        "display_type": "number"
-                    }
-                }
-            },
-            {
-                "name": "discount_percentage",
                 "data_type": "number",
                 "required": true,
                 "display_value_field": "value",
                 "display_option": {
                     "opensea": {
-                        "trait_type": "Discount Percentage",
-                        "display_type": "boost_percentage"
+                        "trait_type": "Points"
                     }
                 }
             },
             {
-                "name": "discount_amount",
+                "name": "missions_completed",
+                "default_mint_value": {
+                    "number_attribute_value": {
+                        "value": 1
+                    }
+                },
                 "data_type": "number",
                 "required": true,
                 "display_value_field": "value",
                 "display_option": {
                     "opensea": {
-                        "trait_type": "Discount",
-                        "display_type": "boost_number"
+                        "trait_type": "Missions Completed",
+                        "max_value": 3
+                    }
+                }
+            },
+            {
+                "name": "bonus_1",
+                "default_mint_value": {
+                    "boolean_attribute_value": {
+                        "value": false
+                    }
+                },
+                "data_type": "boolean",
+                "required": true,
+                "display_value_field": "value",
+                "display_option": {
+                    "bool_true_value": "Yes",
+                    "bool_false_value": "No",
+                    "opensea": {
+                        "trait_type": "Bonus 1"
+                    }
+                }
+            },
+            {
+                "name": "bonus_2",
+                "default_mint_value": {
+                    "boolean_attribute_value": {
+                        "value": false
+                    }
+                },
+                "data_type": "boolean",
+                "required": true,
+                "display_value_field": "value",
+                "display_option": {
+                    "bool_true_value": "Yes",
+                    "bool_false_value": "No",
+                    "opensea": {
+                        "trait_type": "Bonus 2"
+                    }
+                }
+            },
+            {
+                "name": "checked_in",
+                "default_mint_value": {
+                    "boolean_attribute_value": {
+                        "value": false
+                    }
+                },
+                "data_type": "boolean",
+                "required": true,
+                "display_value_field": "value",
+                "display_option": {
+                    "bool_true_value": "Yes",
+                    "bool_false_value": "No",
+                    "opensea": {
+                        "trait_type": "Checked In"
+                    }
+                }
+            },
+            {
+                "name": "redeemed",
+                "default_mint_value": {
+                    "boolean_attribute_value": {
+                        "value": false
+                    }
+                },
+                "data_type": "boolean",
+                "required": true,
+                "display_value_field": "value",
+                "display_option": {
+                    "bool_true_value": "Yes",
+                    "bool_false_value": "No",
+                    "opensea": {
+                        "trait_type": "Redeemed"
+                    }
+                }
+            },
+            {
+                "name": "transformed",
+                "default_mint_value": {
+                    "boolean_attribute_value": {
+                        "value": false
+                    }
+                },
+                "data_type": "boolean",
+                "required": true,
+                "display_value_field": "value",
+                "display_option": {
+                    "bool_true_value": "Yes",
+                    "bool_false_value": "No",
+                    "opensea": {
+                        "trait_type": "Transformed"
                     }
                 }
             }
         ],
         "actions": [
             {
-                "name": "use10percentdiscount",
-                "desc": "Use 10% discount on purchase",
-                "when": "meta.GetNumber('percent_discount_10') > 0",
+                "name": "check_in",
+                "desc": "Check In",
+                "when": "meta.GetBoolean('checked_in') == false",
                 "then": [
-                    "meta.SetNumber('percent_discount_10',meta.GetNumber('percent_discount_10') - 1)",
-                    "meta.SetBoolean('first_discount_used', true)"
-                ]
+                    "meta.SetBoolean('checked_in', true)",
+                    "meta.SetNumber('missions_completed', meta.GetNumber('missions_completed') + 1)",
+                    "meta.SetNumber('points', meta.GetNumber('points') + 200)"
+                ],
+                "is_active": true
+            },
+            {
+                "name": "claim_bonus_1",
+                "desc": "Claim Bonus 1",
+                "when": "meta.GetBoolean('bonus_1') == false",
+                "then": [
+                    "meta.SetBoolean('bonus_1', true)",
+                    "meta.SetNumber('points', meta.GetNumber('points') + 200)"
+                ],
+                "is_active": true
+            },
+            {
+                "name": "claim_bonus_2",
+                "desc": "Claim Bonus 2",
+                "when": "meta.GetBoolean('bonus_2') == false",
+                "then": [
+                    "meta.SetBoolean('bonus_2', true)",
+                    "meta.SetNumber('points', meta.GetNumber('points') + 200)"
+                ],
+                "is_active": true
+            },
+            {
+                "name": "redeem_200",
+                "desc": "Redeem gift for 200 points",
+                "when": "meta.GetBoolean('redeemed') == false && meta.GetNumber('points') >= 200",
+                "then": [
+                    "meta.SetBoolean('redeemed', true)",
+                    "meta.SetNumber('points', meta.GetNumber('points') - 200)",
+                    "meta.SetNumber('missions_completed', meta.GetNumber('missions_completed') + 1)"
+                ],
+                "is_active": true
+            },
+            {
+                "name": "redeem_400",
+                "desc": "Redeem gift for 400 points",
+                "when": "meta.GetBoolean('redeemed') == false && meta.GetNumber('points') >= 400",
+                "then": [
+                    "meta.SetBoolean('redeemed', true)",
+                    "meta.SetNumber('points', meta.GetNumber('points') - 400)",
+                    "meta.SetNumber('missions_completed', meta.GetNumber('missions_completed') + 1)"
+                ],
+                "is_active": true
+            },
+            {
+                "name": "redeem_600",
+                "desc": "Redeem gift for 600 points",
+                "when": "meta.GetBoolean('redeemed') == false && meta.GetNumber('points') >= 600",
+                "then": [
+                    "meta.SetBoolean('redeemed', true)",
+                    "meta.SetNumber('points', meta.GetNumber('points') - 600)",
+                    "meta.SetNumber('missions_completed', meta.GetNumber('missions_completed') + 1)"
+                ],
+                "is_active": true
+            },
+            {
+                "name": "transform",
+                "desc": "Transform",
+                "when": "meta.GetBoolean('transformed') == false && meta.GetNumber('missions_completed') == 3",
+                "then": [
+                    "meta.SetBoolean('transformed', true)",
+                    "meta.SetImage(meta.ReplaceAllString(meta.GetImage(),'.jpeg','-t.jpeg'))"
+                ],
+                "is_active": true
             }
         ],
         "on_off_switch": {
@@ -259,13 +273,6 @@
         "status": {
             "first_mint_complete": false
         },
-        "nft_attributes_value": [
-            {
-                "name": "expire_date",
-                "number_attribute_value": {
-                    "value": 1665009678
-                }
-            }
-        ]
+        "nft_attributes_value": []
     }
 }

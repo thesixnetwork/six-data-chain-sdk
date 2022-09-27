@@ -1,107 +1,40 @@
 {
-    "nft_schema_code": "buakaw99",
-    "token_id": "2",
-    "token_owner": "0xTOKENOWNER",
+    "nft_schema_code": "sixnetwork.nftexpo",
+    "token_id": "1",
+    "token_owner": "0x26D9a08F77cfA046289A934588F75037d77944bD",
     "owner_address_type": "ORIGIN_ADDRESS",
-    "origin_image": "https://bk1nft.sixnetwork.io/ipfs/QmaBUdqTctVteajpoMVEpo55XEXe2YVwWDgeNi1UT47UKU/1.png",
+    "origin_image": "https://ipfs.io/ipfs/QmUd5xBxZucHQyUkqkCCtfZ3iktSSmEEyhuX1u48bP4WE7/whale.jpeg",
     "origin_attributes": [
         {
-            "name": "background_l",
+            "name": "background",
             "string_attribute_value": {
-                "value": "L BG Ringside Golden"
+                "value": "Blue"
             }
         },
         {
-            "name": "background_r",
+            "name": "moon",
             "string_attribute_value": {
-                "value": "R Tiger"
+                "value": "White"
             }
         },
         {
-            "name": "plate_l",
+            "name": "plate",
             "string_attribute_value": {
-                "value": "L Banchamek Black"
+                "value": "Red"
             }
         },
         {
-            "name": "plate_r",
+            "name": "tail",
             "string_attribute_value": {
-                "value": "R Banchamek Golden"
+                "value": "Red"
             }
         },
         {
-            "name": "body_l",
+            "name": "whale",
             "string_attribute_value": {
-                "value": "L Body Normal Gentleman"
-            }
-        },
-        {
-            "name": "head_l",
-            "string_attribute_value": {
-                "value": "L NON HEAD"
-            }
-        },
-        {
-            "name": "clothes_l",
-            "string_attribute_value": {
-                "value": "L Robe Golden"
-            }
-        },
-        {
-            "name": "extra_l",
-            "string_attribute_value": {
-                "value": "L NO EXTRA"
-            }
-        },
-        {
-            "name": "hand_l",
-            "string_attribute_value": {
-                "value": "L Glove Black BV"
-            }
-        },
-        {
-            "name": "influencer",
-            "string_attribute_value": {
-                "value": "Teerawat Yioyim"
+                "value": "Whale"
             }
         }
     ],
-    "onchain_attributes": [
-        {
-            "name": "exclusive_party_access",
-            "boolean_attribute_value": {
-                "value": true
-            }
-        },
-        {
-            "name": "percent_discount_10",
-            "number_attribute_value": {
-                "value": 10
-            }
-        },
-        {
-            "name": "discount_percentage",
-            "number_attribute_value": {
-                "value": 10
-            }
-        },
-        {
-            "name": "first_discount_used",
-            "boolean_attribute_value": {
-                "value": false
-            }
-        },
-        {
-            "name": "discount_amount",
-            "number_attribute_value": {
-                "value": 10
-            }
-        },
-        {
-            "name": "influencer",
-            "string_attribute_value": {
-                "value": "Teerawat Yioyim"
-            }
-        }
-    ]
+    "onchain_attributes": []
 }
