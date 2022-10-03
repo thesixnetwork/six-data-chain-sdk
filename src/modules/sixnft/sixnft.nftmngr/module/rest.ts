@@ -19,6 +19,7 @@ export interface GooglerpcStatus {
 export interface NftmngrAction {
   name?: string;
   desc?: string;
+  disable?: boolean;
   when?: string;
   then?: string[];
 }
@@ -89,6 +90,11 @@ export interface NftmngrMsgAddTokenAttributeResponse {
   onchainData?: NftmngrOnChainData;
 }
 
+export interface NftmngrMsgChangeSchemaOwnerResponse {
+  nftSchemaCode?: string;
+  newOwner?: string;
+}
+
 export interface NftmngrMsgCreateMetadataResponse {
   nftSchemaCode?: string;
   tokenId?: string;
@@ -103,10 +109,21 @@ export interface NftmngrMsgPerformActionByAdminResponse {
   token_id?: string;
 }
 
+export interface NftmngrMsgSetBaseUriResponse {
+  code?: string;
+  uri?: string;
+}
+
 export interface NftmngrMsgSetNFTAttributeResponse {
   nft_schema_code?: string;
   attribute_name?: string;
   nft_attribute_value?: string;
+}
+
+export interface NftmngrMsgToggleActionResponse {
+  code?: string;
+  name?: string;
+  onchainDataAction?: NftmngrOnChainData;
 }
 
 export interface NftmngrNFTSchema {
