@@ -3,10 +3,7 @@
 - 2 delete index.ts ./sixnft/sixnft.{module}/index.ts
 - 3 search all remove
 ```
-if (util.Long !== Long) {
-  util.Long = Long as any;
-  configure();
-}
+
 ```
 - 4 export SignAndBroadcastOptions in all sixnft/{module name}/module/index
-export interface SignAndBroadcastOptions
+export export interface SignAndBroadcastOptions

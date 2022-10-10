@@ -4,17 +4,13 @@ import { StdFee } from "@cosmjs/launchpad";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
-import { MsgRevokePermission } from "./types/admin/tx";
-import { MsgMint } from "./types/admin/tx";
-import { MsgGrantPermission } from "./types/admin/tx";
-import { MsgBurn } from "./types/admin/tx";
+import { MsgBindAddress } from "./types/evmsupport/tx";
+import { MsgRemoveBinding } from "./types/evmsupport/tx";
 
 
 const types = [
-  ["/sixnft.admin.MsgRevokePermission", MsgRevokePermission],
-  ["/sixnft.admin.MsgMint", MsgMint],
-  ["/sixnft.admin.MsgGrantPermission", MsgGrantPermission],
-  ["/sixnft.admin.MsgBurn", MsgBurn],
+  ["/thesixnetwork.sixnft.evmsupport.MsgBindAddress", MsgBindAddress],
+  ["/thesixnetwork.sixnft.evmsupport.MsgRemoveBinding", MsgRemoveBinding],
   
 ];
 export const MissingWalletError = new Error("wallet is required");
@@ -47,10 +43,8 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
 
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
-    msgRevokePermission: (data: MsgRevokePermission): EncodeObject => ({ typeUrl: "/sixnft.admin.MsgRevokePermission", value: MsgRevokePermission.fromPartial( data ) }),
-    msgMint: (data: MsgMint): EncodeObject => ({ typeUrl: "/sixnft.admin.MsgMint", value: MsgMint.fromPartial( data ) }),
-    msgGrantPermission: (data: MsgGrantPermission): EncodeObject => ({ typeUrl: "/sixnft.admin.MsgGrantPermission", value: MsgGrantPermission.fromPartial( data ) }),
-    msgBurn: (data: MsgBurn): EncodeObject => ({ typeUrl: "/sixnft.admin.MsgBurn", value: MsgBurn.fromPartial( data ) }),
+    msgBindAddress: (data: MsgBindAddress): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.evmsupport.MsgBindAddress", value: MsgBindAddress.fromPartial( data ) }),
+    msgRemoveBinding: (data: MsgRemoveBinding): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.evmsupport.MsgRemoveBinding", value: MsgRemoveBinding.fromPartial( data ) }),
     
   };
 };

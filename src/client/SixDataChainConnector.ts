@@ -2,21 +2,24 @@
 
 import { Accounts } from "./Accounts"
 import { OfflineSigner } from "@cosmjs/proto-signing";
-import * as nftmngrModuleGenerate from "../modules/sixnft/sixnft.nftmngr/module/index"
-import * as evmsupportModuleGenerate from "../modules/sixnft/sixnft.evmsupport/module/index"
-import * as adminModuleGenerate from "../modules/sixnft/sixnft.admin/module/index"
-import * as nftoracleModuleGenerate from "../modules/sixnft/sixnft.nftoracle/module/index"
+import * as sixNftAdminGenerate from "../modules/sixnft/sixnft.admin/module/index"
+
+// import * as nftmngrModuleGenerate from "../modules/sixnft/sixnft.nftmngr/module/index"
+import * as nftmngrModuleGenerate from "../modules/sixnft/thesixnetwork.sixnft.nftmngr/module/index"
+
+// import * as nftoracleModuleGenerate from "../modules/sixnft/sixnft.nftoracle/module/index"
+import * as nftoracleModuleGenerate from "../modules/sixnft/thesixnetwork.sixnft.nftoracle/module/index"
+
+import * as sixNFTNFTadmin from "../modules/sixnft/thesixnetwork.sixnft.nftadmin/module/index"
+// import * as evmsupportModuleGenerate from "../modules/sixnft/sixnft.evmsupport/module/index"
+import * as evmsupportModuleGenerate from "../modules/sixnft/thesixnetwork.sixnft.evmsupport/module/index"
+
 
 
 type Module = {
     txClient: (wallet: any, options: any) => Promise<any>
     queryClient: (options: any) => Promise<any>
 }
-type ModulesName =
-    | "nftmngrModule"
-    | "evmsupportModule"
-    | "adminModule"
-    | "nftoracleModule"
 
 export class SixDataChainConnector {
     // public rpcClient: RPCClient = new RPCClient();
@@ -48,17 +51,20 @@ export class SixDataChainConnector {
             evmsupportModule,
             adminModule,
             nftoracleModule,
+            nftAdmin
         ] = await Promise.all([
             nftmngrModuleGenerate.queryClient({ addr: this.apiUrl }),
             evmsupportModuleGenerate.queryClient({ addr: this.apiUrl }),
-            adminModuleGenerate.queryClient({ addr: this.apiUrl }),
-            nftoracleModuleGenerate.queryClient({ addr: this.apiUrl })
+            sixNftAdminGenerate.queryClient({ addr: this.apiUrl }),
+            nftoracleModuleGenerate.queryClient({ addr: this.apiUrl }),
+            sixNFTNFTadmin.queryClient({ addr: this.apiUrl })
         ])
         return {
             nftmngrModule,
             evmsupportModule,
             adminModule,
-            nftoracleModule
+            nftoracleModule,
+            nftAdmin
         }
     }
 
@@ -78,14 +84,16 @@ export class SixDataChainConnector {
         ] = await Promise.all([
             nftmngrModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl }),
             evmsupportModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl }),
-            adminModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl }),
-            nftoracleModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl })
+            sixNftAdminGenerate.txClient(accountSigner, { addr: this.rpcUrl }),
+            nftoracleModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl }),
+            sixNFTNFTadmin.txClient(accountSigner, { addr: this.rpcUrl })
         ])
         return {
             nftmngrModule,
             evmsupportModule,
             adminModule,
             nftoracleModule,
+            sixNFTNFTadmin
         }
     }
 
