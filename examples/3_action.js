@@ -3,7 +3,13 @@ const {  SixDataChainConnector } = require("@sixnetwork/six-data-chain-sdk");
 const main = async () => {
     const sixConnector = new SixDataChainConnector("http://127.0.0.1")
     const accountSigner = await sixConnector.accounts.privateKeyToAccount("pk or mnomic")
-    // get wallet address
+    
+     // Or direct config (require uri with port) 
+    // use when node split url
+    // const sixConnector = new SixDataChainConnector()
+    // sixConnector.apiUrl = "http://example1.node:1317"
+    // sixConnector.rpcUrl = "http://example2.node:26657"
+
     const address = (await accountSigner.getAccounts())[0].address
     const rpcClient = await sixConnector.connectRPCClient(accountSigner)
 
