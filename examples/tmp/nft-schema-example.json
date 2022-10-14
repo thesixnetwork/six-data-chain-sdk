@@ -1,278 +1,384 @@
 {
-    "code": "sixnetwork.nftexpo",
-    "name": "NFTexpoRinkeby",
-    "owner": "0xNFTOWNER",
-    "origin_data": {
-        "origin_base_uri": "https://dryotus.definix.com/ipfs/QmZc4kPjvz4M4SpNfRZme2gcVzbMQjDt76GsxvLqSexT8R/",
-        "uri_retrieval_method": "BASE",
+    "nFTSchema": {
+      "code": "sixnetwork.nftexpo",
+      "name": "NFTexpoRinkeby",
+      "owner": "6nft1q3566qhn4hnjf8l0zt90daew2ade2yc6l5usaq",
+      "system_actioners": [],
+      "origin_data": {
         "origin_chain": "RINKEBY",
         "origin_contract_address": "0x7e1b6D669200723C60782768C74E903A46C98112",
+        "origin_base_uri": "https://dryotus.definix.com/ipfs/QmZc4kPjvz4M4SpNfRZme2gcVzbMQjDt76GsxvLqSexT8R/",
         "attribute_overriding": "CHAIN",
         "metadata_format": "opensea",
         "origin_attributes": [
-            {
-                "name": "background",
-                "data_type": "string",
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "trait_type": "Background"
-                    }
-                }
+          {
+            "name": "background",
+            "data_type": "string",
+            "required": false,
+            "display_value_field": "value",
+            "display_option": {
+              "bool_true_value": "",
+              "bool_false_value": "",
+              "opensea": {
+                "display_type": "",
+                "trait_type": "Background",
+                "max_value": "0"
+              }
             },
-            {
-                "name": "moon",
-                "data_type": "string",
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "trait_type": "Moon"
-                    }
-                }
+            "default_mint_value": null,
+            "hidden_to_marketplace": false,
+            "index": "0"
+          },
+          {
+            "name": "moon",
+            "data_type": "string",
+            "required": false,
+            "display_value_field": "value",
+            "display_option": {
+              "bool_true_value": "",
+              "bool_false_value": "",
+              "opensea": {
+                "display_type": "",
+                "trait_type": "Moon",
+                "max_value": "0"
+              }
             },
-            {
-                "name": "plate",
-                "data_type": "string",
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "trait_type": "Plate"
-                    }
-                }
+            "default_mint_value": null,
+            "hidden_to_marketplace": false,
+            "index": "1"
+          },
+          {
+            "name": "plate",
+            "data_type": "string",
+            "required": false,
+            "display_value_field": "value",
+            "display_option": {
+              "bool_true_value": "",
+              "bool_false_value": "",
+              "opensea": {
+                "display_type": "",
+                "trait_type": "Plate",
+                "max_value": "0"
+              }
             },
-            {
-                "name": "tail",
-                "data_type": "string",
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "trait_type": "Tail"
-                    }
-                }
+            "default_mint_value": null,
+            "hidden_to_marketplace": false,
+            "index": "2"
+          },
+          {
+            "name": "tail",
+            "data_type": "string",
+            "required": false,
+            "display_value_field": "value",
+            "display_option": {
+              "bool_true_value": "",
+              "bool_false_value": "",
+              "opensea": {
+                "display_type": "",
+                "trait_type": "Tail",
+                "max_value": "0"
+              }
             },
-            {
-                "name": "whale",
-                "data_type": "string",
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "trait_type": "Whale"
-                    }
-                }
-            }
-        ]
-    },
-    "onchain_data": {
+            "default_mint_value": null,
+            "hidden_to_marketplace": false,
+            "index": "3"
+          },
+          {
+            "name": "whale",
+            "data_type": "string",
+            "required": false,
+            "display_value_field": "value",
+            "display_option": {
+              "bool_true_value": "",
+              "bool_false_value": "",
+              "opensea": {
+                "display_type": "",
+                "trait_type": "Whale",
+                "max_value": "0"
+              }
+            },
+            "default_mint_value": null,
+            "hidden_to_marketplace": false,
+            "index": "4"
+          }
+        ],
+        "uri_retrieval_method": "BASE"
+      },
+      "onchain_data": {
         "reveal_required": true,
-        "reveal_secret": "",
+        "reveal_secret": null,
         "nft_attributes": [],
         "token_attributes": [
-            {
-                "name": "points",
-                "default_mint_value": {
-                    "number_attribute_value": {
-                        "value": 0
-                    }
-                },
-                "data_type": "number",
-                "required": true,
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "trait_type": "Points"
-                    }
-                }
+          {
+            "name": "points",
+            "data_type": "number",
+            "required": true,
+            "display_value_field": "value",
+            "display_option": {
+              "bool_true_value": "",
+              "bool_false_value": "",
+              "opensea": {
+                "display_type": "",
+                "trait_type": "Points",
+                "max_value": "0"
+              }
             },
-            {
-                "name": "missions_completed",
-                "default_mint_value": {
-                    "number_attribute_value": {
-                        "value": 1
-                    }
-                },
-                "data_type": "number",
-                "required": true,
-                "display_value_field": "value",
-                "display_option": {
-                    "opensea": {
-                        "trait_type": "Missions Completed",
-                        "max_value": 3
-                    }
-                }
+            "default_mint_value": {
+              "number_attribute_value": {
+                "value": "0"
+              }
             },
-            {
-                "name": "bonus_1",
-                "default_mint_value": {
-                    "boolean_attribute_value": {
-                        "value": false
-                    }
-                },
-                "data_type": "boolean",
-                "required": true,
-                "display_value_field": "value",
-                "display_option": {
-                    "bool_true_value": "Yes",
-                    "bool_false_value": "No",
-                    "opensea": {
-                        "trait_type": "Bonus 1"
-                    }
-                }
+            "hidden_to_marketplace": false,
+            "index": "5"
+          },
+          {
+            "name": "missions_completed",
+            "data_type": "number",
+            "required": true,
+            "display_value_field": "value",
+            "display_option": {
+              "bool_true_value": "",
+              "bool_false_value": "",
+              "opensea": {
+                "display_type": "",
+                "trait_type": "Missions Completed",
+                "max_value": "3"
+              }
             },
-            {
-                "name": "bonus_2",
-                "default_mint_value": {
-                    "boolean_attribute_value": {
-                        "value": false
-                    }
-                },
-                "data_type": "boolean",
-                "required": true,
-                "display_value_field": "value",
-                "display_option": {
-                    "bool_true_value": "Yes",
-                    "bool_false_value": "No",
-                    "opensea": {
-                        "trait_type": "Bonus 2"
-                    }
-                }
+            "default_mint_value": {
+              "number_attribute_value": {
+                "value": "1"
+              }
             },
-            {
-                "name": "checked_in",
-                "default_mint_value": {
-                    "boolean_attribute_value": {
-                        "value": false
-                    }
-                },
-                "data_type": "boolean",
-                "required": true,
-                "display_value_field": "value",
-                "display_option": {
-                    "bool_true_value": "Yes",
-                    "bool_false_value": "No",
-                    "opensea": {
-                        "trait_type": "Checked In"
-                    }
-                }
+            "hidden_to_marketplace": false,
+            "index": "6"
+          },
+          {
+            "name": "bonus_1",
+            "data_type": "boolean",
+            "required": true,
+            "display_value_field": "value",
+            "display_option": {
+              "bool_true_value": "Yes",
+              "bool_false_value": "No",
+              "opensea": {
+                "display_type": "",
+                "trait_type": "Bonus 1",
+                "max_value": "0"
+              }
             },
-            {
-                "name": "redeemed",
-                "default_mint_value": {
-                    "boolean_attribute_value": {
-                        "value": false
-                    }
-                },
-                "data_type": "boolean",
-                "required": true,
-                "display_value_field": "value",
-                "display_option": {
-                    "bool_true_value": "Yes",
-                    "bool_false_value": "No",
-                    "opensea": {
-                        "trait_type": "Redeemed"
-                    }
-                }
+            "default_mint_value": {
+              "boolean_attribute_value": {
+                "value": false
+              }
             },
-            {
-                "name": "transformed",
-                "default_mint_value": {
-                    "boolean_attribute_value": {
-                        "value": false
-                    }
-                },
-                "data_type": "boolean",
-                "required": true,
-                "display_value_field": "value",
-                "display_option": {
-                    "bool_true_value": "Yes",
-                    "bool_false_value": "No",
-                    "opensea": {
-                        "trait_type": "Transformed"
-                    }
-                }
-            }
+            "hidden_to_marketplace": false,
+            "index": "7"
+          },
+          {
+            "name": "bonus_2",
+            "data_type": "boolean",
+            "required": true,
+            "display_value_field": "value",
+            "display_option": {
+              "bool_true_value": "Yes",
+              "bool_false_value": "No",
+              "opensea": {
+                "display_type": "",
+                "trait_type": "Bonus 2",
+                "max_value": "0"
+              }
+            },
+            "default_mint_value": {
+              "boolean_attribute_value": {
+                "value": false
+              }
+            },
+            "hidden_to_marketplace": false,
+            "index": "8"
+          },
+          {
+            "name": "checked_in",
+            "data_type": "boolean",
+            "required": true,
+            "display_value_field": "value",
+            "display_option": {
+              "bool_true_value": "Yes",
+              "bool_false_value": "No",
+              "opensea": {
+                "display_type": "",
+                "trait_type": "Checked In",
+                "max_value": "0"
+              }
+            },
+            "default_mint_value": {
+              "boolean_attribute_value": {
+                "value": false
+              }
+            },
+            "hidden_to_marketplace": false,
+            "index": "9"
+          },
+          {
+            "name": "redeemed",
+            "data_type": "boolean",
+            "required": true,
+            "display_value_field": "value",
+            "display_option": {
+              "bool_true_value": "Yes",
+              "bool_false_value": "No",
+              "opensea": {
+                "display_type": "",
+                "trait_type": "Redeemed",
+                "max_value": "0"
+              }
+            },
+            "default_mint_value": {
+              "boolean_attribute_value": {
+                "value": false
+              }
+            },
+            "hidden_to_marketplace": false,
+            "index": "10"
+          },
+          {
+            "name": "transformed",
+            "data_type": "boolean",
+            "required": true,
+            "display_value_field": "value",
+            "display_option": {
+              "bool_true_value": "Yes",
+              "bool_false_value": "No",
+              "opensea": {
+                "display_type": "",
+                "trait_type": "Transformed",
+                "max_value": "0"
+              }
+            },
+            "default_mint_value": {
+              "boolean_attribute_value": {
+                "value": false
+              }
+            },
+            "hidden_to_marketplace": false,
+            "index": "11"
+          },
+          {
+            "name": "points2",
+            "data_type": "number",
+            "required": true,
+            "display_value_field": "value",
+            "display_option": {
+              "bool_true_value": "",
+              "bool_false_value": "",
+              "opensea": {
+                "display_type": "",
+                "trait_type": "Points2",
+                "max_value": "0"
+              }
+            },
+            "default_mint_value": {
+              "number_attribute_value": {
+                "value": "0"
+              }
+            },
+            "hidden_to_marketplace": false,
+            "index": "12"
+          }
         ],
         "actions": [
-            {
-                "name": "check_in",
-                "desc": "Check In",
-                "when": "meta.GetBoolean('checked_in') == false",
-                "then": [
-                    "meta.SetBoolean('checked_in', true)",
-                    "meta.SetNumber('missions_completed', meta.GetNumber('missions_completed') + 1)",
-                    "meta.SetNumber('points', meta.GetNumber('points') + 200)"
-                ],
-                "is_active": true
-            },
-            {
-                "name": "claim_bonus_1",
-                "desc": "Claim Bonus 1",
-                "when": "meta.GetBoolean('bonus_1') == false",
-                "then": [
-                    "meta.SetBoolean('bonus_1', true)",
-                    "meta.SetNumber('points', meta.GetNumber('points') + 200)"
-                ],
-                "is_active": true
-            },
-            {
-                "name": "claim_bonus_2",
-                "desc": "Claim Bonus 2",
-                "when": "meta.GetBoolean('bonus_2') == false",
-                "then": [
-                    "meta.SetBoolean('bonus_2', true)",
-                    "meta.SetNumber('points', meta.GetNumber('points') + 200)"
-                ],
-                "is_active": true
-            },
-            {
-                "name": "redeem_200",
-                "desc": "Redeem gift for 200 points",
-                "when": "meta.GetBoolean('redeemed') == false && meta.GetNumber('points') >= 200",
-                "then": [
-                    "meta.SetBoolean('redeemed', true)",
-                    "meta.SetNumber('points', meta.GetNumber('points') - 200)",
-                    "meta.SetNumber('missions_completed', meta.GetNumber('missions_completed') + 1)"
-                ],
-                "is_active": true
-            },
-            {
-                "name": "redeem_400",
-                "desc": "Redeem gift for 400 points",
-                "when": "meta.GetBoolean('redeemed') == false && meta.GetNumber('points') >= 400",
-                "then": [
-                    "meta.SetBoolean('redeemed', true)",
-                    "meta.SetNumber('points', meta.GetNumber('points') - 400)",
-                    "meta.SetNumber('missions_completed', meta.GetNumber('missions_completed') + 1)"
-                ],
-                "is_active": true
-            },
-            {
-                "name": "redeem_600",
-                "desc": "Redeem gift for 600 points",
-                "when": "meta.GetBoolean('redeemed') == false && meta.GetNumber('points') >= 600",
-                "then": [
-                    "meta.SetBoolean('redeemed', true)",
-                    "meta.SetNumber('points', meta.GetNumber('points') - 600)",
-                    "meta.SetNumber('missions_completed', meta.GetNumber('missions_completed') + 1)"
-                ],
-                "is_active": true
-            },
-            {
-                "name": "transform",
-                "desc": "Transform",
-                "when": "meta.GetBoolean('transformed') == false && meta.GetNumber('missions_completed') == 3",
-                "then": [
-                    "meta.SetBoolean('transformed', true)",
-                    "meta.SetImage(meta.ReplaceAllString(meta.GetImage(),'.jpeg','-t.jpeg'))"
-                ],
-                "is_active": true
-            }
+          {
+            "name": "check_in",
+            "desc": "Check In",
+            "disable": false,
+            "when": "meta.GetBoolean('checked_in') == false",
+            "then": [
+              "meta.SetBoolean('checked_in', true)",
+              "meta.SetNumber('missions_completed', meta.GetNumber('missions_completed') + 1)",
+              "meta.SetNumber('points', meta.GetNumber('points') + 200)"
+            ]
+          },
+          {
+            "name": "claim_bonus_1",
+            "desc": "Claim Bonus 1",
+            "disable": false,
+            "when": "meta.GetBoolean('bonus_1') == false",
+            "then": [
+              "meta.SetBoolean('bonus_1', true)",
+              "meta.SetNumber('points', meta.GetNumber('points') + 200)"
+            ]
+          },
+          {
+            "name": "claim_bonus_2",
+            "desc": "Claim Bonus 2",
+            "disable": false,
+            "when": "meta.GetBoolean('bonus_2') == false",
+            "then": [
+              "meta.SetBoolean('bonus_2', true)",
+              "meta.SetNumber('points', meta.GetNumber('points') + 200)"
+            ]
+          },
+          {
+            "name": "redeem_200",
+            "desc": "Redeem gift for 200 points",
+            "disable": false,
+            "when": "meta.GetBoolean('redeemed') == false && meta.GetNumber('points') >= 200",
+            "then": [
+              "meta.SetBoolean('redeemed', true)",
+              "meta.SetNumber('points', meta.GetNumber('points') - 200)",
+              "meta.SetNumber('missions_completed', meta.GetNumber('missions_completed') + 1)"
+            ]
+          },
+          {
+            "name": "redeem_400",
+            "desc": "Redeem gift for 400 points",
+            "disable": false,
+            "when": "meta.GetBoolean('redeemed') == false && meta.GetNumber('points') >= 400",
+            "then": [
+              "meta.SetBoolean('redeemed', true)",
+              "meta.SetNumber('points', meta.GetNumber('points') - 400)",
+              "meta.SetNumber('missions_completed', meta.GetNumber('missions_completed') + 1)"
+            ]
+          },
+          {
+            "name": "redeem_600",
+            "desc": "Redeem gift for 600 points",
+            "disable": false,
+            "when": "meta.GetBoolean('redeemed') == false && meta.GetNumber('points') >= 600",
+            "then": [
+              "meta.SetBoolean('redeemed', true)",
+              "meta.SetNumber('points', meta.GetNumber('points') - 600)",
+              "meta.SetNumber('missions_completed', meta.GetNumber('missions_completed') + 1)"
+            ]
+          },
+          {
+            "name": "transform",
+            "desc": "Transform",
+            "disable": false,
+            "when": "meta.GetBoolean('transformed') == false && meta.GetNumber('missions_completed') == 3",
+            "then": [
+              "meta.SetBoolean('transformed', true)",
+              "meta.SetImage(meta.ReplaceAllString(meta.GetImage(),'.jpeg','-t.jpeg'))"
+            ]
+          },
+          {
+            "name": "test_action",
+            "desc": "booooooost",
+            "disable": false,
+            "when": "meta.GetBoolean('checked_in') == true",
+            "then": [
+              "meta.SetNumber('points2', meta.GetNumber('points2') + 10000)"
+            ]
+          }
         ],
-        "on_off_switch": {
-            "active": true
-        },
         "status": {
-            "first_mint_complete": false
+          "first_mint_complete": true
+        },
+        "on_off_switch": {
+          "active": true
         },
         "nft_attributes_value": []
+      },
+      "isVerified": false
     }
-}
+  }
