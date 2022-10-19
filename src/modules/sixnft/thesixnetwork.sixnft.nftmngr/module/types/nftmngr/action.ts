@@ -3,12 +3,51 @@ import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "thesixnetwork.sixnft.nftmngr";
 
+export enum AllowedActioner {
+  ALLOWED_ACTIONER_ALL = 0,
+  ALLOWED_ACTIONER_SYSTEM_ONLY = 1,
+  ALLOWED_ACTIONER_USER_ONLY = 2,
+  UNRECOGNIZED = -1,
+}
+
+export function allowedActionerFromJSON(object: any): AllowedActioner {
+  switch (object) {
+    case 0:
+    case "ALLOWED_ACTIONER_ALL":
+      return AllowedActioner.ALLOWED_ACTIONER_ALL;
+    case 1:
+    case "ALLOWED_ACTIONER_SYSTEM_ONLY":
+      return AllowedActioner.ALLOWED_ACTIONER_SYSTEM_ONLY;
+    case 2:
+    case "ALLOWED_ACTIONER_USER_ONLY":
+      return AllowedActioner.ALLOWED_ACTIONER_USER_ONLY;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return AllowedActioner.UNRECOGNIZED;
+  }
+}
+
+export function allowedActionerToJSON(object: AllowedActioner): string {
+  switch (object) {
+    case AllowedActioner.ALLOWED_ACTIONER_ALL:
+      return "ALLOWED_ACTIONER_ALL";
+    case AllowedActioner.ALLOWED_ACTIONER_SYSTEM_ONLY:
+      return "ALLOWED_ACTIONER_SYSTEM_ONLY";
+    case AllowedActioner.ALLOWED_ACTIONER_USER_ONLY:
+      return "ALLOWED_ACTIONER_USER_ONLY";
+    default:
+      return "UNKNOWN";
+  }
+}
+
 export interface Action {
   name: string;
   desc: string;
   disable: boolean;
   when: string;
   then: string[];
+  allowed_actioner: AllowedActioner;
 }
 
 const baseAction: object = {
@@ -17,6 +56,7 @@ const baseAction: object = {
   disable: false,
   when: "",
   then: "",
+  allowed_actioner: 0,
 };
 
 export const Action = {
@@ -35,6 +75,9 @@ export const Action = {
     }
     for (const v of message.then) {
       writer.uint32(42).string(v!);
+    }
+    if (message.allowed_actioner !== 0) {
+      writer.uint32(48).int32(message.allowed_actioner);
     }
     return writer;
   },
@@ -61,6 +104,9 @@ export const Action = {
           break;
         case 5:
           message.then.push(reader.string());
+          break;
+        case 6:
+          message.allowed_actioner = reader.int32() as any;
           break;
         default:
           reader.skipType(tag & 7);
@@ -98,6 +144,16 @@ export const Action = {
         message.then.push(String(e));
       }
     }
+    if (
+      object.allowed_actioner !== undefined &&
+      object.allowed_actioner !== null
+    ) {
+      message.allowed_actioner = allowedActionerFromJSON(
+        object.allowed_actioner
+      );
+    } else {
+      message.allowed_actioner = 0;
+    }
     return message;
   },
 
@@ -112,6 +168,8 @@ export const Action = {
     } else {
       obj.then = [];
     }
+    message.allowed_actioner !== undefined &&
+      (obj.allowed_actioner = allowedActionerToJSON(message.allowed_actioner));
     return obj;
   },
 
@@ -142,6 +200,14 @@ export const Action = {
       for (const e of object.then) {
         message.then.push(e);
       }
+    }
+    if (
+      object.allowed_actioner !== undefined &&
+      object.allowed_actioner !== null
+    ) {
+      message.allowed_actioner = object.allowed_actioner;
+    } else {
+      message.allowed_actioner = 0;
     }
     return message;
   },

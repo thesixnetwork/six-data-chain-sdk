@@ -1,7 +1,6 @@
 /* eslint-disable */
 import {
   RequestStatus,
-  OriginTxInfo,
   requestStatusFromJSON,
   requestStatusToJSON,
 } from "../nftoracle/request";
@@ -11,11 +10,16 @@ import { util, configure, Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "thesixnetwork.sixnft.nftoracle";
 
-export interface TxOriginParam {
+export interface OriginContractParam {
   chain: string;
-  tx_hash: string;
-  block_number: number;
-  deployer_address: string;
+  contract_address: string;
+  contract_owner: string;
+}
+
+export interface OriginContractInfo {
+  contractOriginDataInfo: OriginContractParam | undefined;
+  hash: Uint8Array;
+  confirmers: string[];
 }
 
 export interface CollectionOwnerRequest {
@@ -28,7 +32,7 @@ export interface CollectionOwnerRequest {
   confirmers: { [key: string]: boolean };
   created_at: Date | undefined;
   valid_until: Date | undefined;
-  origin_tx: OriginTxInfo[];
+  contract_info: OriginContractInfo[];
   expired_height: number;
 }
 
@@ -37,34 +41,33 @@ export interface CollectionOwnerRequest_ConfirmersEntry {
   value: boolean;
 }
 
-const baseTxOriginParam: object = {
+const baseOriginContractParam: object = {
   chain: "",
-  tx_hash: "",
-  block_number: 0,
-  deployer_address: "",
+  contract_address: "",
+  contract_owner: "",
 };
 
-export const TxOriginParam = {
-  encode(message: TxOriginParam, writer: Writer = Writer.create()): Writer {
+export const OriginContractParam = {
+  encode(
+    message: OriginContractParam,
+    writer: Writer = Writer.create()
+  ): Writer {
     if (message.chain !== "") {
       writer.uint32(10).string(message.chain);
     }
-    if (message.tx_hash !== "") {
-      writer.uint32(18).string(message.tx_hash);
+    if (message.contract_address !== "") {
+      writer.uint32(18).string(message.contract_address);
     }
-    if (message.block_number !== 0) {
-      writer.uint32(24).uint64(message.block_number);
-    }
-    if (message.deployer_address !== "") {
-      writer.uint32(34).string(message.deployer_address);
+    if (message.contract_owner !== "") {
+      writer.uint32(26).string(message.contract_owner);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): TxOriginParam {
+  decode(input: Reader | Uint8Array, length?: number): OriginContractParam {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseTxOriginParam } as TxOriginParam;
+    const message = { ...baseOriginContractParam } as OriginContractParam;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -72,13 +75,10 @@ export const TxOriginParam = {
           message.chain = reader.string();
           break;
         case 2:
-          message.tx_hash = reader.string();
+          message.contract_address = reader.string();
           break;
         case 3:
-          message.block_number = longToNumber(reader.uint64() as Long);
-          break;
-        case 4:
-          message.deployer_address = reader.string();
+          message.contract_owner = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -88,69 +88,177 @@ export const TxOriginParam = {
     return message;
   },
 
-  fromJSON(object: any): TxOriginParam {
-    const message = { ...baseTxOriginParam } as TxOriginParam;
+  fromJSON(object: any): OriginContractParam {
+    const message = { ...baseOriginContractParam } as OriginContractParam;
     if (object.chain !== undefined && object.chain !== null) {
       message.chain = String(object.chain);
     } else {
       message.chain = "";
     }
-    if (object.tx_hash !== undefined && object.tx_hash !== null) {
-      message.tx_hash = String(object.tx_hash);
-    } else {
-      message.tx_hash = "";
-    }
-    if (object.block_number !== undefined && object.block_number !== null) {
-      message.block_number = Number(object.block_number);
-    } else {
-      message.block_number = 0;
-    }
     if (
-      object.deployer_address !== undefined &&
-      object.deployer_address !== null
+      object.contract_address !== undefined &&
+      object.contract_address !== null
     ) {
-      message.deployer_address = String(object.deployer_address);
+      message.contract_address = String(object.contract_address);
     } else {
-      message.deployer_address = "";
+      message.contract_address = "";
+    }
+    if (object.contract_owner !== undefined && object.contract_owner !== null) {
+      message.contract_owner = String(object.contract_owner);
+    } else {
+      message.contract_owner = "";
     }
     return message;
   },
 
-  toJSON(message: TxOriginParam): unknown {
+  toJSON(message: OriginContractParam): unknown {
     const obj: any = {};
     message.chain !== undefined && (obj.chain = message.chain);
-    message.tx_hash !== undefined && (obj.tx_hash = message.tx_hash);
-    message.block_number !== undefined &&
-      (obj.block_number = message.block_number);
-    message.deployer_address !== undefined &&
-      (obj.deployer_address = message.deployer_address);
+    message.contract_address !== undefined &&
+      (obj.contract_address = message.contract_address);
+    message.contract_owner !== undefined &&
+      (obj.contract_owner = message.contract_owner);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<TxOriginParam>): TxOriginParam {
-    const message = { ...baseTxOriginParam } as TxOriginParam;
+  fromPartial(object: DeepPartial<OriginContractParam>): OriginContractParam {
+    const message = { ...baseOriginContractParam } as OriginContractParam;
     if (object.chain !== undefined && object.chain !== null) {
       message.chain = object.chain;
     } else {
       message.chain = "";
     }
-    if (object.tx_hash !== undefined && object.tx_hash !== null) {
-      message.tx_hash = object.tx_hash;
-    } else {
-      message.tx_hash = "";
-    }
-    if (object.block_number !== undefined && object.block_number !== null) {
-      message.block_number = object.block_number;
-    } else {
-      message.block_number = 0;
-    }
     if (
-      object.deployer_address !== undefined &&
-      object.deployer_address !== null
+      object.contract_address !== undefined &&
+      object.contract_address !== null
     ) {
-      message.deployer_address = object.deployer_address;
+      message.contract_address = object.contract_address;
     } else {
-      message.deployer_address = "";
+      message.contract_address = "";
+    }
+    if (object.contract_owner !== undefined && object.contract_owner !== null) {
+      message.contract_owner = object.contract_owner;
+    } else {
+      message.contract_owner = "";
+    }
+    return message;
+  },
+};
+
+const baseOriginContractInfo: object = { confirmers: "" };
+
+export const OriginContractInfo = {
+  encode(
+    message: OriginContractInfo,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.contractOriginDataInfo !== undefined) {
+      OriginContractParam.encode(
+        message.contractOriginDataInfo,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    if (message.hash.length !== 0) {
+      writer.uint32(18).bytes(message.hash);
+    }
+    for (const v of message.confirmers) {
+      writer.uint32(26).string(v!);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): OriginContractInfo {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseOriginContractInfo } as OriginContractInfo;
+    message.confirmers = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.contractOriginDataInfo = OriginContractParam.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        case 2:
+          message.hash = reader.bytes();
+          break;
+        case 3:
+          message.confirmers.push(reader.string());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): OriginContractInfo {
+    const message = { ...baseOriginContractInfo } as OriginContractInfo;
+    message.confirmers = [];
+    if (
+      object.contractOriginDataInfo !== undefined &&
+      object.contractOriginDataInfo !== null
+    ) {
+      message.contractOriginDataInfo = OriginContractParam.fromJSON(
+        object.contractOriginDataInfo
+      );
+    } else {
+      message.contractOriginDataInfo = undefined;
+    }
+    if (object.hash !== undefined && object.hash !== null) {
+      message.hash = bytesFromBase64(object.hash);
+    }
+    if (object.confirmers !== undefined && object.confirmers !== null) {
+      for (const e of object.confirmers) {
+        message.confirmers.push(String(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: OriginContractInfo): unknown {
+    const obj: any = {};
+    message.contractOriginDataInfo !== undefined &&
+      (obj.contractOriginDataInfo = message.contractOriginDataInfo
+        ? OriginContractParam.toJSON(message.contractOriginDataInfo)
+        : undefined);
+    message.hash !== undefined &&
+      (obj.hash = base64FromBytes(
+        message.hash !== undefined ? message.hash : new Uint8Array()
+      ));
+    if (message.confirmers) {
+      obj.confirmers = message.confirmers.map((e) => e);
+    } else {
+      obj.confirmers = [];
+    }
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<OriginContractInfo>): OriginContractInfo {
+    const message = { ...baseOriginContractInfo } as OriginContractInfo;
+    message.confirmers = [];
+    if (
+      object.contractOriginDataInfo !== undefined &&
+      object.contractOriginDataInfo !== null
+    ) {
+      message.contractOriginDataInfo = OriginContractParam.fromPartial(
+        object.contractOriginDataInfo
+      );
+    } else {
+      message.contractOriginDataInfo = undefined;
+    }
+    if (object.hash !== undefined && object.hash !== null) {
+      message.hash = object.hash;
+    } else {
+      message.hash = new Uint8Array();
+    }
+    if (object.confirmers !== undefined && object.confirmers !== null) {
+      for (const e of object.confirmers) {
+        message.confirmers.push(e);
+      }
     }
     return message;
   },
@@ -207,8 +315,8 @@ export const CollectionOwnerRequest = {
         writer.uint32(74).fork()
       ).ldelim();
     }
-    for (const v of message.origin_tx) {
-      OriginTxInfo.encode(v!, writer.uint32(82).fork()).ldelim();
+    for (const v of message.contract_info) {
+      OriginContractInfo.encode(v!, writer.uint32(82).fork()).ldelim();
     }
     if (message.expired_height !== 0) {
       writer.uint32(88).int64(message.expired_height);
@@ -221,7 +329,7 @@ export const CollectionOwnerRequest = {
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCollectionOwnerRequest } as CollectionOwnerRequest;
     message.confirmers = {};
-    message.origin_tx = [];
+    message.contract_info = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -263,7 +371,9 @@ export const CollectionOwnerRequest = {
           );
           break;
         case 10:
-          message.origin_tx.push(OriginTxInfo.decode(reader, reader.uint32()));
+          message.contract_info.push(
+            OriginContractInfo.decode(reader, reader.uint32())
+          );
           break;
         case 11:
           message.expired_height = longToNumber(reader.int64() as Long);
@@ -279,7 +389,7 @@ export const CollectionOwnerRequest = {
   fromJSON(object: any): CollectionOwnerRequest {
     const message = { ...baseCollectionOwnerRequest } as CollectionOwnerRequest;
     message.confirmers = {};
-    message.origin_tx = [];
+    message.contract_info = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = Number(object.id);
     } else {
@@ -331,9 +441,9 @@ export const CollectionOwnerRequest = {
     } else {
       message.valid_until = undefined;
     }
-    if (object.origin_tx !== undefined && object.origin_tx !== null) {
-      for (const e of object.origin_tx) {
-        message.origin_tx.push(OriginTxInfo.fromJSON(e));
+    if (object.contract_info !== undefined && object.contract_info !== null) {
+      for (const e of object.contract_info) {
+        message.contract_info.push(OriginContractInfo.fromJSON(e));
       }
     }
     if (object.expired_height !== undefined && object.expired_height !== null) {
@@ -372,12 +482,12 @@ export const CollectionOwnerRequest = {
         message.valid_until !== undefined
           ? message.valid_until.toISOString()
           : null);
-    if (message.origin_tx) {
-      obj.origin_tx = message.origin_tx.map((e) =>
-        e ? OriginTxInfo.toJSON(e) : undefined
+    if (message.contract_info) {
+      obj.contract_info = message.contract_info.map((e) =>
+        e ? OriginContractInfo.toJSON(e) : undefined
       );
     } else {
-      obj.origin_tx = [];
+      obj.contract_info = [];
     }
     message.expired_height !== undefined &&
       (obj.expired_height = message.expired_height);
@@ -389,7 +499,7 @@ export const CollectionOwnerRequest = {
   ): CollectionOwnerRequest {
     const message = { ...baseCollectionOwnerRequest } as CollectionOwnerRequest;
     message.confirmers = {};
-    message.origin_tx = [];
+    message.contract_info = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -443,9 +553,9 @@ export const CollectionOwnerRequest = {
     } else {
       message.valid_until = undefined;
     }
-    if (object.origin_tx !== undefined && object.origin_tx !== null) {
-      for (const e of object.origin_tx) {
-        message.origin_tx.push(OriginTxInfo.fromPartial(e));
+    if (object.contract_info !== undefined && object.contract_info !== null) {
+      for (const e of object.contract_info) {
+        message.contract_info.push(OriginContractInfo.fromPartial(e));
       }
     }
     if (object.expired_height !== undefined && object.expired_height !== null) {
@@ -556,6 +666,29 @@ var globalThis: any = (() => {
   throw "Unable to locate global object";
 })();
 
+const atob: (b64: string) => string =
+  globalThis.atob ||
+  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
+function bytesFromBase64(b64: string): Uint8Array {
+  const bin = atob(b64);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; ++i) {
+    arr[i] = bin.charCodeAt(i);
+  }
+  return arr;
+}
+
+const btoa: (bin: string) => string =
+  globalThis.btoa ||
+  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
+function base64FromBytes(arr: Uint8Array): string {
+  const bin: string[] = [];
+  for (let i = 0; i < arr.byteLength; ++i) {
+    bin.push(String.fromCharCode(arr[i]));
+  }
+  return btoa(bin.join(""));
+}
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
@@ -596,7 +729,4 @@ function longToNumber(long: Long): number {
   return long.toNumber();
 }
 
-if (util.Long !== Long) {
-  util.Long = Long as any;
-  configure();
-}
+

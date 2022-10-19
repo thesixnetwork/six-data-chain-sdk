@@ -9,6 +9,7 @@ import {
 } from "../cosmos/base/query/v1beta1/pagination";
 import { ActionRequest } from "../nftoracle/action_request";
 import { CollectionOwnerRequest } from "../nftoracle/collection_owner_request";
+import { OracleConfig } from "../nftoracle/oracle_config";
 
 export const protobufPackage = "thesixnetwork.sixnft.nftoracle";
 
@@ -70,6 +71,12 @@ export interface QueryAllCollectionOwnerRequestRequest {
 export interface QueryAllCollectionOwnerRequestResponse {
   CollectionOwnerRequest: CollectionOwnerRequest[];
   pagination: PageResponse | undefined;
+}
+
+export interface QueryGetOracleConfigRequest {}
+
+export interface QueryGetOracleConfigResponse {
+  OracleConfig: OracleConfig | undefined;
 }
 
 const baseQueryParamsRequest: object = {};
@@ -1145,6 +1152,133 @@ export const QueryAllCollectionOwnerRequestResponse = {
   },
 };
 
+const baseQueryGetOracleConfigRequest: object = {};
+
+export const QueryGetOracleConfigRequest = {
+  encode(
+    _: QueryGetOracleConfigRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetOracleConfigRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetOracleConfigRequest,
+    } as QueryGetOracleConfigRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): QueryGetOracleConfigRequest {
+    const message = {
+      ...baseQueryGetOracleConfigRequest,
+    } as QueryGetOracleConfigRequest;
+    return message;
+  },
+
+  toJSON(_: QueryGetOracleConfigRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(
+    _: DeepPartial<QueryGetOracleConfigRequest>
+  ): QueryGetOracleConfigRequest {
+    const message = {
+      ...baseQueryGetOracleConfigRequest,
+    } as QueryGetOracleConfigRequest;
+    return message;
+  },
+};
+
+const baseQueryGetOracleConfigResponse: object = {};
+
+export const QueryGetOracleConfigResponse = {
+  encode(
+    message: QueryGetOracleConfigResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.OracleConfig !== undefined) {
+      OracleConfig.encode(
+        message.OracleConfig,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetOracleConfigResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetOracleConfigResponse,
+    } as QueryGetOracleConfigResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.OracleConfig = OracleConfig.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetOracleConfigResponse {
+    const message = {
+      ...baseQueryGetOracleConfigResponse,
+    } as QueryGetOracleConfigResponse;
+    if (object.OracleConfig !== undefined && object.OracleConfig !== null) {
+      message.OracleConfig = OracleConfig.fromJSON(object.OracleConfig);
+    } else {
+      message.OracleConfig = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetOracleConfigResponse): unknown {
+    const obj: any = {};
+    message.OracleConfig !== undefined &&
+      (obj.OracleConfig = message.OracleConfig
+        ? OracleConfig.toJSON(message.OracleConfig)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetOracleConfigResponse>
+  ): QueryGetOracleConfigResponse {
+    const message = {
+      ...baseQueryGetOracleConfigResponse,
+    } as QueryGetOracleConfigResponse;
+    if (object.OracleConfig !== undefined && object.OracleConfig !== null) {
+      message.OracleConfig = OracleConfig.fromPartial(object.OracleConfig);
+    } else {
+      message.OracleConfig = undefined;
+    }
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -1173,6 +1307,10 @@ export interface Query {
   CollectionOwnerRequestAll(
     request: QueryAllCollectionOwnerRequestRequest
   ): Promise<QueryAllCollectionOwnerRequestResponse>;
+  /** Queries a OracleConfig by index. */
+  OracleConfig(
+    request: QueryGetOracleConfigRequest
+  ): Promise<QueryGetOracleConfigResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -1273,6 +1411,20 @@ export class QueryClientImpl implements Query {
       QueryAllCollectionOwnerRequestResponse.decode(new Reader(data))
     );
   }
+
+  OracleConfig(
+    request: QueryGetOracleConfigRequest
+  ): Promise<QueryGetOracleConfigResponse> {
+    const data = QueryGetOracleConfigRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Query",
+      "OracleConfig",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetOracleConfigResponse.decode(new Reader(data))
+    );
+  }
 }
 
 interface Rpc {
@@ -1311,7 +1463,4 @@ function longToNumber(long: Long): number {
   return long.toNumber();
 }
 
-if (util.Long !== Long) {
-  util.Long = Long as any;
-  configure();
-}
+

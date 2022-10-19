@@ -53,7 +53,7 @@ export interface NftadminQueryGetAuthorizationResponse {
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
 export interface NftadminQueryParamsResponse {
-  /** params holds all the parameters of this module. */
+  /** Params defines the parameters for the module. */
   params?: NftadminParams;
 }
 
