@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "@sixnetwork/six-data-chain-sdk",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "This project is Six Data Chain Client it use for send transactions and query data from chain",
   "main": "dist/index.js",
   "scripts": {
@@ -12,7 +12,12 @@
     "type": "git",
     "url": "git+https://github.com/thesixnetwork/six-data-chain-sdk.git"
   },
-  "keywords": ["sixnetwork","six data chain","six sdk","sixprotocol"],
+  "keywords": [
+    "sixnetwork",
+    "six data chain",
+    "six sdk",
+    "sixprotocol"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
