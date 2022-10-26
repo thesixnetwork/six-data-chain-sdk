@@ -1,16 +1,16 @@
 // THIS FILE IS GENERATED AUTOMATICALLY. DO NOT MODIFY.
 
 import { StdFee } from "@cosmjs/launchpad";
-import { SigningStargateClient } from "@cosmjs/stargate";
+import { SigningStargateClient ,SigningStargateClientOptions} from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
-import { MsgRemoveBinding } from "./types/evmsupport/tx";
 import { MsgBindAddress } from "./types/evmsupport/tx";
+import { MsgRemoveBinding } from "./types/evmsupport/tx";
 
 
 const types = [
-  ["/thesixnetwork.sixnft.evmsupport.MsgRemoveBinding", MsgRemoveBinding],
   ["/thesixnetwork.sixnft.evmsupport.MsgBindAddress", MsgBindAddress],
+  ["/thesixnetwork.sixnft.evmsupport.MsgRemoveBinding", MsgRemoveBinding],
   
 ];
 export const MissingWalletError = new Error("wallet is required");
@@ -26,16 +26,16 @@ interface TxClientOptions {
   addr: string
 }
 
-interface SignAndBroadcastOptions {
+export interface SignAndBroadcastOptions {
   fee: StdFee,
   memo?: string
 }
 
-const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions = { addr: "http://localhost:26657" }) => {
+const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions = { addr: "http://localhost:26657" },options?:SigningStargateClientOptions) => {
   if (!wallet) throw MissingWalletError;
   let client;
   if (addr) {
-    client = await SigningStargateClient.connectWithSigner(addr, wallet, { registry });
+    client = await SigningStargateClient.connectWithSigner(addr, wallet, { registry,...options });
   }else{
     client = await SigningStargateClient.offline( wallet, { registry });
   }
@@ -43,8 +43,8 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
 
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
-    msgRemoveBinding: (data: MsgRemoveBinding): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.evmsupport.MsgRemoveBinding", value: MsgRemoveBinding.fromPartial( data ) }),
     msgBindAddress: (data: MsgBindAddress): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.evmsupport.MsgBindAddress", value: MsgBindAddress.fromPartial( data ) }),
+    msgRemoveBinding: (data: MsgRemoveBinding): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.evmsupport.MsgRemoveBinding", value: MsgRemoveBinding.fromPartial( data ) }),
     
   };
 };
