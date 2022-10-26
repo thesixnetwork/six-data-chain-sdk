@@ -13,6 +13,7 @@ export interface NFTSchema {
   origin_data: OriginData | undefined;
   onchain_data: OnChainData | undefined;
   isVerified: boolean;
+  mint_authorization: string;
 }
 
 const baseNFTSchema: object = {
@@ -21,6 +22,7 @@ const baseNFTSchema: object = {
   owner: "",
   system_actioners: "",
   isVerified: false,
+  mint_authorization: "",
 };
 
 export const NFTSchema = {
@@ -48,6 +50,9 @@ export const NFTSchema = {
     }
     if (message.isVerified === true) {
       writer.uint32(56).bool(message.isVerified);
+    }
+    if (message.mint_authorization !== "") {
+      writer.uint32(66).string(message.mint_authorization);
     }
     return writer;
   },
@@ -80,6 +85,9 @@ export const NFTSchema = {
           break;
         case 7:
           message.isVerified = reader.bool();
+          break;
+        case 8:
+          message.mint_authorization = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -130,6 +138,14 @@ export const NFTSchema = {
     } else {
       message.isVerified = false;
     }
+    if (
+      object.mint_authorization !== undefined &&
+      object.mint_authorization !== null
+    ) {
+      message.mint_authorization = String(object.mint_authorization);
+    } else {
+      message.mint_authorization = "";
+    }
     return message;
   },
 
@@ -152,6 +168,8 @@ export const NFTSchema = {
         ? OnChainData.toJSON(message.onchain_data)
         : undefined);
     message.isVerified !== undefined && (obj.isVerified = message.isVerified);
+    message.mint_authorization !== undefined &&
+      (obj.mint_authorization = message.mint_authorization);
     return obj;
   },
 
@@ -195,6 +213,14 @@ export const NFTSchema = {
       message.isVerified = object.isVerified;
     } else {
       message.isVerified = false;
+    }
+    if (
+      object.mint_authorization !== undefined &&
+      object.mint_authorization !== null
+    ) {
+      message.mint_authorization = object.mint_authorization;
+    } else {
+      message.mint_authorization = "";
     }
     return message;
   },

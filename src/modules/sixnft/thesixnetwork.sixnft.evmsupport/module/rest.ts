@@ -52,7 +52,7 @@ export interface EvmsupportQueryGetAddressBindingResponse {
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
 export interface EvmsupportQueryParamsResponse {
-  /** params holds all the parameters of this module. */
+  /** Params defines the parameters for the module. */
   params?: EvmsupportParams;
 }
 
@@ -325,7 +325,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryAddressBindingAll
    * @summary Queries a list of AddressBinding items.
-   * @request GET:/sixnft/evmsupport/address_binding
+   * @request GET:/thesixnetwork/sixnft/evmsupport/address_binding
    */
   queryAddressBindingAll = (
     query?: {
@@ -337,7 +337,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     params: RequestParams = {},
   ) =>
     this.request<EvmsupportQueryAllAddressBindingResponse, RpcStatus>({
-      path: `/sixnft/evmsupport/address_binding`,
+      path: `/thesixnetwork/sixnft/evmsupport/address_binding`,
       method: "GET",
       query: query,
       format: "json",
@@ -350,11 +350,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryAddressBinding
    * @summary Queries a AddressBinding by index.
-   * @request GET:/sixnft/evmsupport/address_binding/{ethAddress}/{nativeAddress}
+   * @request GET:/thesixnetwork/sixnft/evmsupport/address_binding/{ethAddress}/{nativeAddress}
    */
   queryAddressBinding = (ethAddress: string, nativeAddress: string, params: RequestParams = {}) =>
     this.request<EvmsupportQueryGetAddressBindingResponse, RpcStatus>({
-      path: `/sixnft/evmsupport/address_binding/${ethAddress}/${nativeAddress}`,
+      path: `/thesixnetwork/sixnft/evmsupport/address_binding/${ethAddress}/${nativeAddress}`,
       method: "GET",
       format: "json",
       ...params,
@@ -366,11 +366,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryParams
    * @summary Parameters queries the parameters of the module.
-   * @request GET:/sixnft/evmsupport/params
+   * @request GET:/thesixnetwork/sixnft/evmsupport/params
    */
   queryParams = (params: RequestParams = {}) =>
     this.request<EvmsupportQueryParamsResponse, RpcStatus>({
-      path: `/sixnft/evmsupport/params`,
+      path: `/thesixnetwork/sixnft/evmsupport/params`,
       method: "GET",
       format: "json",
       ...params,
