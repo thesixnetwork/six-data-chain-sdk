@@ -57,7 +57,7 @@ export interface NftoracleCollectionOwnerRequest {
 
   /** @format date-time */
   valid_until?: string;
-  origin_tx?: NftoracleOriginTxInfo[];
+  contract_info?: NftoracleOriginContractInfo[];
 
   /** @format int64 */
   expired_height?: string;
@@ -115,6 +115,10 @@ export interface NftoracleMsgCreateVerifyCollectionOwnerRequestResponse {
   ownerAddress?: string;
 }
 
+export interface NftoracleMsgSetMinimumConfirmationResponse {
+  newConfirmation?: string;
+}
+
 export interface NftoracleMsgSubmitActionResponseResponse {
   actionRequestID?: string;
 }
@@ -134,12 +138,26 @@ export interface NftoracleNftOriginData {
   traits?: NftoracleTrait[];
 }
 
-export interface NftoracleOriginTxInfo {
-  transactionOriginDataInfo?: NftoracleTransactionOriginDataInfo;
+export interface NftoracleOracleConfig {
+  /** @format int32 */
+  minimum_confirmation?: number;
+}
+
+export interface NftoracleOriginContractInfo {
+  contractOriginDataInfo?: NftoracleOriginContractParam;
 
   /** @format byte */
   hash?: string;
   confirmers?: string[];
+}
+
+export interface NftoracleOriginContractParam {
+  chain?: string;
+  contract_address?: string;
+  contract_owner?: string;
+
+  /** @format date-time */
+  request_expire?: string;
 }
 
 /**
@@ -208,11 +226,15 @@ export interface NftoracleQueryGetMintRequestResponse {
   MintRequest?: NftoracleMintRequest;
 }
 
+export interface NftoracleQueryGetOracleConfigResponse {
+  OracleConfig?: NftoracleOracleConfig;
+}
+
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
 export interface NftoracleQueryParamsResponse {
-  /** params holds all the parameters of this module. */
+  /** Params defines the parameters for the module. */
   params?: NftoracleParams;
 }
 
@@ -230,15 +252,6 @@ export interface NftoracleTrait {
   value?: string;
   display_type?: string;
   max_value?: string;
-}
-
-export interface NftoracleTransactionOriginDataInfo {
-  chain?: string;
-  tx_hash?: string;
-
-  /** @format uint64 */
-  block_number?: string;
-  deployer_address?: string;
 }
 
 export interface ProtobufAny {
@@ -289,6 +302,13 @@ export interface V1Beta1PageRequest {
    * is set.
    */
   count_total?: boolean;
+
+  /**
+   * reverse is set to true if results are to be returned in the descending order.
+   *
+   * Since: cosmos-sdk 0.43
+   */
+  reverse?: boolean;
 }
 
 /**
@@ -510,7 +530,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryActionRequestAll
    * @summary Queries a list of ActionRequest items.
-   * @request GET:/sixnft/nftoracle/action_request
+   * @request GET:/thesixnetwork/sixnft/nftoracle/action_request
    */
   queryActionRequestAll = (
     query?: {
@@ -518,11 +538,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>
     this.request<NftoracleQueryAllActionRequestResponse, RpcStatus>({
-      path: `/sixnft/nftoracle/action_request`,
+      path: `/thesixnetwork/sixnft/nftoracle/action_request`,
       method: "GET",
       query: query,
       format: "json",
@@ -535,68 +556,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryActionRequest
    * @summary Queries a ActionRequest by id.
-   * @request GET:/sixnft/nftoracle/action_request/{id}
+   * @request GET:/thesixnetwork/sixnft/nftoracle/action_request/{id}
    */
   queryActionRequest = (id: string, params: RequestParams = {}) =>
     this.request<NftoracleQueryGetActionRequestResponse, RpcStatus>({
-      path: `/sixnft/nftoracle/action_request/${id}`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryMintRequestAll
-   * @summary Queries a list of MintRequest items.
-   * @request GET:/sixnft/nftoracle/mint_request
-   */
-  queryMintRequestAll = (
-    query?: {
-      "pagination.key"?: string;
-      "pagination.offset"?: string;
-      "pagination.limit"?: string;
-      "pagination.count_total"?: boolean;
-    },
-    params: RequestParams = {},
-  ) =>
-    this.request<NftoracleQueryAllMintRequestResponse, RpcStatus>({
-      path: `/sixnft/nftoracle/mint_request`,
-      method: "GET",
-      query: query,
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryMintRequest
-   * @summary Queries a MintRequest by id.
-   * @request GET:/sixnft/nftoracle/mint_request/{id}
-   */
-  queryMintRequest = (id: string, params: RequestParams = {}) =>
-    this.request<NftoracleQueryGetMintRequestResponse, RpcStatus>({
-      path: `/sixnft/nftoracle/mint_request/${id}`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryParams
-   * @summary Parameters queries the parameters of the module.
-   * @request GET:/sixnft/nftoracle/params
-   */
-  queryParams = (params: RequestParams = {}) =>
-    this.request<NftoracleQueryParamsResponse, RpcStatus>({
-      path: `/sixnft/nftoracle/params`,
+      path: `/thesixnetwork/sixnft/nftoracle/action_request/${id}`,
       method: "GET",
       format: "json",
       ...params,
@@ -616,6 +580,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>
@@ -638,6 +603,80 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryCollectionOwnerRequest = (id: string, params: RequestParams = {}) =>
     this.request<NftoracleQueryGetCollectionOwnerRequestResponse, RpcStatus>({
       path: `/thesixnetwork/sixnft/nftoracle/collection_owner_request/${id}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryMintRequestAll
+   * @summary Queries a list of MintRequest items.
+   * @request GET:/thesixnetwork/sixnft/nftoracle/mint_request
+   */
+  queryMintRequestAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<NftoracleQueryAllMintRequestResponse, RpcStatus>({
+      path: `/thesixnetwork/sixnft/nftoracle/mint_request`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryMintRequest
+   * @summary Queries a MintRequest by id.
+   * @request GET:/thesixnetwork/sixnft/nftoracle/mint_request/{id}
+   */
+  queryMintRequest = (id: string, params: RequestParams = {}) =>
+    this.request<NftoracleQueryGetMintRequestResponse, RpcStatus>({
+      path: `/thesixnetwork/sixnft/nftoracle/mint_request/${id}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryOracleConfig
+   * @summary Queries a OracleConfig by index.
+   * @request GET:/thesixnetwork/sixnft/nftoracle/oracle_config
+   */
+  queryOracleConfig = (params: RequestParams = {}) =>
+    this.request<NftoracleQueryGetOracleConfigResponse, RpcStatus>({
+      path: `/thesixnetwork/sixnft/nftoracle/oracle_config`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryParams
+   * @summary Parameters queries the parameters of the module.
+   * @request GET:/thesixnetwork/sixnft/nftoracle/params
+   */
+  queryParams = (params: RequestParams = {}) =>
+    this.request<NftoracleQueryParamsResponse, RpcStatus>({
+      path: `/thesixnetwork/sixnft/nftoracle/params`,
       method: "GET",
       format: "json",
       ...params,

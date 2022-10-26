@@ -64,12 +64,21 @@ export interface MsgCreateVerifyCollectionOwnerRequestResponse {
 export interface MsgSubmitVerifyCollectionOwner {
   creator: string;
   verifyRequestID: number;
-  schemaCode: string;
-  base64OriginTxInfo: string;
+  nftSchemaCode: string;
+  base64OriginContractInfo: string;
 }
 
 export interface MsgSubmitVerifyCollectionOwnerResponse {
   verifyRequestID: number;
+}
+
+export interface MsgSetMinimumConfirmation {
+  creator: string;
+  newConfirmation: string;
+}
+
+export interface MsgSetMinimumConfirmationResponse {
+  newConfirmation: string;
 }
 
 const baseMsgCreateMintRequest: object = {
@@ -1115,8 +1124,8 @@ export const MsgCreateVerifyCollectionOwnerRequestResponse = {
 const baseMsgSubmitVerifyCollectionOwner: object = {
   creator: "",
   verifyRequestID: 0,
-  schemaCode: "",
-  base64OriginTxInfo: "",
+  nftSchemaCode: "",
+  base64OriginContractInfo: "",
 };
 
 export const MsgSubmitVerifyCollectionOwner = {
@@ -1130,11 +1139,11 @@ export const MsgSubmitVerifyCollectionOwner = {
     if (message.verifyRequestID !== 0) {
       writer.uint32(16).uint64(message.verifyRequestID);
     }
-    if (message.schemaCode !== "") {
-      writer.uint32(26).string(message.schemaCode);
+    if (message.nftSchemaCode !== "") {
+      writer.uint32(26).string(message.nftSchemaCode);
     }
-    if (message.base64OriginTxInfo !== "") {
-      writer.uint32(34).string(message.base64OriginTxInfo);
+    if (message.base64OriginContractInfo !== "") {
+      writer.uint32(34).string(message.base64OriginContractInfo);
     }
     return writer;
   },
@@ -1158,10 +1167,10 @@ export const MsgSubmitVerifyCollectionOwner = {
           message.verifyRequestID = longToNumber(reader.uint64() as Long);
           break;
         case 3:
-          message.schemaCode = reader.string();
+          message.nftSchemaCode = reader.string();
           break;
         case 4:
-          message.base64OriginTxInfo = reader.string();
+          message.base64OriginContractInfo = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1188,18 +1197,20 @@ export const MsgSubmitVerifyCollectionOwner = {
     } else {
       message.verifyRequestID = 0;
     }
-    if (object.schemaCode !== undefined && object.schemaCode !== null) {
-      message.schemaCode = String(object.schemaCode);
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = String(object.nftSchemaCode);
     } else {
-      message.schemaCode = "";
+      message.nftSchemaCode = "";
     }
     if (
-      object.base64OriginTxInfo !== undefined &&
-      object.base64OriginTxInfo !== null
+      object.base64OriginContractInfo !== undefined &&
+      object.base64OriginContractInfo !== null
     ) {
-      message.base64OriginTxInfo = String(object.base64OriginTxInfo);
+      message.base64OriginContractInfo = String(
+        object.base64OriginContractInfo
+      );
     } else {
-      message.base64OriginTxInfo = "";
+      message.base64OriginContractInfo = "";
     }
     return message;
   },
@@ -1209,9 +1220,10 @@ export const MsgSubmitVerifyCollectionOwner = {
     message.creator !== undefined && (obj.creator = message.creator);
     message.verifyRequestID !== undefined &&
       (obj.verifyRequestID = message.verifyRequestID);
-    message.schemaCode !== undefined && (obj.schemaCode = message.schemaCode);
-    message.base64OriginTxInfo !== undefined &&
-      (obj.base64OriginTxInfo = message.base64OriginTxInfo);
+    message.nftSchemaCode !== undefined &&
+      (obj.nftSchemaCode = message.nftSchemaCode);
+    message.base64OriginContractInfo !== undefined &&
+      (obj.base64OriginContractInfo = message.base64OriginContractInfo);
     return obj;
   },
 
@@ -1234,18 +1246,18 @@ export const MsgSubmitVerifyCollectionOwner = {
     } else {
       message.verifyRequestID = 0;
     }
-    if (object.schemaCode !== undefined && object.schemaCode !== null) {
-      message.schemaCode = object.schemaCode;
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = object.nftSchemaCode;
     } else {
-      message.schemaCode = "";
+      message.nftSchemaCode = "";
     }
     if (
-      object.base64OriginTxInfo !== undefined &&
-      object.base64OriginTxInfo !== null
+      object.base64OriginContractInfo !== undefined &&
+      object.base64OriginContractInfo !== null
     ) {
-      message.base64OriginTxInfo = object.base64OriginTxInfo;
+      message.base64OriginContractInfo = object.base64OriginContractInfo;
     } else {
-      message.base64OriginTxInfo = "";
+      message.base64OriginContractInfo = "";
     }
     return message;
   },
@@ -1329,6 +1341,178 @@ export const MsgSubmitVerifyCollectionOwnerResponse = {
   },
 };
 
+const baseMsgSetMinimumConfirmation: object = {
+  creator: "",
+  newConfirmation: "",
+};
+
+export const MsgSetMinimumConfirmation = {
+  encode(
+    message: MsgSetMinimumConfirmation,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.newConfirmation !== "") {
+      writer.uint32(18).string(message.newConfirmation);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgSetMinimumConfirmation {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgSetMinimumConfirmation,
+    } as MsgSetMinimumConfirmation;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.newConfirmation = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSetMinimumConfirmation {
+    const message = {
+      ...baseMsgSetMinimumConfirmation,
+    } as MsgSetMinimumConfirmation;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (
+      object.newConfirmation !== undefined &&
+      object.newConfirmation !== null
+    ) {
+      message.newConfirmation = String(object.newConfirmation);
+    } else {
+      message.newConfirmation = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgSetMinimumConfirmation): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.newConfirmation !== undefined &&
+      (obj.newConfirmation = message.newConfirmation);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgSetMinimumConfirmation>
+  ): MsgSetMinimumConfirmation {
+    const message = {
+      ...baseMsgSetMinimumConfirmation,
+    } as MsgSetMinimumConfirmation;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (
+      object.newConfirmation !== undefined &&
+      object.newConfirmation !== null
+    ) {
+      message.newConfirmation = object.newConfirmation;
+    } else {
+      message.newConfirmation = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgSetMinimumConfirmationResponse: object = { newConfirmation: "" };
+
+export const MsgSetMinimumConfirmationResponse = {
+  encode(
+    message: MsgSetMinimumConfirmationResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.newConfirmation !== "") {
+      writer.uint32(10).string(message.newConfirmation);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgSetMinimumConfirmationResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgSetMinimumConfirmationResponse,
+    } as MsgSetMinimumConfirmationResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.newConfirmation = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSetMinimumConfirmationResponse {
+    const message = {
+      ...baseMsgSetMinimumConfirmationResponse,
+    } as MsgSetMinimumConfirmationResponse;
+    if (
+      object.newConfirmation !== undefined &&
+      object.newConfirmation !== null
+    ) {
+      message.newConfirmation = String(object.newConfirmation);
+    } else {
+      message.newConfirmation = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgSetMinimumConfirmationResponse): unknown {
+    const obj: any = {};
+    message.newConfirmation !== undefined &&
+      (obj.newConfirmation = message.newConfirmation);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgSetMinimumConfirmationResponse>
+  ): MsgSetMinimumConfirmationResponse {
+    const message = {
+      ...baseMsgSetMinimumConfirmationResponse,
+    } as MsgSetMinimumConfirmationResponse;
+    if (
+      object.newConfirmation !== undefined &&
+      object.newConfirmation !== null
+    ) {
+      message.newConfirmation = object.newConfirmation;
+    } else {
+      message.newConfirmation = "";
+    }
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   CreateMintRequest(
@@ -1346,10 +1530,13 @@ export interface Msg {
   CreateVerifyCollectionOwnerRequest(
     request: MsgCreateVerifyCollectionOwnerRequest
   ): Promise<MsgCreateVerifyCollectionOwnerRequestResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   SubmitVerifyCollectionOwner(
     request: MsgSubmitVerifyCollectionOwner
   ): Promise<MsgSubmitVerifyCollectionOwnerResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  SetMinimumConfirmation(
+    request: MsgSetMinimumConfirmation
+  ): Promise<MsgSetMinimumConfirmationResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -1438,6 +1625,20 @@ export class MsgClientImpl implements Msg {
     );
     return promise.then((data) =>
       MsgSubmitVerifyCollectionOwnerResponse.decode(new Reader(data))
+    );
+  }
+
+  SetMinimumConfirmation(
+    request: MsgSetMinimumConfirmation
+  ): Promise<MsgSetMinimumConfirmationResponse> {
+    const data = MsgSetMinimumConfirmation.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Msg",
+      "SetMinimumConfirmation",
+      data
+    );
+    return promise.then((data) =>
+      MsgSetMinimumConfirmationResponse.decode(new Reader(data))
     );
   }
 }

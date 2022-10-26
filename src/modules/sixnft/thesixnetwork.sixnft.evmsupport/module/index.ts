@@ -4,13 +4,13 @@ import { StdFee } from "@cosmjs/launchpad";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
-import { MsgBindAddress } from "./types/evmsupport/tx";
 import { MsgRemoveBinding } from "./types/evmsupport/tx";
+import { MsgBindAddress } from "./types/evmsupport/tx";
 
 
 const types = [
-  ["/thesixnetwork.sixnft.evmsupport.MsgBindAddress", MsgBindAddress],
   ["/thesixnetwork.sixnft.evmsupport.MsgRemoveBinding", MsgRemoveBinding],
+  ["/thesixnetwork.sixnft.evmsupport.MsgBindAddress", MsgBindAddress],
   
 ];
 export const MissingWalletError = new Error("wallet is required");
@@ -26,7 +26,7 @@ interface TxClientOptions {
   addr: string
 }
 
-export interface SignAndBroadcastOptions {
+interface SignAndBroadcastOptions {
   fee: StdFee,
   memo?: string
 }
@@ -43,8 +43,8 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
 
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
-    msgBindAddress: (data: MsgBindAddress): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.evmsupport.MsgBindAddress", value: MsgBindAddress.fromPartial( data ) }),
     msgRemoveBinding: (data: MsgRemoveBinding): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.evmsupport.MsgRemoveBinding", value: MsgRemoveBinding.fromPartial( data ) }),
+    msgBindAddress: (data: MsgBindAddress): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.evmsupport.MsgBindAddress", value: MsgBindAddress.fromPartial( data ) }),
     
   };
 };

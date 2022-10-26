@@ -53,7 +53,7 @@ export interface NftadminQueryGetAuthorizationResponse {
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
 export interface NftadminQueryParamsResponse {
-  /** params holds all the parameters of this module. */
+  /** Params defines the parameters for the module. */
   params?: NftadminParams;
 }
 
@@ -270,11 +270,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryAuthorization
    * @summary Queries a Authorization by index.
-   * @request GET:/sixnft/nftadmin/authorization
+   * @request GET:/thesixnetwork/sixnft/nftadmin/authorization
    */
   queryAuthorization = (params: RequestParams = {}) =>
     this.request<NftadminQueryGetAuthorizationResponse, RpcStatus>({
-      path: `/sixnft/nftadmin/authorization`,
+      path: `/thesixnetwork/sixnft/nftadmin/authorization`,
       method: "GET",
       format: "json",
       ...params,
@@ -286,11 +286,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryParams
    * @summary Parameters queries the parameters of the module.
-   * @request GET:/sixnft/nftadmin/params
+   * @request GET:/thesixnetwork/sixnft/nftadmin/params
    */
   queryParams = (params: RequestParams = {}) =>
     this.request<NftadminQueryParamsResponse, RpcStatus>({
-      path: `/sixnft/nftadmin/params`,
+      path: `/thesixnetwork/sixnft/nftadmin/params`,
       method: "GET",
       format: "json",
       ...params,
