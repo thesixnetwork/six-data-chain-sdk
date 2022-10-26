@@ -1,0 +1,93 @@
+{
+    "nftData": {
+      "nft_schema_code": "sixnetwork.nftexpo",
+      "token_id": "1",
+      "token_owner": "0x26D9a08F77cfA046289A934588F75037d77944bD",
+      "owner_address_type": "ORIGIN_ADDRESS",
+      "origin_image": "https://ipfs.io/ipfs/QmUd5xBxZucHQyUkqkCCtfZ3iktSSmEEyhuX1u48bP4WE7/whale.jpeg",
+      "onchain_image": "",
+      "token_uri": "",
+      "origin_attributes": [
+        {
+          "name": "background",
+          "string_attribute_value": {
+            "value": "Blue"
+          }
+        },
+        {
+          "name": "moon",
+          "string_attribute_value": {
+            "value": "White"
+          }
+        },
+        {
+          "name": "plate",
+          "string_attribute_value": {
+            "value": "Red"
+          }
+        },
+        {
+          "name": "tail",
+          "string_attribute_value": {
+            "value": "Red"
+          }
+        },
+        {
+          "name": "whale",
+          "string_attribute_value": {
+            "value": "Whale"
+          }
+        }
+      ],
+      "onchain_attributes": [
+        {
+          "name": "points",
+          "number_attribute_value": {
+            "value": "200"
+          }
+        },
+        {
+          "name": "missions_completed",
+          "number_attribute_value": {
+            "value": "2"
+          }
+        },
+        {
+          "name": "bonus_1",
+          "boolean_attribute_value": {
+            "value": false
+          }
+        },
+        {
+          "name": "bonus_2",
+          "boolean_attribute_value": {
+            "value": false
+          }
+        },
+        {
+          "name": "checked_in",
+          "boolean_attribute_value": {
+            "value": true
+          }
+        },
+        {
+          "name": "redeemed",
+          "boolean_attribute_value": {
+            "value": false
+          }
+        },
+        {
+          "name": "transformed",
+          "boolean_attribute_value": {
+            "value": false
+          }
+        },
+        {
+          "name": "points2",
+          "number_attribute_value": {
+            "value": "10000"
+          }
+        }
+      ]
+    }
+  }

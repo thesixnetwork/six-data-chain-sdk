@@ -596,6 +596,13 @@ export interface V1Beta1PageRequest {
    * is set.
    */
   count_total?: boolean;
+
+  /**
+   * reverse is set to true if results are to be returned in the descending order.
+   *
+   * Since: cosmos-sdk 0.43
+   */
+  reverse?: boolean;
 }
 
 /**
@@ -825,6 +832,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>
@@ -923,6 +931,73 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
+   * @name QueryMetadataCreatorAll
+   * @summary Queries a list of MetadataCreator items.
+   * @request GET:/thesixnetwork/sixnft/nftmngr/metadata_creator
+   */
+  queryMetadataCreatorAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<NftmngrQueryAllMetadataCreatorResponse, GooglerpcStatus>({
+      path: `/thesixnetwork/sixnft/nftmngr/metadata_creator`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryMetadataCreator
+   * @summary Queries a MetadataCreator by index.
+   * @request GET:/thesixnetwork/sixnft/nftmngr/metadata_creator/{nftSchemaCode}
+   */
+  queryMetadataCreator = (nftSchemaCode: string, params: RequestParams = {}) =>
+    this.request<NftmngrQueryGetMetadataCreatorResponse, GooglerpcStatus>({
+      path: `/thesixnetwork/sixnft/nftmngr/metadata_creator/${nftSchemaCode}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryNftCollection
+   * @summary Queries a NftCollection by index.
+   * @request GET:/thesixnetwork/sixnft/nftmngr/nft_collection/{nftSchemaCode}
+   */
+  queryNftCollection = (
+    nftSchemaCode: string,
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<NftmngrQueryGetNftCollectionResponse, GooglerpcStatus>({
+      path: `/thesixnetwork/sixnft/nftmngr/nft_collection/${nftSchemaCode}`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
    * @name QueryNftDataAll
    * @summary Queries a list of NftData items.
    * @request GET:/thesixnetwork/sixnft/nftmngr/nft_data
@@ -933,6 +1008,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>
@@ -1006,6 +1082,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>
@@ -1088,6 +1165,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>

@@ -10,7 +10,7 @@ import { MsgResyncAttributes } from "./types/nftmngr/tx";
 import { MsgChangeSchemaOwner } from "./types/nftmngr/tx";
 import { MsgAddAction } from "./types/nftmngr/tx";
 import { MsgSetBaseUri } from "./types/nftmngr/tx";
-import { MsgPerformActionByAdmin } from "./types/nftmngr/tx";
+import { MsgAddAttribute } from "./types/nftmngr/tx";
 import { MsgToggleAction } from "./types/nftmngr/tx";
 import { MsgRemoveSystemActioner } from "./types/nftmngr/tx";
 import { MsgCreateMetadata } from "./types/nftmngr/tx";
@@ -28,7 +28,7 @@ const types = [
   ["/thesixnetwork.sixnft.nftmngr.MsgChangeSchemaOwner", MsgChangeSchemaOwner],
   ["/thesixnetwork.sixnft.nftmngr.MsgAddAction", MsgAddAction],
   ["/thesixnetwork.sixnft.nftmngr.MsgSetBaseUri", MsgSetBaseUri],
-  ["/thesixnetwork.sixnft.nftmngr.MsgPerformActionByAdmin", MsgPerformActionByAdmin],
+  ["/thesixnetwork.sixnft.nftmngr.MsgAddAttribute", MsgAddAttribute],
   ["/thesixnetwork.sixnft.nftmngr.MsgToggleAction", MsgToggleAction],
   ["/thesixnetwork.sixnft.nftmngr.MsgRemoveSystemActioner", MsgRemoveSystemActioner],
   ["/thesixnetwork.sixnft.nftmngr.MsgCreateMetadata", MsgCreateMetadata],
@@ -75,7 +75,7 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
     msgChangeSchemaOwner: (data: MsgChangeSchemaOwner): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftmngr.MsgChangeSchemaOwner", value: MsgChangeSchemaOwner.fromPartial( data ) }),
     msgAddAction: (data: MsgAddAction): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftmngr.MsgAddAction", value: MsgAddAction.fromPartial( data ) }),
     msgSetBaseUri: (data: MsgSetBaseUri): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftmngr.MsgSetBaseUri", value: MsgSetBaseUri.fromPartial( data ) }),
-    msgPerformActionByAdmin: (data: MsgPerformActionByAdmin): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftmngr.MsgPerformActionByAdmin", value: MsgPerformActionByAdmin.fromPartial( data ) }),
+    msgAddAttribute: (data: MsgAddAttribute): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftmngr.MsgAddAttribute", value: MsgAddAttribute.fromPartial( data ) }),
     msgToggleAction: (data: MsgToggleAction): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftmngr.MsgToggleAction", value: MsgToggleAction.fromPartial( data ) }),
     msgRemoveSystemActioner: (data: MsgRemoveSystemActioner): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftmngr.MsgRemoveSystemActioner", value: MsgRemoveSystemActioner.fromPartial( data ) }),
     msgCreateMetadata: (data: MsgCreateMetadata): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftmngr.MsgCreateMetadata", value: MsgCreateMetadata.fromPartial( data ) }),
