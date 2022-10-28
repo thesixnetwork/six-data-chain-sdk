@@ -1,6 +1,7 @@
 
 
 import { Accounts } from "./Accounts"
+import {  SigningStargateClientOptions} from "@cosmjs/stargate";
 import { OfflineSigner } from "@cosmjs/proto-signing";
 
 // import * as nftmngrModuleGenerate from "../modules/sixnft/sixnft.nftmngr/module/index"
@@ -75,18 +76,18 @@ export class SixDataChainConnector {
     * const txClient = await sixConnector.connectRPCClient(signer)
     * @description connect to RPC client use for send transaction
     **/
-    connectRPCClient = async (accountSigner: OfflineSigner) => {
+    connectRPCClient = async (accountSigner: OfflineSigner,options?:SigningStargateClientOptions) => {
         const [
             nftmngrModule,
             evmsupportModule,
             adminModule,
             nftoracleModule,
         ] = await Promise.all([
-            nftmngrModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl }),
-            evmsupportModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl }),
+            nftmngrModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options),
+            evmsupportModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options),
             // sixNftAdminGenerate.txClient(accountSigner, { addr: this.rpcUrl }),
-            nftoracleModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl }),
-            sixNFTNFTadmin.txClient(accountSigner, { addr: this.rpcUrl })
+            nftoracleModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options),
+            sixNFTNFTadmin.txClient(accountSigner, { addr: this.rpcUrl },options)
         ])
         return {
             nftmngrModule,

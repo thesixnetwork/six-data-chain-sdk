@@ -1,7 +1,7 @@
 // THIS FILE IS GENERATED AUTOMATICALLY. DO NOT MODIFY.
 
 import { StdFee } from "@cosmjs/launchpad";
-import { SigningStargateClient,SigningStargateClientOptions } from "@cosmjs/stargate";
+import { SigningStargateClient ,SigningStargateClientOptions} from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
 import { MsgCreateVerifyCollectionOwnerRequest } from "./types/nftoracle/tx";
@@ -41,7 +41,7 @@ export interface SignAndBroadcastOptions {
   memo?: string
 }
 
-const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions = { addr: "http://localhost:26657" },options?:SigningStargateClientOptions) => {
+const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions = { addr: "http://localhost:26657" },options?: SigningStargateClientOptions) => {
   if (!wallet) throw MissingWalletError;
   let client;
   if (addr) {

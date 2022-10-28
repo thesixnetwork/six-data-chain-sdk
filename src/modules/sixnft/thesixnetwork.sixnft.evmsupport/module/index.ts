@@ -31,11 +31,11 @@ export interface SignAndBroadcastOptions {
   memo?: string
 }
 
-const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions = { addr: "http://localhost:26657" },options?:SigningStargateClientOptions) => {
+const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions = { addr: "http://localhost:26657" },options?: SigningStargateClientOptions) => {
   if (!wallet) throw MissingWalletError;
   let client;
   if (addr) {
-    client = await SigningStargateClient.connectWithSigner(addr, wallet, { registry,...options });
+    client = await SigningStargateClient.connectWithSigner(addr, wallet, { registry , ...options});
   }else{
     client = await SigningStargateClient.offline( wallet, { registry });
   }
