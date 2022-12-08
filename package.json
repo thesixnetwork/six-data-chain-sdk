@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "@sixnetwork/six-data-chain-sdk",
-  "version": "2.5.6",
+  "version": "2.5.7",
   "description": "This project is Six Data Chain Client it use for send transactions and query data from chain",
   "main": "dist/index.js",
   "scripts": {
@@ -30,6 +30,7 @@
     "@cosmjs/proto-signing": "0.27.0",
     "@cosmjs/stargate": "0.27.0",
     "@types/lodash": "^4.14.182",
+    "@web3auth/core": "^4.0.0-alpha.0",
     "axios": "^0.27.2",
     "cross-fetch": "^3.1.5",
     "lodash": "^4.17.21",

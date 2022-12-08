@@ -2,7 +2,7 @@ import { OfflineSigner } from "@cosmjs/proto-signing";
 import {DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 
 export class Accounts {
-    prefix: string = "6nft";
+    prefix: string = "6x";
     /**
      * Generates a new wallet with a BIP39 mnemonic of the given length.
      *
