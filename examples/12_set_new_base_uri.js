@@ -7,11 +7,12 @@ const main = async () => {
     const address = (await accountSigner.getAccounts())[0].address
     const rpcClient = await sixDataChainConnector.connectRPCClient(accountSigner)
 
-    const msg = await rpcClient.nftmngrModule.msgResyncAttributes({
+    const msg = await rpcClient.nftmngrModule.msgSetBaseUri({
         creator: address,
-        nftSchemaCode: "test_nft_schema_code",
-        tokenId:"0"
+        code: "test_schema_code",
+        newBaseUri: "<new base uri>"
     })
+    
     const txResponse = await rpcClient.nftmngrModule.signAndBroadcast([msg])
     console.log(txResponse)
 }

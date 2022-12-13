@@ -1,7 +1,7 @@
 {
-    "code": "test_nft",
-    "name": "test_nft",
-    "owner": "0xE9350352eb3C509D0D8A70aE0BC01B173EbE4121",
+    "code": "<string_of_organization.schemacode>__example::six.rocket_ticket",
+    "name": "<string_of_name>__example::sixlauncher001",
+    "owner": "<your_address>",
     "origin_data": {
         "origin_base_uri": "https://dryotus.definix.com/ipfs/QmZc4kPjvz4M4SpNfRZme2gcVzbMQjDt76GsxvLqSexT8R/",
         "uri_retrieval_method": "BASE",
