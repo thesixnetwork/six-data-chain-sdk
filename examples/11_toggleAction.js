@@ -10,7 +10,8 @@ const main = async () => {
     const msg = await rpcClient.nftmngrModule.msgToggleAction({
         creator: address,
         code: "test_schema_code",
-        action: "attribute1"
+        action: "attribute1",
+        disalbe: true, // true: disable, false: enable
     })
     
     const txResponse = await rpcClient.nftmngrModule.signAndBroadcast([msg])

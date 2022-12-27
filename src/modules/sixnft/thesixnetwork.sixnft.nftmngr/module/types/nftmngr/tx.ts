@@ -129,12 +129,19 @@ export interface UpdatedOriginData {
   opensea: UpdatedOpenseaAttributes | undefined;
 }
 
+/** ActionParameter */
+export interface ActionParameter {
+  name: string;
+  value: string;
+}
+
 export interface MsgPerformActionByAdmin {
   creator: string;
   nft_schema_code: string;
   tokenId: string;
   action: string;
   ref_id: string;
+  parameters: ActionParameter[];
 }
 
 export interface MsgPerformActionByAdminResponse {
@@ -194,6 +201,7 @@ export interface MsgToggleAction {
   creator: string;
   code: string;
   action: string;
+  disable: boolean;
 }
 
 export interface MsgToggleActionResponse {
@@ -272,6 +280,18 @@ export interface MsgSetMintauth {
 
 export interface MsgSetMintauthResponse {
   nftSchemaCode: string;
+}
+
+export interface MsgChangeOrgOwner {
+  creator: string;
+  orgName: string;
+  toNewOwner: string;
+}
+
+export interface MsgChangeOrgOwnerResponse {
+  orgName: string;
+  oldOwner: string;
+  newOwner: string;
 }
 
 const baseMsgCreateNFTSchema: object = { creator: "", nftSchemaBase64: "" };
@@ -845,6 +865,78 @@ export const UpdatedOriginData = {
   },
 };
 
+const baseActionParameter: object = { name: "", value: "" };
+
+export const ActionParameter = {
+  encode(message: ActionParameter, writer: Writer = Writer.create()): Writer {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+    if (message.value !== "") {
+      writer.uint32(18).string(message.value);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): ActionParameter {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseActionParameter } as ActionParameter;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.name = reader.string();
+          break;
+        case 2:
+          message.value = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ActionParameter {
+    const message = { ...baseActionParameter } as ActionParameter;
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = String(object.value);
+    } else {
+      message.value = "";
+    }
+    return message;
+  },
+
+  toJSON(message: ActionParameter): unknown {
+    const obj: any = {};
+    message.name !== undefined && (obj.name = message.name);
+    message.value !== undefined && (obj.value = message.value);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<ActionParameter>): ActionParameter {
+    const message = { ...baseActionParameter } as ActionParameter;
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    } else {
+      message.name = "";
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = object.value;
+    } else {
+      message.value = "";
+    }
+    return message;
+  },
+};
+
 const baseMsgPerformActionByAdmin: object = {
   creator: "",
   nft_schema_code: "",
@@ -873,6 +965,9 @@ export const MsgPerformActionByAdmin = {
     if (message.ref_id !== "") {
       writer.uint32(42).string(message.ref_id);
     }
+    for (const v of message.parameters) {
+      ActionParameter.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -882,6 +977,7 @@ export const MsgPerformActionByAdmin = {
     const message = {
       ...baseMsgPerformActionByAdmin,
     } as MsgPerformActionByAdmin;
+    message.parameters = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -900,6 +996,11 @@ export const MsgPerformActionByAdmin = {
         case 5:
           message.ref_id = reader.string();
           break;
+        case 6:
+          message.parameters.push(
+            ActionParameter.decode(reader, reader.uint32())
+          );
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -912,6 +1013,7 @@ export const MsgPerformActionByAdmin = {
     const message = {
       ...baseMsgPerformActionByAdmin,
     } as MsgPerformActionByAdmin;
+    message.parameters = [];
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator);
     } else {
@@ -940,6 +1042,11 @@ export const MsgPerformActionByAdmin = {
     } else {
       message.ref_id = "";
     }
+    if (object.parameters !== undefined && object.parameters !== null) {
+      for (const e of object.parameters) {
+        message.parameters.push(ActionParameter.fromJSON(e));
+      }
+    }
     return message;
   },
 
@@ -951,6 +1058,13 @@ export const MsgPerformActionByAdmin = {
     message.tokenId !== undefined && (obj.tokenId = message.tokenId);
     message.action !== undefined && (obj.action = message.action);
     message.ref_id !== undefined && (obj.ref_id = message.ref_id);
+    if (message.parameters) {
+      obj.parameters = message.parameters.map((e) =>
+        e ? ActionParameter.toJSON(e) : undefined
+      );
+    } else {
+      obj.parameters = [];
+    }
     return obj;
   },
 
@@ -960,6 +1074,7 @@ export const MsgPerformActionByAdmin = {
     const message = {
       ...baseMsgPerformActionByAdmin,
     } as MsgPerformActionByAdmin;
+    message.parameters = [];
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator;
     } else {
@@ -987,6 +1102,11 @@ export const MsgPerformActionByAdmin = {
       message.ref_id = object.ref_id;
     } else {
       message.ref_id = "";
+    }
+    if (object.parameters !== undefined && object.parameters !== null) {
+      for (const e of object.parameters) {
+        message.parameters.push(ActionParameter.fromPartial(e));
+      }
     }
     return message;
   },
@@ -1909,7 +2029,12 @@ export const MsgSetBaseUriResponse = {
   },
 };
 
-const baseMsgToggleAction: object = { creator: "", code: "", action: "" };
+const baseMsgToggleAction: object = {
+  creator: "",
+  code: "",
+  action: "",
+  disable: false,
+};
 
 export const MsgToggleAction = {
   encode(message: MsgToggleAction, writer: Writer = Writer.create()): Writer {
@@ -1921,6 +2046,9 @@ export const MsgToggleAction = {
     }
     if (message.action !== "") {
       writer.uint32(26).string(message.action);
+    }
+    if (message.disable === true) {
+      writer.uint32(32).bool(message.disable);
     }
     return writer;
   },
@@ -1940,6 +2068,9 @@ export const MsgToggleAction = {
           break;
         case 3:
           message.action = reader.string();
+          break;
+        case 4:
+          message.disable = reader.bool();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1966,6 +2097,11 @@ export const MsgToggleAction = {
     } else {
       message.action = "";
     }
+    if (object.disable !== undefined && object.disable !== null) {
+      message.disable = Boolean(object.disable);
+    } else {
+      message.disable = false;
+    }
     return message;
   },
 
@@ -1974,6 +2110,7 @@ export const MsgToggleAction = {
     message.creator !== undefined && (obj.creator = message.creator);
     message.code !== undefined && (obj.code = message.code);
     message.action !== undefined && (obj.action = message.action);
+    message.disable !== undefined && (obj.disable = message.disable);
     return obj;
   },
 
@@ -1993,6 +2130,11 @@ export const MsgToggleAction = {
       message.action = object.action;
     } else {
       message.action = "";
+    }
+    if (object.disable !== undefined && object.disable !== null) {
+      message.disable = object.disable;
+    } else {
+      message.disable = false;
     }
     return message;
   },
@@ -3344,6 +3486,206 @@ export const MsgSetMintauthResponse = {
   },
 };
 
+const baseMsgChangeOrgOwner: object = {
+  creator: "",
+  orgName: "",
+  toNewOwner: "",
+};
+
+export const MsgChangeOrgOwner = {
+  encode(message: MsgChangeOrgOwner, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.orgName !== "") {
+      writer.uint32(18).string(message.orgName);
+    }
+    if (message.toNewOwner !== "") {
+      writer.uint32(26).string(message.toNewOwner);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgChangeOrgOwner {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgChangeOrgOwner } as MsgChangeOrgOwner;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.orgName = reader.string();
+          break;
+        case 3:
+          message.toNewOwner = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgChangeOrgOwner {
+    const message = { ...baseMsgChangeOrgOwner } as MsgChangeOrgOwner;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.orgName !== undefined && object.orgName !== null) {
+      message.orgName = String(object.orgName);
+    } else {
+      message.orgName = "";
+    }
+    if (object.toNewOwner !== undefined && object.toNewOwner !== null) {
+      message.toNewOwner = String(object.toNewOwner);
+    } else {
+      message.toNewOwner = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgChangeOrgOwner): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.orgName !== undefined && (obj.orgName = message.orgName);
+    message.toNewOwner !== undefined && (obj.toNewOwner = message.toNewOwner);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgChangeOrgOwner>): MsgChangeOrgOwner {
+    const message = { ...baseMsgChangeOrgOwner } as MsgChangeOrgOwner;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.orgName !== undefined && object.orgName !== null) {
+      message.orgName = object.orgName;
+    } else {
+      message.orgName = "";
+    }
+    if (object.toNewOwner !== undefined && object.toNewOwner !== null) {
+      message.toNewOwner = object.toNewOwner;
+    } else {
+      message.toNewOwner = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgChangeOrgOwnerResponse: object = {
+  orgName: "",
+  oldOwner: "",
+  newOwner: "",
+};
+
+export const MsgChangeOrgOwnerResponse = {
+  encode(
+    message: MsgChangeOrgOwnerResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.orgName !== "") {
+      writer.uint32(10).string(message.orgName);
+    }
+    if (message.oldOwner !== "") {
+      writer.uint32(18).string(message.oldOwner);
+    }
+    if (message.newOwner !== "") {
+      writer.uint32(26).string(message.newOwner);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgChangeOrgOwnerResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgChangeOrgOwnerResponse,
+    } as MsgChangeOrgOwnerResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.orgName = reader.string();
+          break;
+        case 2:
+          message.oldOwner = reader.string();
+          break;
+        case 3:
+          message.newOwner = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgChangeOrgOwnerResponse {
+    const message = {
+      ...baseMsgChangeOrgOwnerResponse,
+    } as MsgChangeOrgOwnerResponse;
+    if (object.orgName !== undefined && object.orgName !== null) {
+      message.orgName = String(object.orgName);
+    } else {
+      message.orgName = "";
+    }
+    if (object.oldOwner !== undefined && object.oldOwner !== null) {
+      message.oldOwner = String(object.oldOwner);
+    } else {
+      message.oldOwner = "";
+    }
+    if (object.newOwner !== undefined && object.newOwner !== null) {
+      message.newOwner = String(object.newOwner);
+    } else {
+      message.newOwner = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgChangeOrgOwnerResponse): unknown {
+    const obj: any = {};
+    message.orgName !== undefined && (obj.orgName = message.orgName);
+    message.oldOwner !== undefined && (obj.oldOwner = message.oldOwner);
+    message.newOwner !== undefined && (obj.newOwner = message.newOwner);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgChangeOrgOwnerResponse>
+  ): MsgChangeOrgOwnerResponse {
+    const message = {
+      ...baseMsgChangeOrgOwnerResponse,
+    } as MsgChangeOrgOwnerResponse;
+    if (object.orgName !== undefined && object.orgName !== null) {
+      message.orgName = object.orgName;
+    } else {
+      message.orgName = "";
+    }
+    if (object.oldOwner !== undefined && object.oldOwner !== null) {
+      message.oldOwner = object.oldOwner;
+    } else {
+      message.oldOwner = "";
+    }
+    if (object.newOwner !== undefined && object.newOwner !== null) {
+      message.newOwner = object.newOwner;
+    } else {
+      message.newOwner = "";
+    }
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   CreateNFTSchema(
@@ -3378,8 +3720,11 @@ export interface Msg {
     request: MsgShowAttributes
   ): Promise<MsgShowAttributesResponse>;
   SetFeeConfig(request: MsgSetFeeConfig): Promise<MsgSetFeeConfigResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   SetMintauth(request: MsgSetMintauth): Promise<MsgSetMintauthResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  ChangeOrgOwner(
+    request: MsgChangeOrgOwner
+  ): Promise<MsgChangeOrgOwnerResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -3582,6 +3927,20 @@ export class MsgClientImpl implements Msg {
     );
     return promise.then((data) =>
       MsgSetMintauthResponse.decode(new Reader(data))
+    );
+  }
+
+  ChangeOrgOwner(
+    request: MsgChangeOrgOwner
+  ): Promise<MsgChangeOrgOwnerResponse> {
+    const data = MsgChangeOrgOwner.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftmngr.Msg",
+      "ChangeOrgOwner",
+      data
+    );
+    return promise.then((data) =>
+      MsgChangeOrgOwnerResponse.decode(new Reader(data))
     );
   }
 }

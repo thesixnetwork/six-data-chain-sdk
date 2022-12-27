@@ -4,22 +4,28 @@ import { StdFee } from "@cosmjs/launchpad";
 import { SigningStargateClient ,SigningStargateClientOptions} from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
+import { MsgDeleteActionSigner } from "./types/nftoracle/tx";
 import { MsgCreateVerifyCollectionOwnerRequest } from "./types/nftoracle/tx";
+import { MsgCreateActionRequest } from "./types/nftoracle/tx";
 import { MsgSubmitMintResponse } from "./types/nftoracle/tx";
+import { MsgCreateActionSigner } from "./types/nftoracle/tx";
+import { MsgSubmitActionResponse } from "./types/nftoracle/tx";
+import { MsgUpdateActionSigner } from "./types/nftoracle/tx";
 import { MsgSetMinimumConfirmation } from "./types/nftoracle/tx";
 import { MsgCreateMintRequest } from "./types/nftoracle/tx";
-import { MsgCreateActionRequest } from "./types/nftoracle/tx";
-import { MsgSubmitActionResponse } from "./types/nftoracle/tx";
 import { MsgSubmitVerifyCollectionOwner } from "./types/nftoracle/tx";
 
 
 const types = [
+  ["/thesixnetwork.sixnft.nftoracle.MsgDeleteActionSigner", MsgDeleteActionSigner],
   ["/thesixnetwork.sixnft.nftoracle.MsgCreateVerifyCollectionOwnerRequest", MsgCreateVerifyCollectionOwnerRequest],
+  ["/thesixnetwork.sixnft.nftoracle.MsgCreateActionRequest", MsgCreateActionRequest],
   ["/thesixnetwork.sixnft.nftoracle.MsgSubmitMintResponse", MsgSubmitMintResponse],
+  ["/thesixnetwork.sixnft.nftoracle.MsgCreateActionSigner", MsgCreateActionSigner],
+  ["/thesixnetwork.sixnft.nftoracle.MsgSubmitActionResponse", MsgSubmitActionResponse],
+  ["/thesixnetwork.sixnft.nftoracle.MsgUpdateActionSigner", MsgUpdateActionSigner],
   ["/thesixnetwork.sixnft.nftoracle.MsgSetMinimumConfirmation", MsgSetMinimumConfirmation],
   ["/thesixnetwork.sixnft.nftoracle.MsgCreateMintRequest", MsgCreateMintRequest],
-  ["/thesixnetwork.sixnft.nftoracle.MsgCreateActionRequest", MsgCreateActionRequest],
-  ["/thesixnetwork.sixnft.nftoracle.MsgSubmitActionResponse", MsgSubmitActionResponse],
   ["/thesixnetwork.sixnft.nftoracle.MsgSubmitVerifyCollectionOwner", MsgSubmitVerifyCollectionOwner],
   
 ];
@@ -41,7 +47,7 @@ export interface SignAndBroadcastOptions {
   memo?: string
 }
 
-const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions = { addr: "http://localhost:26657" },options?: SigningStargateClientOptions) => {
+const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions = { addr: "http://localhost:26657" }, options?: SigningStargateClientOptions) => {
   if (!wallet) throw MissingWalletError;
   let client;
   if (addr) {
@@ -53,12 +59,15 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
 
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
+    msgDeleteActionSigner: (data: MsgDeleteActionSigner): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftoracle.MsgDeleteActionSigner", value: MsgDeleteActionSigner.fromPartial( data ) }),
     msgCreateVerifyCollectionOwnerRequest: (data: MsgCreateVerifyCollectionOwnerRequest): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftoracle.MsgCreateVerifyCollectionOwnerRequest", value: MsgCreateVerifyCollectionOwnerRequest.fromPartial( data ) }),
+    msgCreateActionRequest: (data: MsgCreateActionRequest): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftoracle.MsgCreateActionRequest", value: MsgCreateActionRequest.fromPartial( data ) }),
     msgSubmitMintResponse: (data: MsgSubmitMintResponse): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftoracle.MsgSubmitMintResponse", value: MsgSubmitMintResponse.fromPartial( data ) }),
+    msgCreateActionSigner: (data: MsgCreateActionSigner): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftoracle.MsgCreateActionSigner", value: MsgCreateActionSigner.fromPartial( data ) }),
+    msgSubmitActionResponse: (data: MsgSubmitActionResponse): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftoracle.MsgSubmitActionResponse", value: MsgSubmitActionResponse.fromPartial( data ) }),
+    msgUpdateActionSigner: (data: MsgUpdateActionSigner): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftoracle.MsgUpdateActionSigner", value: MsgUpdateActionSigner.fromPartial( data ) }),
     msgSetMinimumConfirmation: (data: MsgSetMinimumConfirmation): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftoracle.MsgSetMinimumConfirmation", value: MsgSetMinimumConfirmation.fromPartial( data ) }),
     msgCreateMintRequest: (data: MsgCreateMintRequest): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftoracle.MsgCreateMintRequest", value: MsgCreateMintRequest.fromPartial( data ) }),
-    msgCreateActionRequest: (data: MsgCreateActionRequest): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftoracle.MsgCreateActionRequest", value: MsgCreateActionRequest.fromPartial( data ) }),
-    msgSubmitActionResponse: (data: MsgSubmitActionResponse): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftoracle.MsgSubmitActionResponse", value: MsgSubmitActionResponse.fromPartial( data ) }),
     msgSubmitVerifyCollectionOwner: (data: MsgSubmitVerifyCollectionOwner): EncodeObject => ({ typeUrl: "/thesixnetwork.sixnft.nftoracle.MsgSubmitVerifyCollectionOwner", value: MsgSubmitVerifyCollectionOwner.fromPartial( data ) }),
     
   };

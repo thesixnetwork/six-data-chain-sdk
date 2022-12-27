@@ -9,12 +9,13 @@
  * ---------------------------------------------------------------
  */
 
-export interface NftoracleActionRequest {
+export interface NftoracleActionOracleRequest {
   /** @format uint64 */
   id?: string;
   nft_schema_code?: string;
   token_id?: string;
   action?: string;
+  params?: NftoracleActionParameter[];
   caller?: string;
   ref_id?: string;
 
@@ -24,7 +25,7 @@ export interface NftoracleActionRequest {
 
   /** @format uint64 */
   current_confirm?: string;
-  confirmers?: Record<string, boolean>;
+  confirmers?: string[];
 
   /** @format date-time */
   created_at?: string;
@@ -36,6 +37,23 @@ export interface NftoracleActionRequest {
   /** @format int64 */
   expired_height?: string;
   execution_error_message?: string;
+}
+
+export interface NftoracleActionParameter {
+  name?: string;
+  value?: string;
+}
+
+export interface NftoracleActionSigner {
+  actor_address?: string;
+  owner_address?: string;
+
+  /** @format date-time */
+  created_at?: string;
+
+  /** @format date-time */
+  expired_at?: string;
+  creator?: string;
 }
 
 export interface NftoracleCollectionOwnerRequest {
@@ -50,7 +68,7 @@ export interface NftoracleCollectionOwnerRequest {
 
   /** @format uint64 */
   current_confirm?: string;
-  confirmers?: Record<string, boolean>;
+  confirmers?: string[];
 
   /** @format date-time */
   created_at?: string;
@@ -83,7 +101,7 @@ export interface NftoracleMintRequest {
 
   /** @format uint64 */
   current_confirm?: string;
-  confirmers?: Record<string, boolean>;
+  confirmers?: string[];
 
   /** @format date-time */
   created_at?: string;
@@ -101,6 +119,12 @@ export interface NftoracleMsgCreateActionRequestResponse {
   id?: string;
 }
 
+export interface NftoracleMsgCreateActionSignerResponse {
+  ownerAddress?: string;
+  signerAddress?: string;
+  expireAt?: string;
+}
+
 export interface NftoracleMsgCreateMintRequestResponse {
   /** @format uint64 */
   id?: string;
@@ -113,6 +137,11 @@ export interface NftoracleMsgCreateVerifyCollectionOwnerRequestResponse {
   id?: string;
   nftSchemaCode?: string;
   ownerAddress?: string;
+}
+
+export interface NftoracleMsgDeleteActionSignerResponse {
+  ownerAddress?: string;
+  signerAddress?: string;
 }
 
 export interface NftoracleMsgSetMinimumConfirmationResponse {
@@ -130,6 +159,12 @@ export interface NftoracleMsgSubmitMintResponseResponse {
 export interface NftoracleMsgSubmitVerifyCollectionOwnerResponse {
   /** @format uint64 */
   verifyRequestID?: string;
+}
+
+export interface NftoracleMsgUpdateActionSignerResponse {
+  ownerAddress?: string;
+  signerAddress?: string;
+  expireAt?: string;
 }
 
 export interface NftoracleNftOriginData {
@@ -167,10 +202,26 @@ export interface NftoracleParams {
   mint_request_active_duration?: string;
   action_request_active_duration?: string;
   verify_request_active_duration?: string;
+  action_signer_active_duration?: string;
 }
 
 export interface NftoracleQueryAllActionRequestResponse {
-  ActionRequest?: NftoracleActionRequest[];
+  ActionOracleRequest?: NftoracleActionOracleRequest[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
+export interface NftoracleQueryAllActionSignerResponse {
+  actionSigner?: NftoracleActionSigner[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -215,7 +266,11 @@ export interface NftoracleQueryAllMintRequestResponse {
 }
 
 export interface NftoracleQueryGetActionRequestResponse {
-  ActionRequest?: NftoracleActionRequest;
+  ActionOracleRequest?: NftoracleActionOracleRequest;
+}
+
+export interface NftoracleQueryGetActionSignerResponse {
+  actionSigner?: NftoracleActionSigner;
 }
 
 export interface NftoracleQueryGetCollectionOwnerRequestResponse {
@@ -234,7 +289,7 @@ export interface NftoracleQueryGetOracleConfigResponse {
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
 export interface NftoracleQueryParamsResponse {
-  /** Params defines the parameters for the module. */
+  /** params holds all the parameters of this module. */
   params?: NftoracleParams;
 }
 
@@ -546,14 +601,56 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
-   * @name QueryActionRequest
+   * @name QueryActionOracleRequest
    * @summary Queries a ActionRequest by id.
    * @request GET:/thesixnetwork/sixnft/nftoracle/action_request/{id}
    */
-  queryActionRequest = (id: string, params: RequestParams = {}) =>
+  queryActionOracleRequest = (id: string, params: RequestParams = {}) =>
     this.request<NftoracleQueryGetActionRequestResponse, RpcStatus>({
       path: `/thesixnetwork/sixnft/nftoracle/action_request/${id}`,
       method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryActionSignerAll
+   * @summary Queries a list of ActionSigner items.
+   * @request GET:/thesixnetwork/sixnft/nftoracle/action_signer
+   */
+  queryActionSignerAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<NftoracleQueryAllActionSignerResponse, RpcStatus>({
+      path: `/thesixnetwork/sixnft/nftoracle/action_signer`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryActionSigner
+   * @summary Queries a ActionSigner by index.
+   * @request GET:/thesixnetwork/sixnft/nftoracle/action_signer/{actorAddress}
+   */
+  queryActionSigner = (actorAddress: string, query?: { ownerAddress?: string }, params: RequestParams = {}) =>
+    this.request<NftoracleQueryGetActionSignerResponse, RpcStatus>({
+      path: `/thesixnetwork/sixnft/nftoracle/action_signer/${actorAddress}`,
+      method: "GET",
+      query: query,
       format: "json",
       ...params,
     });

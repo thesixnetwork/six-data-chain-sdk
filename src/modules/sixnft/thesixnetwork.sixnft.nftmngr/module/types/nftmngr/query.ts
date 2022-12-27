@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { Reader, Writer } from "protobufjs/minimal";
 import { Params } from "../nftmngr/params";
-import { NFTSchema } from "../nftmngr/nft_schema";
+import { NFTSchema, NFTSchemaV063 } from "../nftmngr/nft_schema";
 import {
   PageRequest,
   PageResponse,
@@ -33,12 +33,21 @@ export interface QueryGetNFTSchemaResponse {
   nFTSchema: NFTSchema | undefined;
 }
 
+export interface QueryGetNFTSchemaResponseV063 {
+  nFTSchemaV063: NFTSchemaV063 | undefined;
+}
+
 export interface QueryAllNFTSchemaRequest {
   pagination: PageRequest | undefined;
 }
 
 export interface QueryAllNFTSchemaResponse {
   nFTSchema: NFTSchema[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryAllNFTSchemaResponseV063 {
+  nFTSchemaV063: NFTSchemaV063[];
   pagination: PageResponse | undefined;
 }
 
@@ -388,6 +397,81 @@ export const QueryGetNFTSchemaResponse = {
   },
 };
 
+const baseQueryGetNFTSchemaResponseV063: object = {};
+
+export const QueryGetNFTSchemaResponseV063 = {
+  encode(
+    message: QueryGetNFTSchemaResponseV063,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.nFTSchemaV063 !== undefined) {
+      NFTSchemaV063.encode(
+        message.nFTSchemaV063,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetNFTSchemaResponseV063 {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetNFTSchemaResponseV063,
+    } as QueryGetNFTSchemaResponseV063;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.nFTSchemaV063 = NFTSchemaV063.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetNFTSchemaResponseV063 {
+    const message = {
+      ...baseQueryGetNFTSchemaResponseV063,
+    } as QueryGetNFTSchemaResponseV063;
+    if (object.nFTSchemaV063 !== undefined && object.nFTSchemaV063 !== null) {
+      message.nFTSchemaV063 = NFTSchemaV063.fromJSON(object.nFTSchemaV063);
+    } else {
+      message.nFTSchemaV063 = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetNFTSchemaResponseV063): unknown {
+    const obj: any = {};
+    message.nFTSchemaV063 !== undefined &&
+      (obj.nFTSchemaV063 = message.nFTSchemaV063
+        ? NFTSchemaV063.toJSON(message.nFTSchemaV063)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetNFTSchemaResponseV063>
+  ): QueryGetNFTSchemaResponseV063 {
+    const message = {
+      ...baseQueryGetNFTSchemaResponseV063,
+    } as QueryGetNFTSchemaResponseV063;
+    if (object.nFTSchemaV063 !== undefined && object.nFTSchemaV063 !== null) {
+      message.nFTSchemaV063 = NFTSchemaV063.fromPartial(object.nFTSchemaV063);
+    } else {
+      message.nFTSchemaV063 = undefined;
+    }
+    return message;
+  },
+};
+
 const baseQueryAllNFTSchemaRequest: object = {};
 
 export const QueryAllNFTSchemaRequest = {
@@ -550,6 +634,109 @@ export const QueryAllNFTSchemaResponse = {
     if (object.nFTSchema !== undefined && object.nFTSchema !== null) {
       for (const e of object.nFTSchema) {
         message.nFTSchema.push(NFTSchema.fromPartial(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllNFTSchemaResponseV063: object = {};
+
+export const QueryAllNFTSchemaResponseV063 = {
+  encode(
+    message: QueryAllNFTSchemaResponseV063,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.nFTSchemaV063) {
+      NFTSchemaV063.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllNFTSchemaResponseV063 {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllNFTSchemaResponseV063,
+    } as QueryAllNFTSchemaResponseV063;
+    message.nFTSchemaV063 = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.nFTSchemaV063.push(
+            NFTSchemaV063.decode(reader, reader.uint32())
+          );
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllNFTSchemaResponseV063 {
+    const message = {
+      ...baseQueryAllNFTSchemaResponseV063,
+    } as QueryAllNFTSchemaResponseV063;
+    message.nFTSchemaV063 = [];
+    if (object.nFTSchemaV063 !== undefined && object.nFTSchemaV063 !== null) {
+      for (const e of object.nFTSchemaV063) {
+        message.nFTSchemaV063.push(NFTSchemaV063.fromJSON(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllNFTSchemaResponseV063): unknown {
+    const obj: any = {};
+    if (message.nFTSchemaV063) {
+      obj.nFTSchemaV063 = message.nFTSchemaV063.map((e) =>
+        e ? NFTSchemaV063.toJSON(e) : undefined
+      );
+    } else {
+      obj.nFTSchemaV063 = [];
+    }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageResponse.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllNFTSchemaResponseV063>
+  ): QueryAllNFTSchemaResponseV063 {
+    const message = {
+      ...baseQueryAllNFTSchemaResponseV063,
+    } as QueryAllNFTSchemaResponseV063;
+    message.nFTSchemaV063 = [];
+    if (object.nFTSchemaV063 !== undefined && object.nFTSchemaV063 !== null) {
+      for (const e of object.nFTSchemaV063) {
+        message.nFTSchemaV063.push(NFTSchemaV063.fromPartial(e));
       }
     }
     if (object.pagination !== undefined && object.pagination !== null) {
@@ -2646,10 +2833,18 @@ export interface Query {
   NFTSchema(
     request: QueryGetNFTSchemaRequest
   ): Promise<QueryGetNFTSchemaResponse>;
+  /** Queries a NFTSchema by index. */
+  NFTSchemaV063(
+    request: QueryGetNFTSchemaRequest
+  ): Promise<QueryGetNFTSchemaResponseV063>;
   /** Queries a list of NFTSchema items. */
   NFTSchemaAll(
     request: QueryAllNFTSchemaRequest
   ): Promise<QueryAllNFTSchemaResponse>;
+  /** Queries a list of NFTSchema items. */
+  NFTSchemaAllV063(
+    request: QueryAllNFTSchemaRequest
+  ): Promise<QueryAllNFTSchemaResponseV063>;
   /** Queries a NftData by index. */
   NftData(request: QueryGetNftDataRequest): Promise<QueryGetNftDataResponse>;
   /** Queries a list of NftData items. */
@@ -2729,6 +2924,20 @@ export class QueryClientImpl implements Query {
     );
   }
 
+  NFTSchemaV063(
+    request: QueryGetNFTSchemaRequest
+  ): Promise<QueryGetNFTSchemaResponseV063> {
+    const data = QueryGetNFTSchemaRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftmngr.Query",
+      "NFTSchemaV063",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetNFTSchemaResponseV063.decode(new Reader(data))
+    );
+  }
+
   NFTSchemaAll(
     request: QueryAllNFTSchemaRequest
   ): Promise<QueryAllNFTSchemaResponse> {
@@ -2740,6 +2949,20 @@ export class QueryClientImpl implements Query {
     );
     return promise.then((data) =>
       QueryAllNFTSchemaResponse.decode(new Reader(data))
+    );
+  }
+
+  NFTSchemaAllV063(
+    request: QueryAllNFTSchemaRequest
+  ): Promise<QueryAllNFTSchemaResponseV063> {
+    const data = QueryAllNFTSchemaRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftmngr.Query",
+      "NFTSchemaAllV063",
+      data
+    );
+    return promise.then((data) =>
+      QueryAllNFTSchemaResponseV063.decode(new Reader(data))
     );
   }
 

@@ -81,6 +81,38 @@ export interface MsgSetMinimumConfirmationResponse {
   newConfirmation: string;
 }
 
+export interface MsgCreateActionSigner {
+  creator: string;
+  base64EncodedSetSignerAction: string;
+}
+
+export interface MsgCreateActionSignerResponse {
+  ownerAddress: string;
+  signerAddress: string;
+  expireAt: string;
+}
+
+export interface MsgUpdateActionSigner {
+  creator: string;
+  base64EncodedSetSignerAction: string;
+}
+
+export interface MsgUpdateActionSignerResponse {
+  ownerAddress: string;
+  signerAddress: string;
+  expireAt: string;
+}
+
+export interface MsgDeleteActionSigner {
+  creator: string;
+  base64EncodedSetSignerAction: string;
+}
+
+export interface MsgDeleteActionSignerResponse {
+  ownerAddress: string;
+  signerAddress: string;
+}
+
 const baseMsgCreateMintRequest: object = {
   creator: "",
   nftSchemaCode: "",
@@ -1513,6 +1545,585 @@ export const MsgSetMinimumConfirmationResponse = {
   },
 };
 
+const baseMsgCreateActionSigner: object = {
+  creator: "",
+  base64EncodedSetSignerAction: "",
+};
+
+export const MsgCreateActionSigner = {
+  encode(
+    message: MsgCreateActionSigner,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.base64EncodedSetSignerAction !== "") {
+      writer.uint32(18).string(message.base64EncodedSetSignerAction);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgCreateActionSigner {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgCreateActionSigner } as MsgCreateActionSigner;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.base64EncodedSetSignerAction = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgCreateActionSigner {
+    const message = { ...baseMsgCreateActionSigner } as MsgCreateActionSigner;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (
+      object.base64EncodedSetSignerAction !== undefined &&
+      object.base64EncodedSetSignerAction !== null
+    ) {
+      message.base64EncodedSetSignerAction = String(
+        object.base64EncodedSetSignerAction
+      );
+    } else {
+      message.base64EncodedSetSignerAction = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgCreateActionSigner): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.base64EncodedSetSignerAction !== undefined &&
+      (obj.base64EncodedSetSignerAction = message.base64EncodedSetSignerAction);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgCreateActionSigner>
+  ): MsgCreateActionSigner {
+    const message = { ...baseMsgCreateActionSigner } as MsgCreateActionSigner;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (
+      object.base64EncodedSetSignerAction !== undefined &&
+      object.base64EncodedSetSignerAction !== null
+    ) {
+      message.base64EncodedSetSignerAction =
+        object.base64EncodedSetSignerAction;
+    } else {
+      message.base64EncodedSetSignerAction = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgCreateActionSignerResponse: object = {
+  ownerAddress: "",
+  signerAddress: "",
+  expireAt: "",
+};
+
+export const MsgCreateActionSignerResponse = {
+  encode(
+    message: MsgCreateActionSignerResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.ownerAddress !== "") {
+      writer.uint32(10).string(message.ownerAddress);
+    }
+    if (message.signerAddress !== "") {
+      writer.uint32(18).string(message.signerAddress);
+    }
+    if (message.expireAt !== "") {
+      writer.uint32(26).string(message.expireAt);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgCreateActionSignerResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgCreateActionSignerResponse,
+    } as MsgCreateActionSignerResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.ownerAddress = reader.string();
+          break;
+        case 2:
+          message.signerAddress = reader.string();
+          break;
+        case 3:
+          message.expireAt = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgCreateActionSignerResponse {
+    const message = {
+      ...baseMsgCreateActionSignerResponse,
+    } as MsgCreateActionSignerResponse;
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = String(object.ownerAddress);
+    } else {
+      message.ownerAddress = "";
+    }
+    if (object.signerAddress !== undefined && object.signerAddress !== null) {
+      message.signerAddress = String(object.signerAddress);
+    } else {
+      message.signerAddress = "";
+    }
+    if (object.expireAt !== undefined && object.expireAt !== null) {
+      message.expireAt = String(object.expireAt);
+    } else {
+      message.expireAt = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgCreateActionSignerResponse): unknown {
+    const obj: any = {};
+    message.ownerAddress !== undefined &&
+      (obj.ownerAddress = message.ownerAddress);
+    message.signerAddress !== undefined &&
+      (obj.signerAddress = message.signerAddress);
+    message.expireAt !== undefined && (obj.expireAt = message.expireAt);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgCreateActionSignerResponse>
+  ): MsgCreateActionSignerResponse {
+    const message = {
+      ...baseMsgCreateActionSignerResponse,
+    } as MsgCreateActionSignerResponse;
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = object.ownerAddress;
+    } else {
+      message.ownerAddress = "";
+    }
+    if (object.signerAddress !== undefined && object.signerAddress !== null) {
+      message.signerAddress = object.signerAddress;
+    } else {
+      message.signerAddress = "";
+    }
+    if (object.expireAt !== undefined && object.expireAt !== null) {
+      message.expireAt = object.expireAt;
+    } else {
+      message.expireAt = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgUpdateActionSigner: object = {
+  creator: "",
+  base64EncodedSetSignerAction: "",
+};
+
+export const MsgUpdateActionSigner = {
+  encode(
+    message: MsgUpdateActionSigner,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.base64EncodedSetSignerAction !== "") {
+      writer.uint32(18).string(message.base64EncodedSetSignerAction);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgUpdateActionSigner {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgUpdateActionSigner } as MsgUpdateActionSigner;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.base64EncodedSetSignerAction = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateActionSigner {
+    const message = { ...baseMsgUpdateActionSigner } as MsgUpdateActionSigner;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (
+      object.base64EncodedSetSignerAction !== undefined &&
+      object.base64EncodedSetSignerAction !== null
+    ) {
+      message.base64EncodedSetSignerAction = String(
+        object.base64EncodedSetSignerAction
+      );
+    } else {
+      message.base64EncodedSetSignerAction = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgUpdateActionSigner): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.base64EncodedSetSignerAction !== undefined &&
+      (obj.base64EncodedSetSignerAction = message.base64EncodedSetSignerAction);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgUpdateActionSigner>
+  ): MsgUpdateActionSigner {
+    const message = { ...baseMsgUpdateActionSigner } as MsgUpdateActionSigner;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (
+      object.base64EncodedSetSignerAction !== undefined &&
+      object.base64EncodedSetSignerAction !== null
+    ) {
+      message.base64EncodedSetSignerAction =
+        object.base64EncodedSetSignerAction;
+    } else {
+      message.base64EncodedSetSignerAction = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgUpdateActionSignerResponse: object = {
+  ownerAddress: "",
+  signerAddress: "",
+  expireAt: "",
+};
+
+export const MsgUpdateActionSignerResponse = {
+  encode(
+    message: MsgUpdateActionSignerResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.ownerAddress !== "") {
+      writer.uint32(10).string(message.ownerAddress);
+    }
+    if (message.signerAddress !== "") {
+      writer.uint32(18).string(message.signerAddress);
+    }
+    if (message.expireAt !== "") {
+      writer.uint32(26).string(message.expireAt);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgUpdateActionSignerResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgUpdateActionSignerResponse,
+    } as MsgUpdateActionSignerResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.ownerAddress = reader.string();
+          break;
+        case 2:
+          message.signerAddress = reader.string();
+          break;
+        case 3:
+          message.expireAt = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateActionSignerResponse {
+    const message = {
+      ...baseMsgUpdateActionSignerResponse,
+    } as MsgUpdateActionSignerResponse;
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = String(object.ownerAddress);
+    } else {
+      message.ownerAddress = "";
+    }
+    if (object.signerAddress !== undefined && object.signerAddress !== null) {
+      message.signerAddress = String(object.signerAddress);
+    } else {
+      message.signerAddress = "";
+    }
+    if (object.expireAt !== undefined && object.expireAt !== null) {
+      message.expireAt = String(object.expireAt);
+    } else {
+      message.expireAt = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgUpdateActionSignerResponse): unknown {
+    const obj: any = {};
+    message.ownerAddress !== undefined &&
+      (obj.ownerAddress = message.ownerAddress);
+    message.signerAddress !== undefined &&
+      (obj.signerAddress = message.signerAddress);
+    message.expireAt !== undefined && (obj.expireAt = message.expireAt);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgUpdateActionSignerResponse>
+  ): MsgUpdateActionSignerResponse {
+    const message = {
+      ...baseMsgUpdateActionSignerResponse,
+    } as MsgUpdateActionSignerResponse;
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = object.ownerAddress;
+    } else {
+      message.ownerAddress = "";
+    }
+    if (object.signerAddress !== undefined && object.signerAddress !== null) {
+      message.signerAddress = object.signerAddress;
+    } else {
+      message.signerAddress = "";
+    }
+    if (object.expireAt !== undefined && object.expireAt !== null) {
+      message.expireAt = object.expireAt;
+    } else {
+      message.expireAt = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgDeleteActionSigner: object = {
+  creator: "",
+  base64EncodedSetSignerAction: "",
+};
+
+export const MsgDeleteActionSigner = {
+  encode(
+    message: MsgDeleteActionSigner,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.base64EncodedSetSignerAction !== "") {
+      writer.uint32(18).string(message.base64EncodedSetSignerAction);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgDeleteActionSigner {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgDeleteActionSigner } as MsgDeleteActionSigner;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.base64EncodedSetSignerAction = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgDeleteActionSigner {
+    const message = { ...baseMsgDeleteActionSigner } as MsgDeleteActionSigner;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (
+      object.base64EncodedSetSignerAction !== undefined &&
+      object.base64EncodedSetSignerAction !== null
+    ) {
+      message.base64EncodedSetSignerAction = String(
+        object.base64EncodedSetSignerAction
+      );
+    } else {
+      message.base64EncodedSetSignerAction = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgDeleteActionSigner): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.base64EncodedSetSignerAction !== undefined &&
+      (obj.base64EncodedSetSignerAction = message.base64EncodedSetSignerAction);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgDeleteActionSigner>
+  ): MsgDeleteActionSigner {
+    const message = { ...baseMsgDeleteActionSigner } as MsgDeleteActionSigner;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (
+      object.base64EncodedSetSignerAction !== undefined &&
+      object.base64EncodedSetSignerAction !== null
+    ) {
+      message.base64EncodedSetSignerAction =
+        object.base64EncodedSetSignerAction;
+    } else {
+      message.base64EncodedSetSignerAction = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgDeleteActionSignerResponse: object = {
+  ownerAddress: "",
+  signerAddress: "",
+};
+
+export const MsgDeleteActionSignerResponse = {
+  encode(
+    message: MsgDeleteActionSignerResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.ownerAddress !== "") {
+      writer.uint32(10).string(message.ownerAddress);
+    }
+    if (message.signerAddress !== "") {
+      writer.uint32(18).string(message.signerAddress);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgDeleteActionSignerResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgDeleteActionSignerResponse,
+    } as MsgDeleteActionSignerResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.ownerAddress = reader.string();
+          break;
+        case 2:
+          message.signerAddress = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgDeleteActionSignerResponse {
+    const message = {
+      ...baseMsgDeleteActionSignerResponse,
+    } as MsgDeleteActionSignerResponse;
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = String(object.ownerAddress);
+    } else {
+      message.ownerAddress = "";
+    }
+    if (object.signerAddress !== undefined && object.signerAddress !== null) {
+      message.signerAddress = String(object.signerAddress);
+    } else {
+      message.signerAddress = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgDeleteActionSignerResponse): unknown {
+    const obj: any = {};
+    message.ownerAddress !== undefined &&
+      (obj.ownerAddress = message.ownerAddress);
+    message.signerAddress !== undefined &&
+      (obj.signerAddress = message.signerAddress);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgDeleteActionSignerResponse>
+  ): MsgDeleteActionSignerResponse {
+    const message = {
+      ...baseMsgDeleteActionSignerResponse,
+    } as MsgDeleteActionSignerResponse;
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = object.ownerAddress;
+    } else {
+      message.ownerAddress = "";
+    }
+    if (object.signerAddress !== undefined && object.signerAddress !== null) {
+      message.signerAddress = object.signerAddress;
+    } else {
+      message.signerAddress = "";
+    }
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   CreateMintRequest(
@@ -1533,10 +2144,19 @@ export interface Msg {
   SubmitVerifyCollectionOwner(
     request: MsgSubmitVerifyCollectionOwner
   ): Promise<MsgSubmitVerifyCollectionOwnerResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   SetMinimumConfirmation(
     request: MsgSetMinimumConfirmation
   ): Promise<MsgSetMinimumConfirmationResponse>;
+  CreateActionSigner(
+    request: MsgCreateActionSigner
+  ): Promise<MsgCreateActionSignerResponse>;
+  UpdateActionSigner(
+    request: MsgUpdateActionSigner
+  ): Promise<MsgUpdateActionSignerResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  DeleteActionSigner(
+    request: MsgDeleteActionSigner
+  ): Promise<MsgDeleteActionSignerResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -1639,6 +2259,48 @@ export class MsgClientImpl implements Msg {
     );
     return promise.then((data) =>
       MsgSetMinimumConfirmationResponse.decode(new Reader(data))
+    );
+  }
+
+  CreateActionSigner(
+    request: MsgCreateActionSigner
+  ): Promise<MsgCreateActionSignerResponse> {
+    const data = MsgCreateActionSigner.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Msg",
+      "CreateActionSigner",
+      data
+    );
+    return promise.then((data) =>
+      MsgCreateActionSignerResponse.decode(new Reader(data))
+    );
+  }
+
+  UpdateActionSigner(
+    request: MsgUpdateActionSigner
+  ): Promise<MsgUpdateActionSignerResponse> {
+    const data = MsgUpdateActionSigner.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Msg",
+      "UpdateActionSigner",
+      data
+    );
+    return promise.then((data) =>
+      MsgUpdateActionSignerResponse.decode(new Reader(data))
+    );
+  }
+
+  DeleteActionSigner(
+    request: MsgDeleteActionSigner
+  ): Promise<MsgDeleteActionSignerResponse> {
+    const data = MsgDeleteActionSigner.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Msg",
+      "DeleteActionSigner",
+      data
+    );
+    return promise.then((data) =>
+      MsgDeleteActionSignerResponse.decode(new Reader(data))
     );
   }
 }
