@@ -7,13 +7,13 @@ export interface AddressList {
   addresses: string[];
 }
 
-export interface Permissions {
-  map_name: { [key: string]: AddressList };
+export interface Permission {
+  name: string;
+  addresses: AddressList | undefined;
 }
 
-export interface Permissions_MapNameEntry {
-  key: string;
-  value: AddressList | undefined;
+export interface Permissions {
+  permissions: Permission[];
 }
 
 const baseAddressList: object = { addresses: "" };
@@ -78,16 +78,88 @@ export const AddressList = {
   },
 };
 
+const basePermission: object = { name: "" };
+
+export const Permission = {
+  encode(message: Permission, writer: Writer = Writer.create()): Writer {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+    if (message.addresses !== undefined) {
+      AddressList.encode(message.addresses, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): Permission {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...basePermission } as Permission;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.name = reader.string();
+          break;
+        case 2:
+          message.addresses = AddressList.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Permission {
+    const message = { ...basePermission } as Permission;
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    if (object.addresses !== undefined && object.addresses !== null) {
+      message.addresses = AddressList.fromJSON(object.addresses);
+    } else {
+      message.addresses = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: Permission): unknown {
+    const obj: any = {};
+    message.name !== undefined && (obj.name = message.name);
+    message.addresses !== undefined &&
+      (obj.addresses = message.addresses
+        ? AddressList.toJSON(message.addresses)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<Permission>): Permission {
+    const message = { ...basePermission } as Permission;
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    } else {
+      message.name = "";
+    }
+    if (object.addresses !== undefined && object.addresses !== null) {
+      message.addresses = AddressList.fromPartial(object.addresses);
+    } else {
+      message.addresses = undefined;
+    }
+    return message;
+  },
+};
+
 const basePermissions: object = {};
 
 export const Permissions = {
   encode(message: Permissions, writer: Writer = Writer.create()): Writer {
-    Object.entries(message.map_name).forEach(([key, value]) => {
-      Permissions_MapNameEntry.encode(
-        { key: key as any, value },
-        writer.uint32(10).fork()
-      ).ldelim();
-    });
+    for (const v of message.permissions) {
+      Permission.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -95,18 +167,12 @@ export const Permissions = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...basePermissions } as Permissions;
-    message.map_name = {};
+    message.permissions = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          const entry1 = Permissions_MapNameEntry.decode(
-            reader,
-            reader.uint32()
-          );
-          if (entry1.value !== undefined) {
-            message.map_name[entry1.key] = entry1.value;
-          }
+          message.permissions.push(Permission.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -118,124 +184,34 @@ export const Permissions = {
 
   fromJSON(object: any): Permissions {
     const message = { ...basePermissions } as Permissions;
-    message.map_name = {};
-    if (object.map_name !== undefined && object.map_name !== null) {
-      Object.entries(object.map_name).forEach(([key, value]) => {
-        message.map_name[key] = AddressList.fromJSON(value);
-      });
+    message.permissions = [];
+    if (object.permissions !== undefined && object.permissions !== null) {
+      for (const e of object.permissions) {
+        message.permissions.push(Permission.fromJSON(e));
+      }
     }
     return message;
   },
 
   toJSON(message: Permissions): unknown {
     const obj: any = {};
-    obj.map_name = {};
-    if (message.map_name) {
-      Object.entries(message.map_name).forEach(([k, v]) => {
-        obj.map_name[k] = AddressList.toJSON(v);
-      });
+    if (message.permissions) {
+      obj.permissions = message.permissions.map((e) =>
+        e ? Permission.toJSON(e) : undefined
+      );
+    } else {
+      obj.permissions = [];
     }
     return obj;
   },
 
   fromPartial(object: DeepPartial<Permissions>): Permissions {
     const message = { ...basePermissions } as Permissions;
-    message.map_name = {};
-    if (object.map_name !== undefined && object.map_name !== null) {
-      Object.entries(object.map_name).forEach(([key, value]) => {
-        if (value !== undefined) {
-          message.map_name[key] = AddressList.fromPartial(value);
-        }
-      });
-    }
-    return message;
-  },
-};
-
-const basePermissions_MapNameEntry: object = { key: "" };
-
-export const Permissions_MapNameEntry = {
-  encode(
-    message: Permissions_MapNameEntry,
-    writer: Writer = Writer.create()
-  ): Writer {
-    if (message.key !== "") {
-      writer.uint32(10).string(message.key);
-    }
-    if (message.value !== undefined) {
-      AddressList.encode(message.value, writer.uint32(18).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): Permissions_MapNameEntry {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...basePermissions_MapNameEntry,
-    } as Permissions_MapNameEntry;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.key = reader.string();
-          break;
-        case 2:
-          message.value = AddressList.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+    message.permissions = [];
+    if (object.permissions !== undefined && object.permissions !== null) {
+      for (const e of object.permissions) {
+        message.permissions.push(Permission.fromPartial(e));
       }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): Permissions_MapNameEntry {
-    const message = {
-      ...basePermissions_MapNameEntry,
-    } as Permissions_MapNameEntry;
-    if (object.key !== undefined && object.key !== null) {
-      message.key = String(object.key);
-    } else {
-      message.key = "";
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = AddressList.fromJSON(object.value);
-    } else {
-      message.value = undefined;
-    }
-    return message;
-  },
-
-  toJSON(message: Permissions_MapNameEntry): unknown {
-    const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined &&
-      (obj.value = message.value
-        ? AddressList.toJSON(message.value)
-        : undefined);
-    return obj;
-  },
-
-  fromPartial(
-    object: DeepPartial<Permissions_MapNameEntry>
-  ): Permissions_MapNameEntry {
-    const message = {
-      ...basePermissions_MapNameEntry,
-    } as Permissions_MapNameEntry;
-    if (object.key !== undefined && object.key !== null) {
-      message.key = object.key;
-    } else {
-      message.key = "";
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = AddressList.fromPartial(object.value);
-    } else {
-      message.value = undefined;
     }
     return message;
   },

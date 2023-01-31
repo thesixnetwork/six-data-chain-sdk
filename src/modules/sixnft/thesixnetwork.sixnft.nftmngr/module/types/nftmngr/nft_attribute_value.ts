@@ -10,6 +10,7 @@ export interface NftAttributeValue {
   string_attribute_value: StringAttributeValue | undefined;
   boolean_attribute_value: BooleanAttributeValue | undefined;
   float_attribute_value: FloatAttributeValue | undefined;
+  hidden_to_marketplace: boolean;
 }
 
 export interface NumberAttributeValue {
@@ -28,7 +29,10 @@ export interface FloatAttributeValue {
   value: number;
 }
 
-const baseNftAttributeValue: object = { name: "" };
+const baseNftAttributeValue: object = {
+  name: "",
+  hidden_to_marketplace: false,
+};
 
 export const NftAttributeValue = {
   encode(message: NftAttributeValue, writer: Writer = Writer.create()): Writer {
@@ -58,6 +62,9 @@ export const NftAttributeValue = {
         message.float_attribute_value,
         writer.uint32(42).fork()
       ).ldelim();
+    }
+    if (message.hidden_to_marketplace === true) {
+      writer.uint32(48).bool(message.hidden_to_marketplace);
     }
     return writer;
   },
@@ -95,6 +102,9 @@ export const NftAttributeValue = {
             reader,
             reader.uint32()
           );
+          break;
+        case 6:
+          message.hidden_to_marketplace = reader.bool();
           break;
         default:
           reader.skipType(tag & 7);
@@ -151,6 +161,14 @@ export const NftAttributeValue = {
     } else {
       message.float_attribute_value = undefined;
     }
+    if (
+      object.hidden_to_marketplace !== undefined &&
+      object.hidden_to_marketplace !== null
+    ) {
+      message.hidden_to_marketplace = Boolean(object.hidden_to_marketplace);
+    } else {
+      message.hidden_to_marketplace = false;
+    }
     return message;
   },
 
@@ -173,6 +191,8 @@ export const NftAttributeValue = {
       (obj.float_attribute_value = message.float_attribute_value
         ? FloatAttributeValue.toJSON(message.float_attribute_value)
         : undefined);
+    message.hidden_to_marketplace !== undefined &&
+      (obj.hidden_to_marketplace = message.hidden_to_marketplace);
     return obj;
   },
 
@@ -222,6 +242,14 @@ export const NftAttributeValue = {
       );
     } else {
       message.float_attribute_value = undefined;
+    }
+    if (
+      object.hidden_to_marketplace !== undefined &&
+      object.hidden_to_marketplace !== null
+    ) {
+      message.hidden_to_marketplace = object.hidden_to_marketplace;
+    } else {
+      message.hidden_to_marketplace = false;
     }
     return message;
   },

@@ -41,8 +41,13 @@ export interface NftadminMsgRevokePermissionResponse {
  */
 export type NftadminParams = object;
 
+export interface NftadminPermission {
+  name?: string;
+  addresses?: NftadminAddressList;
+}
+
 export interface NftadminPermissions {
-  map_name?: Record<string, NftadminAddressList>;
+  permissions?: NftadminPermission[];
 }
 
 export interface NftadminQueryGetAuthorizationResponse {
@@ -53,7 +58,7 @@ export interface NftadminQueryGetAuthorizationResponse {
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
 export interface NftadminQueryParamsResponse {
-  /** Params defines the parameters for the module. */
+  /** params holds all the parameters of this module. */
   params?: NftadminParams;
 }
 

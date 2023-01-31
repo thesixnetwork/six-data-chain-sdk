@@ -3,9 +3,10 @@ import * as Long from "long";
 import { util, configure, Writer, Reader } from "protobufjs/minimal";
 import { Params } from "../nftoracle/params";
 import { MintRequest } from "../nftoracle/mint_request";
-import { ActionRequest } from "../nftoracle/action_request";
+import { ActionOracleRequest } from "../nftoracle/action_request";
 import { CollectionOwnerRequest } from "../nftoracle/collection_owner_request";
 import { OracleConfig } from "../nftoracle/oracle_config";
+import { ActionSigner } from "../nftoracle/action_signer";
 
 export const protobufPackage = "thesixnetwork.sixnft.nftoracle";
 
@@ -14,12 +15,13 @@ export interface GenesisState {
   params: Params | undefined;
   mintRequestList: MintRequest[];
   mintRequestCount: number;
-  actionRequestList: ActionRequest[];
+  actionRequestList: ActionOracleRequest[];
   actionRequestCount: number;
   collectionOwnerRequestList: CollectionOwnerRequest[];
   collectionOwnerRequestCount: number;
-  /** this line is used by starport scaffolding # genesis/proto/state */
   oracle_config: OracleConfig | undefined;
+  /** this line is used by starport scaffolding # genesis/proto/state */
+  actionSignerList: ActionSigner[];
 }
 
 const baseGenesisState: object = {
@@ -40,7 +42,7 @@ export const GenesisState = {
       writer.uint32(24).uint64(message.mintRequestCount);
     }
     for (const v of message.actionRequestList) {
-      ActionRequest.encode(v!, writer.uint32(34).fork()).ldelim();
+      ActionOracleRequest.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     if (message.actionRequestCount !== 0) {
       writer.uint32(40).uint64(message.actionRequestCount);
@@ -57,6 +59,9 @@ export const GenesisState = {
         writer.uint32(66).fork()
       ).ldelim();
     }
+    for (const v of message.actionSignerList) {
+      ActionSigner.encode(v!, writer.uint32(74).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -67,6 +72,7 @@ export const GenesisState = {
     message.mintRequestList = [];
     message.actionRequestList = [];
     message.collectionOwnerRequestList = [];
+    message.actionSignerList = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -83,7 +89,7 @@ export const GenesisState = {
           break;
         case 4:
           message.actionRequestList.push(
-            ActionRequest.decode(reader, reader.uint32())
+            ActionOracleRequest.decode(reader, reader.uint32())
           );
           break;
         case 5:
@@ -102,6 +108,11 @@ export const GenesisState = {
         case 8:
           message.oracle_config = OracleConfig.decode(reader, reader.uint32());
           break;
+        case 9:
+          message.actionSignerList.push(
+            ActionSigner.decode(reader, reader.uint32())
+          );
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -115,6 +126,7 @@ export const GenesisState = {
     message.mintRequestList = [];
     message.actionRequestList = [];
     message.collectionOwnerRequestList = [];
+    message.actionSignerList = [];
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromJSON(object.params);
     } else {
@@ -141,7 +153,7 @@ export const GenesisState = {
       object.actionRequestList !== null
     ) {
       for (const e of object.actionRequestList) {
-        message.actionRequestList.push(ActionRequest.fromJSON(e));
+        message.actionRequestList.push(ActionOracleRequest.fromJSON(e));
       }
     }
     if (
@@ -177,6 +189,14 @@ export const GenesisState = {
     } else {
       message.oracle_config = undefined;
     }
+    if (
+      object.actionSignerList !== undefined &&
+      object.actionSignerList !== null
+    ) {
+      for (const e of object.actionSignerList) {
+        message.actionSignerList.push(ActionSigner.fromJSON(e));
+      }
+    }
     return message;
   },
 
@@ -195,7 +215,7 @@ export const GenesisState = {
       (obj.mintRequestCount = message.mintRequestCount);
     if (message.actionRequestList) {
       obj.actionRequestList = message.actionRequestList.map((e) =>
-        e ? ActionRequest.toJSON(e) : undefined
+        e ? ActionOracleRequest.toJSON(e) : undefined
       );
     } else {
       obj.actionRequestList = [];
@@ -215,6 +235,13 @@ export const GenesisState = {
       (obj.oracle_config = message.oracle_config
         ? OracleConfig.toJSON(message.oracle_config)
         : undefined);
+    if (message.actionSignerList) {
+      obj.actionSignerList = message.actionSignerList.map((e) =>
+        e ? ActionSigner.toJSON(e) : undefined
+      );
+    } else {
+      obj.actionSignerList = [];
+    }
     return obj;
   },
 
@@ -223,6 +250,7 @@ export const GenesisState = {
     message.mintRequestList = [];
     message.actionRequestList = [];
     message.collectionOwnerRequestList = [];
+    message.actionSignerList = [];
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromPartial(object.params);
     } else {
@@ -249,7 +277,7 @@ export const GenesisState = {
       object.actionRequestList !== null
     ) {
       for (const e of object.actionRequestList) {
-        message.actionRequestList.push(ActionRequest.fromPartial(e));
+        message.actionRequestList.push(ActionOracleRequest.fromPartial(e));
       }
     }
     if (
@@ -282,6 +310,14 @@ export const GenesisState = {
       message.oracle_config = OracleConfig.fromPartial(object.oracle_config);
     } else {
       message.oracle_config = undefined;
+    }
+    if (
+      object.actionSignerList !== undefined &&
+      object.actionSignerList !== null
+    ) {
+      for (const e of object.actionSignerList) {
+        message.actionSignerList.push(ActionSigner.fromPartial(e));
+      }
     }
     return message;
   },

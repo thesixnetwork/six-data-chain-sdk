@@ -13,12 +13,19 @@ const main = async () => {
     const address = (await accountSigner.getAccounts())[0].address
     const rpcClient = await sixConnector.connectRPCClient(accountSigner)
 
-    const msg = await rpcClient.msgPerformActionByAdmin({
+    const msg = await rpcClient.nftmngrModule.msgPerformActionByAdmin({
         creator: address,
-        nft_schema_code: "buakaw99",
-        tokenId: "2",
-        action: "use10percentdiscount",
-        ref_id: "1"
+        nft_schema_code: "six.rocket_ticket",
+        tokenId: "1",
+        action: "transfer",
+        params: [{
+            name: "discount",
+            value: "10"
+        },{
+            name: "token_id",
+            value: "2"
+        }],
+        ref_id: "transfer_1_to_2"
     })
 
     const tx = await rpcClient.nftmngrModule.signAndBroadcast([msg])
