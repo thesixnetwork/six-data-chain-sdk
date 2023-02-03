@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "@sixnetwork/six-data-chain-sdk",
-  "version": "2.6.0",
+  "version": "3.0.0",
   "description": "This project is Six Data Chain Client it use for send transactions and query data from chain",
   "main": "dist/index.js",
   "scripts": {
@@ -34,6 +34,7 @@
     "axios": "^0.27.2",
     "cross-fetch": "^3.1.5",
     "dotenv": "^16.0.3",
+    "crypto": "^1.0.1",
     "lodash": "^4.17.21",
     "typescript": "^4.7.4"
   },

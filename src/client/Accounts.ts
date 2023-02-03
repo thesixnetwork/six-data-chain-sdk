@@ -1,6 +1,6 @@
 import { OfflineSigner } from "@cosmjs/proto-signing";
-import {DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-
+import {DirectSecp256k1HdWallet ,DirectSecp256k1Wallet} from "@cosmjs/proto-signing";
+import crypto from 'crypto';
 export class Accounts {
     prefix: string = "6x";
     /**
@@ -19,10 +19,23 @@ export class Accounts {
      * Restores a wallet from the given BIP39 mnemonic.
      *
      * @param mnemonic Any valid English mnemonic.
-     * @param options An optional `DirectSecp256k1HdWalletOptions` object optionally containing a bip39Password, hdPaths, and prefix.
+     */
+    async mnemonicKeyToAccount(mnemonic: string): Promise<OfflineSigner> {
+        return DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: this.prefix })
+    }
+    /**
+     * Restores a wallet from the given privatekey.
+     *
+     * @param privatekey Any valid privatekey.
      */
     async privateKeyToAccount(privateKey: string): Promise<OfflineSigner> {
-        return DirectSecp256k1HdWallet.fromMnemonic(privateKey, { prefix: this.prefix })
+        if(privateKey.startsWith("0x")){
+            privateKey = privateKey.slice(2)
+        }
+        const cryptoConverter = crypto.createECDH('secp256k1');
+        cryptoConverter.setPrivateKey(privateKey, 'hex');
+        // console.log(xxx)
+        return DirectSecp256k1Wallet.fromKey(cryptoConverter.getPrivateKey(),  this.prefix )
     }
   
 }
