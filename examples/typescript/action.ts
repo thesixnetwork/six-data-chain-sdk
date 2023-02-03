@@ -1,6 +1,6 @@
 import { SixDataChainConnector } from "../../src/client";
 import { EncodeObject } from "@cosmjs/proto-signing";
-import { MsgPerformActionByAdmin } from "./interface/IAction";
+import { ITxNFTmngr } from "../../src/";
 
 const main = async () => {
     const sixConnector = new SixDataChainConnector()
@@ -28,7 +28,7 @@ const main = async () => {
     //     }]
     // }
 
-    const action : MsgPerformActionByAdmin = {
+    const action : ITxNFTmngr.MsgPerformActionByAdmin = {
         creator: address,
         nft_schema_code: "six.rocket_ticket",
         tokenId: "1",
