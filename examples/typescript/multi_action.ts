@@ -16,14 +16,14 @@ const schemaCode = exampleNFTData.nft_schema_code;
 const MultiAction = async () => {
   const sixConnector = new SixDataChainConnector();
   // ** LOCAL TESTNET **
-  // sixConnector.rpcUrl = "http://localhost:26657";
-  // const accountSigner = await sixConnector.accounts.privateKeyToAccount(process.env.ALICE_PRIVATE_KEY);
+  sixConnector.rpcUrl = "http://localhost:26657";
+  const accountSigner = await sixConnector.accounts.privateKeyToAccount("code1 code2 code3 code4 code5 code6 code7 code8 code9 code10 code11 code12 code13 code14 code15 code16 code17 code18 code19 code20 code21 code22 code23 code24");
   // const accountSigner = await sixConnector.accounts.mnemonicKeyToAccount(process.env.ALICE_MNEMONIC);
 
   // ** FIVENET **
-  sixConnector.rpcUrl = "https://rpc1.fivenet.sixprotocol.net:443";
+  // sixConnector.rpcUrl = "https://rpc1.fivenet.sixprotocol.net:443";
   // const accountSigner = await sixConnector.accounts.privateKeyToAccount(process.env.PRIVATE_KEY);
-  const accountSigner = await sixConnector.accounts.mnemonicKeyToAccount("code1 code2 code3 code4 code5 code6 code7 code8 code9 code10 code11 code12 code13 code14 code15 code16 code17 code18 code19 code20 code21 code22 code23 code24");
+  // const accountSigner = await sixConnector.accounts.mnemonicKeyToAccount(process.env.MNEMONIC);
   // Get index of account
   const address = (await accountSigner.getAccounts())[0].address;
 
@@ -31,7 +31,7 @@ const MultiAction = async () => {
   // Encode NFT data to base64
   
   
-  let tokenCount = 1;
+  let tokenCount = 0;
   let tokenTarget = "452";
   // let tokenPerRound = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // 3250
   let tokenPerRound = [10,20,30,40,50,60,70,80,90,100]; // 3250
@@ -53,7 +53,7 @@ const MultiAction = async () => {
         tokenId: token_id,
         action: "transfer",
         ref_id: `transfer-${token_id}-to-${tokenTarget}`,
-        parameters: [{"name":"points","value":"20"},{"name":"token_id","value":"20"}],
+        parameters: [{"name":"points","value":"20"},{"name":"token_id","value":tokenTarget}],
     }
 
       const msg = await rpcClient.nftmngrModule.msgPerformActionByAdmin(action);

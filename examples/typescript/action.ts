@@ -7,7 +7,7 @@ const main = async () => {
     // specify the RPC URL of the chain
     sixConnector.rpcUrl = "http://localhost:26657";
     // Retrieve acctount signer from private key or mnemonic
-    const accountSigner = await sixConnector.accounts.privateKeyToAccount(
+    const accountSigner = await sixConnector.accounts.mnemonicKeyToAccount(
         "code1 code2 code3 code4 code5 code6 code7 code8 code9 code10 code11 code12 code13 code14 code15 code16 code17 code18 code19 code20 code21 code22 code23 code24"
     );
     // Get index of account

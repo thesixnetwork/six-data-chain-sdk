@@ -15,8 +15,8 @@ const Mint = async () => {
   const sixConnector = new SixDataChainConnector();
   // ** LOCAL TESTNET **
   sixConnector.rpcUrl = "http://localhost:26657";
-  const accountSigner = await sixConnector.accounts.privateKeyToAccount("code1 code2 code3 code4 code5 code6 code7 code8 code9 code10 code11 code12 code13 code14 code15 code16 code17 code18 code19 code20 code21 code22 code23 code24");
-  // const accountSigner = await sixConnector.accounts.mnemonicKeyToAccount(process.env.ALICE_MNEMONIC);
+  // const accountSigner = await sixConnector.accounts.privateKeyToAccount(process.env.ALICE_PRIVATE_KEY);
+  const accountSigner = await sixConnector.accounts.mnemonicKeyToAccount("code1 code2 code3 code4 code5 code6 code7 code8 code9 code10 code11 code12 code13 code14 code15 code16 code17 code18 code19 code20 code21 code22 code23 code24");
 
   // ** FIVENET **
   // sixConnector.rpcUrl = "https://rpc1.fivenet.sixprotocol.net:443";
