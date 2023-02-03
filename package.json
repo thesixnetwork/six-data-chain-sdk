@@ -34,6 +34,8 @@
     "axios": "^0.27.2",
     "cross-fetch": "^3.1.5",
     "crypto": "^1.0.1",
+    "crypto-js": "^4.1.1",
+    "cryptojs": "^2.5.3",
     "lodash": "^4.17.21",
     "typescript": "^4.7.4"
   },
