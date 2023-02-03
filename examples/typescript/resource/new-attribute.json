@@ -1,0 +1,21 @@
+{
+    "name": "new_attribute",
+    "data_type": "number",
+    "required": true,
+    "display_value_field": "value",
+    "display_option": {
+      "bool_true_value": "",
+      "bool_false_value": "",
+      "opensea": {
+        "display_type": "",
+        "trait_type": "New Attribute",
+        "max_value": "0"
+      }
+    },
+    "default_mint_value": {
+      "number_attribute_value": {
+        "value": "0"
+      }
+    },
+    "hidden_to_marketplace": false
+  }

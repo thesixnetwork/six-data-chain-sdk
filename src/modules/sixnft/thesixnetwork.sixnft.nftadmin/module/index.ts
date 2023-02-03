@@ -31,7 +31,7 @@ interface TxClientOptions {
 }
 
 export interface SignAndBroadcastOptions {
-  fee: StdFee,
+  fee: StdFee | "auto",
   memo?: string
 }
 

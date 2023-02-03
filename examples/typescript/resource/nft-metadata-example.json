@@ -1,0 +1,146 @@
+{
+  "nft_schema_code": "six.rocket_loading_2",
+  "token_id": "1",
+  "token_owner": "0xb7c2468b9481CbDfD029998d6bA98c55072d932e",
+  "owner_address_type": "ORIGIN_ADDRESS",
+  "origin_image": "https://ipfs.io/ipfs/QmUd5xBxZucHQyUkqkCCtfZ3iktSSmEEyhuX1u48bP4WE7/whale.jpeg",
+  "onchain_image": "",
+  "token_uri": "",
+  "origin_attributes": [
+    {
+      "name": "background",
+      "string_attribute_value": {
+        "value": "Blue"
+      },
+      "hidden_to_marketplace": false
+    },
+    {
+      "name": "moon",
+      "string_attribute_value": {
+        "value": "White"
+      },
+      "hidden_to_marketplace": false
+    },
+    {
+      "name": "plate",
+      "string_attribute_value": {
+        "value": "Red"
+      },
+      "hidden_to_marketplace": false
+    },
+    {
+      "name": "tail",
+      "string_attribute_value": {
+        "value": "Red"
+      },
+      "hidden_to_marketplace": false
+    },
+    {
+      "name": "whale",
+      "string_attribute_value": {
+        "value": "Whale"
+      },
+      "hidden_to_marketplace": false
+    }
+  ],
+  "onchain_attributes": [
+    {
+      "name": "missions_passed",
+      "number_attribute_value": {
+        "value": "0"
+      },
+      "hidden_to_marketplace": false
+    },
+    {
+      "name": "jan_claim",
+      "boolean_attribute_value": {
+        "value": false
+      },
+      "hidden_to_marketplace": false
+    },
+    {
+      "name": "feb_claim",
+      "boolean_attribute_value": {
+        "value": false
+      },
+      "hidden_to_marketplace": false
+    },
+    {
+      "name": "mar_claim",
+      "boolean_attribute_value": {
+        "value": false
+      },
+      "hidden_to_marketplace": false
+    },
+    {
+      "name": "apr_claim",
+      "boolean_attribute_value": {
+        "value": false
+      },
+      "hidden_to_marketplace": false
+    },
+    {
+      "name": "may_claim",
+      "boolean_attribute_value": {
+        "value": false
+      },
+      "hidden_to_marketplace": false
+    },
+    {
+      "name": "jun_claim",
+      "boolean_attribute_value": {
+        "value": false
+      },
+      "hidden_to_marketplace": false
+    },
+    {
+      "name": "jul_claim",
+      "boolean_attribute_value": {
+        "value": false
+      },
+      "hidden_to_marketplace": false
+    },
+    {
+      "name": "aug_claim",
+      "boolean_attribute_value": {
+        "value": false
+      },
+      "hidden_to_marketplace": false
+    },
+    {
+      "name": "sep_claim",
+      "boolean_attribute_value": {
+        "value": false
+      },
+      "hidden_to_marketplace": false
+    },
+    {
+      "name": "oct_claim",
+      "boolean_attribute_value": {
+        "value": false
+      },
+      "hidden_to_marketplace": false
+    },
+    {
+      "name": "nov_claim",
+      "boolean_attribute_value": {
+        "value": false
+      },
+      "hidden_to_marketplace": false
+    },
+    {
+      "name": "dec_claim",
+      "boolean_attribute_value": {
+        "value": false
+      },
+      "hidden_to_marketplace": false
+    },
+    {
+      "name": "started",
+      "boolean_attribute_value": {
+        "value": false
+      },
+      "hidden_to_marketplace": false
+    }
+  ]
+}
