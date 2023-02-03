@@ -1,0 +1,655 @@
+{
+  "code": "six.rocket_loading_2",
+  "name": "Test Loading",
+  "owner": "0xNFTOWNER",
+  "origin_data": {
+    "origin_base_uri": "",
+    "uri_retrieval_method": "BASE",
+    "origin_chain": "GOERLI",
+    "origin_contract_address": "0x9EC14dfF0049F8De41FE106f3221a50313F941aB",
+    "attribute_overriding": "CHAIN",
+    "metadata_format": "opensea",
+    "origin_attributes": [
+      {
+        "name": "background",
+        "data_type": "string",
+        "display_value_field": "value",
+        "display_option": {
+          "opensea": {
+            "trait_type": "Background"
+          }
+        }
+      },
+      {
+        "name": "moon",
+        "data_type": "string",
+        "display_value_field": "value",
+        "display_option": {
+          "opensea": {
+            "trait_type": "Moon"
+          }
+        }
+      },
+      {
+        "name": "plate",
+        "data_type": "string",
+        "display_value_field": "value",
+        "display_option": {
+          "opensea": {
+            "trait_type": "Plate"
+          }
+        }
+      },
+      {
+        "name": "tail",
+        "data_type": "string",
+        "display_value_field": "value",
+        "display_option": {
+          "opensea": {
+            "trait_type": "Tail"
+          }
+        }
+      },
+      {
+        "name": "whale",
+        "data_type": "string",
+        "display_value_field": "value",
+        "display_option": {
+          "opensea": {
+            "trait_type": "Whale"
+          }
+        }
+      }
+    ]
+  },
+  "onchain_data": {
+    "reveal_required": true,
+    "reveal_secret": "",
+    "nft_attributes": [],
+    "token_attributes": [
+      {
+        "name": "points",
+        "default_mint_value": {
+          "number_attribute_value": {
+            "value": 0
+          }
+        },
+        "data_type": "number",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "opensea": {
+            "trait_type": "Points"
+          }
+        }
+      },
+      {
+        "name": "missions_accomplished",
+        "default_mint_value": {
+          "boolean_attribute_value": {
+            "value": false
+          }
+        },
+        "data_type": "boolean",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "bool_true_value": "Yes",
+          "bool_false_value": "No",
+          "opensea": {
+            "trait_type": "All Mission is done"
+          }
+        },
+        "hidden_to_marketplace": true
+      },
+      {
+        "name": "started",
+        "default_mint_value": {
+          "boolean_attribute_value": {
+            "value": false
+          }
+        },
+        "data_type": "boolean",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "bool_true_value": "Yes",
+          "bool_false_value": "No",
+          "opensea": {
+            "trait_type": "Started"
+          }
+        },
+        "hidden_to_marketplace": false
+      },
+      {
+        "name": "missions_passed",
+        "default_mint_value": {
+          "number_attribute_value": {
+            "value": 1
+          }
+        },
+        "data_type": "number",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "opensea": {
+            "trait_type": "Missions Passed",
+            "max_value": 12
+          }
+        },
+        "hidden_to_marketplace": false
+      },
+      {
+        "name": "jan_claim",
+        "default_mint_value": {
+          "boolean_attribute_value": {
+            "value": false
+          }
+        },
+        "data_type": "boolean",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "bool_true_value": "Yes",
+          "bool_false_value": "No",
+          "opensea": {
+            "trait_type": "January Claim"
+          }
+        },
+        "hidden_to_marketplace": false
+      },
+      {
+        "name": "feb_claim",
+        "default_mint_value": {
+          "boolean_attribute_value": {
+            "value": false
+          }
+        },
+        "data_type": "boolean",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "bool_true_value": "Yes",
+          "bool_false_value": "No",
+          "opensea": {
+            "trait_type": "February Claim"
+          }
+        },
+        "hidden_to_marketplace": true
+      },
+      {
+        "name": "mar_claim",
+        "default_mint_value": {
+          "boolean_attribute_value": {
+            "value": false
+          }
+        },
+        "data_type": "boolean",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "bool_true_value": "Yes",
+          "bool_false_value": "No",
+          "opensea": {
+            "trait_type": "March Claim"
+          }
+        },
+        "hidden_to_marketplace": true
+      },
+      {
+        "name": "apr_claim",
+        "default_mint_value": {
+          "boolean_attribute_value": {
+            "value": false
+          }
+        },
+        "data_type": "boolean",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "bool_true_value": "Yes",
+          "bool_false_value": "No",
+          "opensea": {
+            "trait_type": "April Claim"
+          }
+        },
+        "hidden_to_marketplace": true
+      },
+      {
+        "name": "may_claim",
+        "default_mint_value": {
+          "boolean_attribute_value": {
+            "value": false
+          }
+        },
+        "data_type": "boolean",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "bool_true_value": "Yes",
+          "bool_false_value": "No",
+          "opensea": {
+            "trait_type": "May Claim"
+          }
+        },
+        "hidden_to_marketplace": true
+      },
+      {
+        "name": "jun_claim",
+        "default_mint_value": {
+          "boolean_attribute_value": {
+            "value": false
+          }
+        },
+        "data_type": "boolean",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "bool_true_value": "Yes",
+          "bool_false_value": "No",
+          "opensea": {
+            "trait_type": "June Claim"
+          }
+        },
+        "hidden_to_marketplace": true
+      },
+      {
+        "name": "jul_claim",
+        "default_mint_value": {
+          "boolean_attribute_value": {
+            "value": false
+          }
+        },
+        "data_type": "boolean",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "bool_true_value": "Yes",
+          "bool_false_value": "No",
+          "opensea": {
+            "trait_type": "July Claim"
+          }
+        },
+        "hidden_to_marketplace": true
+      },
+      {
+        "name": "aug_claim",
+        "default_mint_value": {
+          "boolean_attribute_value": {
+            "value": false
+          }
+        },
+        "data_type": "boolean",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "bool_true_value": "Yes",
+          "bool_false_value": "No",
+          "opensea": {
+            "trait_type": "August Claim"
+          }
+        },
+        "hidden_to_marketplace": true
+      },
+      {
+        "name": "sep_claim",
+        "default_mint_value": {
+          "boolean_attribute_value": {
+            "value": false
+          }
+        },
+        "data_type": "boolean",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "bool_true_value": "Yes",
+          "bool_false_value": "No",
+          "opensea": {
+            "trait_type": "September Claim"
+          }
+        },
+        "hidden_to_marketplace": true
+      },
+      {
+        "name": "oct_claim",
+        "default_mint_value": {
+          "boolean_attribute_value": {
+            "value": false
+          }
+        },
+        "data_type": "boolean",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "bool_true_value": "Yes",
+          "bool_false_value": "No",
+          "opensea": {
+            "trait_type": "October Claim"
+          }
+        },
+        "hidden_to_marketplace": true
+      },
+      {
+        "name": "nov_claim",
+        "default_mint_value": {
+          "boolean_attribute_value": {
+            "value": false
+          }
+        },
+        "data_type": "boolean",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "bool_true_value": "Yes",
+          "bool_false_value": "No",
+          "opensea": {
+            "trait_type": "November Claim"
+          }
+        },
+        "hidden_to_marketplace": true
+      },
+      {
+        "name": "dec_claim",
+        "default_mint_value": {
+          "boolean_attribute_value": {
+            "value": false
+          }
+        },
+        "data_type": "boolean",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "bool_true_value": "Yes",
+          "bool_false_value": "No",
+          "opensea": {
+            "trait_type": "December Claim"
+          }
+        },
+        "hidden_to_marketplace": true
+      },
+      {
+        "name": "start_time",
+        "default_mint_value": {
+          "string_attribute_value": {
+            "value": ""
+          }
+        },
+        "data_type": "string",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "opensea": {
+            "trait_type": "Start Time"
+          }
+        }
+      },
+      {
+        "name": "start_time_bangkok",
+        "default_mint_value": {
+          "string_attribute_value": {
+            "value": ""
+          }
+        },
+        "data_type": "string",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "opensea": {
+            "trait_type": "Start Bangkok Time"
+          }
+        }
+      },
+      {
+        "name": "start_block",
+        "default_mint_value": {
+          "string_attribute_value": {
+            "value": ""
+          }
+        },
+        "data_type": "string",
+        "required": true,
+        "display_value_field": "value",
+        "display_option": {
+          "opensea": {
+            "trait_type": "Start Time"
+          }
+        }
+      }
+    ],
+    "actions": [
+      {
+        "name": "start_mission",
+        "desc": "Start Mission",
+        "disable": false,
+        "params": [],
+        "when": "meta.GetBoolean('started') == false",
+        "then": [
+          "meta.SetBoolean('started', true)",
+          "meta.SetNumber('missions_passed', meta.GetNumber('missions_passed') + 1)",
+          "meta.SetNumber('points', meta.GetNumber('points') + 300)",
+          "meta.SetString('start_block',meta.GetBlockHeight())",
+          "meta.SetString('start_time',meta.GetUTCBlockTimestamp('2006-01-02T15:04:05Z07:00'))",
+          "meta.SetString('start_time_bangkok',meta.GetBlockTimestampByZone('Asia/Bangkok','2006-01-02T15:04:05Z07:00'))"
+        ]
+      },
+      {
+        "name": "claim_jan",
+        "desc": "Claim Jan Mission",
+        "disable": false,
+        "params": [],
+        "when": "meta.GetBoolean('jan_claim') == false && meta.BlockTimeUTCBefore('2022-02-17T00:00:01Z','2006-01-02T15:04:05Z07:00') && meta.BlockTimeUTCAfter('2022-01-01T00:01:00Z','2006-01-02T15:04:05Z07:00')",
+        "then": [
+          "meta.SetBoolean('jan_claim', true)",
+          "meta.SetNumber('points', meta.GetNumber('points') + 100)"
+        ]
+      },
+      {
+        "name": "claim_feb",
+        "desc": "Claim Feb Mission",
+        "disable": false,
+        "params": [],
+        "when": "meta.GetBoolean('feb_claim') == false && meta.BlockTimeUTCBefore('2022-03-17T00:00:01Z','2006-01-02T15:04:05Z07:00') && meta.BlockTimeUTCAfter('2022-02-01T00:01:00Z','2006-01-02T15:04:05Z07:00')",
+        "then": [
+          "meta.SetBoolean('feb_claim', true)",
+          "meta.SetNumber('points', meta.GetNumber('points') + 100)"
+        ]
+      },
+      {
+        "name": "claim_mar",
+        "desc": "Claim Mar Mission",
+        "disable": false,
+        "params": [],
+        "when": "meta.GetBoolean('mar_claim') == false && meta.BlockTimeUTCBefore('2022-04-17T00:00:01Z','2006-01-02T15:04:05Z07:00') && meta.BlockTimeUTCAfter('2022-03-01T00:01:00Z','2006-01-02T15:04:05Z07:00')",
+        "then": [
+          "meta.SetBoolean('mar_claim', true)",
+          "meta.SetNumber('points', meta.GetNumber('points') + 100)"
+        ]
+      },
+      {
+        "name": "claim_apr",
+        "desc": "Claim Apr Mission",
+        "disable": false,
+        "params": [],
+        "when": "meta.GetBoolean('apr_claim') == false && meta.BlockTimeUTCBefore('2022-05-17T00:00:01Z','2006-01-02T15:04:05Z07:00') && meta.BlockTimeUTCAfter('2022-04-01T00:01:00Z','2006-01-02T15:04:05Z07:00')",
+        "then": [
+          "meta.SetBoolean('apr_claim', true)",
+          "meta.SetNumber('points', meta.GetNumber('points') + 100)"
+        ]
+      },
+      {
+        "name": "claim_may",
+        "desc": "Claim May Mission",
+        "disable": false,
+        "params": [],
+        "when": "meta.GetBoolean('may_claim') == false && meta.BlockTimeUTCBefore('2022-06-17T00:00:01Z','2006-01-02T15:04:05Z07:00') && meta.BlockTimeUTCAfter('2022-05-01T00:01:00Z','2006-01-02T15:04:05Z07:00')",
+        "then": [
+          "meta.SetBoolean('may_claim', true)",
+          "meta.SetNumber('points', meta.GetNumber('points') + 100)"
+        ]
+      },
+      {
+        "name": "claim_jun",
+        "desc": "Claim Jun Mission",
+        "disable": false,
+        "params": [],
+        "when": "meta.GetBoolean('jun_claim') == false && meta.BlockTimeUTCBefore('2022-07-17T00:00:01Z','2006-01-02T15:04:05Z07:00') && meta.BlockTimeUTCAfter('2022-06-01T00:01:00Z','2006-01-02T15:04:05Z07:00')",
+        "then": [
+          "meta.SetBoolean('jun_claim', true)",
+          "meta.SetNumber('points', meta.GetNumber('points') + 100)"
+        ]
+      },
+      {
+        "name": "claim_jul",
+        "desc": "Claim Jul Mission",
+        "disable": false,
+        "params": [],
+        "when": "meta.GetBoolean('jul_claim') == false && meta.BlockTimeUTCBefore('2022-08-17T00:00:01Z','2006-01-02T15:04:05Z07:00') && meta.BlockTimeUTCAfter('2022-07-01T00:01:00Z','2006-01-02T15:04:05Z07:00')",
+        "then": [
+          "meta.SetBoolean('jul_claim', true)",
+          "meta.SetNumber('points', meta.GetNumber('points') + 100)"
+        ]
+      },
+      {
+        "name": "claim_aug",
+        "desc": "Claim Aug Mission",
+        "disable": false,
+        "params": [],
+        "when": "meta.GetBoolean('aug_claim') == false && meta.BlockTimeUTCBefore('2022-09-17T00:00:01Z','2006-01-02T15:04:05Z07:00') && meta.BlockTimeUTCAfter('2022-08-01T00:01:00Z','2006-01-02T15:04:05Z07:00')",
+        "then": [
+          "meta.SetBoolean('aug_claim', true)",
+          "meta.SetNumber('points', meta.GetNumber('points') + 100)"
+        ]
+      },
+      {
+        "name": "claim_sep",
+        "desc": "Claim Sep Mission",
+        "disable": false,
+        "params": [],
+        "when": "meta.GetBoolean('sep_claim') == false && meta.BlockTimeUTCBefore('2022-10-17T00:00:01Z','2006-01-02T15:04:05Z07:00') && meta.BlockTimeUTCAfter('2022-09-01T00:01:00Z','2006-01-02T15:04:05Z07:00')",
+        "then": [
+          "meta.SetBoolean('sep_claim', true)",
+          "meta.SetNumber('points', meta.GetNumber('points') + 100)"
+        ]
+      },
+      {
+        "name": "claim_oct",
+        "desc": "Claim Oct Mission",
+        "disable": false,
+        "params": [],
+        "when": "meta.GetBoolean('oct_claim') == false && meta.BlockTimeUTCBefore('2022-11-17T00:00:01Z','2006-01-02T15:04:05Z07:00') && meta.BlockTimeUTCAfter('2022-10-01T00:01:00Z','2006-01-02T15:04:05Z07:00')",
+        "then": [
+          "meta.SetBoolean('oct_claim', true)",
+          "meta.SetNumber('points', meta.GetNumber('points') + 100)"
+        ]
+      },
+      {
+        "name": "claim_nov",
+        "desc": "Claim Nov Mission",
+        "disable": false,
+        "params": [],
+        "when": "meta.GetBoolean('nov_claim') == false && meta.BlockTimeUTCBefore('2022-12-17T00:00:01Z','2006-01-02T15:04:05Z07:00') && meta.BlockTimeUTCAfter('2022-11-01T00:01:00Z','2006-01-02T15:04:05Z07:00')",
+        "then": [
+          "meta.SetBoolean('nov_claim', true)",
+          "meta.SetNumber('points', meta.GetNumber('points') + 100)"
+        ]
+      },
+      {
+        "name": "claim_dec",
+        "desc": "Claim Dec Mission",
+        "disable": false,
+        "params": [],
+        "when": "meta.GetBoolean('dec_claim') == false && meta.BlockTimeUTCBefore('2023-01-17T00:00:01Z','2006-01-02T15:04:05Z07:00') && meta.BlockTimeUTCAfter('2022-12-01T00:01:00Z','2006-01-02T15:04:05Z07:00')",
+        "then": [
+          "meta.SetBoolean('dec_claim', true)",
+          "meta.SetNumber('points', meta.GetNumber('points') + 100)"
+        ]
+      },
+      {
+        "name": "transform",
+        "desc": "Transform",
+        "disable": false,
+        "params": [],
+        "when": "meta.GetBoolean('missions_accomplished') == false && meta.GetNumber('missions_passed') == 12",
+        "then": [
+          "meta.SetBoolean('missions_accomplished', true)",
+          "meta.SetImage(meta.ReplaceAllString(meta.GetImage(),'.jpeg','-t.jpeg'))"
+        ]
+      },
+      {
+        "name": "burn",
+        "desc": "Burn Points",
+        "disable": false,
+        "params": [
+          {
+            "name": "points",
+            "desc": "Points",
+            "data_type": "number",
+            "required": true,
+            "default_value": "10"
+          },
+          {
+            "name": "minimum_balance",
+            "desc": "Minimum balance before redeem",
+            "data_type": "number",
+            "required": false,
+            "default_value": "10"
+          }
+        ],
+        "when": "meta.GetBoolean('started') == true",
+        "then": [
+          "meta.SetNumber('points', meta.GetNumber('points') - params['points'].GetNumber())"
+        ]
+      },
+      {
+        "name": "hide_attribute",
+        "desc": "Test Dyamic hidden to marketplace",
+        "disable": false,
+        "params": [
+          {
+            "name": "attribute_name",
+            "desc": "Attribute name",
+            "data_type": "string",
+            "required": true
+          },
+          {
+            "name": "hide",
+            "desc": "value",
+            "data_type": "string",
+            "required": true
+          }
+        ],
+        "when": "meta.GetBoolean('started') == true || meta.GetBoolean('started') == false",
+        "then": [
+          "meta.SetDisplayArribute(params['attribute_name'].GetString(), params['hide'].GetString())"
+        ]
+      },
+      {
+        "name": "transfer",
+        "desc": "Test Transfer",
+        "disable": false,
+        "params": [
+          {
+            "name": "points",
+            "desc": "Points",
+            "data_type": "number",
+            "required": true,
+            "default_value": "10"
+          },
+          {
+            "name": "token_id",
+            "desc": "Token Id",
+            "data_type": "string",
+            "required": true,
+            "default_value": ""
+          }
+        ],
+        "when": "meta.GetNumber('points') > 0 && params['points'].GetNumber() > 0 ",
+        "then": [
+          "meta.TransferNumber('points',params['token_id'].GetString(),params['points'].GetNumber())"
+        ]
+      }
+    ],
+    "nft_attributes_value": []
+  },
+  "mint_authorization": "system"
+}

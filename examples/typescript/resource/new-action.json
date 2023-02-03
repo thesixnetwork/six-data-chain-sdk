@@ -1,0 +1,19 @@
+{
+    "name": "new_action",
+    "desc": "New Action",
+    "disable": false,
+    "params": [
+      {
+        "name": "param1",
+        "desc": "Param1",
+        "data_type": "number",
+        "required": true,
+        "default_value": "10"
+      }
+    ],
+    "when": "meta.GetBoolean('started') == true",
+    "then": [
+      "meta.SetNumber('points', meta.GetNumber('points') - params['param1'].GetNumber())"
+    ]
+  }
+  
