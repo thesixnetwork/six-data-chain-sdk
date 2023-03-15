@@ -6,7 +6,8 @@ import { OfflineSigner } from "@cosmjs/proto-signing";
 import * as nftmngrModuleGenerate from "../modules/sixnft/thesixnetwork.sixnft.nftmngr/module/index"
 import * as nftoracleModuleGenerate from "../modules/sixnft/thesixnetwork.sixnft.nftoracle/module/index"
 import * as nftadminModuleGenerate from "../modules/sixnft/thesixnetwork.sixnft.nftadmin/module/index"
-
+import * as cosmosbankModuleGenerate from "../modules/cosmos/cosmos-sdk/cosmos.bank.v1beta1/module/index"
+import * as cosmosstakingModuleGenerate from "../modules/cosmos/cosmos-sdk/cosmos.staking.v1beta1/module/index"
 
 
 type Module = {
@@ -42,16 +43,22 @@ export class SixDataChainConnector {
         const [
             nftmngrModule,
             nftoracleModule,
-            nftAdminModule
+            nftAdminModule,
+            cosmosBankModule,
+            cosmosStakingModule,
         ] = await Promise.all([
             nftmngrModuleGenerate.queryClient({ addr: this.apiUrl }),
             nftoracleModuleGenerate.queryClient({ addr: this.apiUrl }),
-            nftadminModuleGenerate.queryClient({ addr: this.apiUrl })
+            nftadminModuleGenerate.queryClient({ addr: this.apiUrl }),
+            cosmosbankModuleGenerate.queryClient({ addr: this.apiUrl }),
+            cosmosstakingModuleGenerate.queryClient({ addr: this.apiUrl })
         ])
         return {
             nftmngrModule,
             nftoracleModule,
-            nftAdminModule
+            nftAdminModule,
+            cosmosBankModule,
+            cosmosStakingModule,
         }
     }
 
@@ -67,15 +74,21 @@ export class SixDataChainConnector {
             nftmngrModule,
             nftadminModule,
             nftoracleModule,
+            cosmosBankModule,
+            cosmosStakingModule,
         ] = await Promise.all([
             nftmngrModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options),
+            nftadminModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options),
             nftoracleModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options),
-            nftadminModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options)
+            cosmosbankModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options),
+            cosmosstakingModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options)
         ])
         return {
             nftmngrModule,
             nftadminModule,
             nftoracleModule,
+            cosmosBankModule,
+            cosmosStakingModule,
         }
     }
 
