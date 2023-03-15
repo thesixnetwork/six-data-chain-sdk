@@ -43,7 +43,7 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
   if (!wallet) throw MissingWalletError;
   let client;
   if (addr) {
-    client = await SigningStargateClient.connectWithSigner(addr, wallet, { registry });
+    client = await SigningStargateClient.connectWithSigner(addr, wallet, { registry, ...options});
   }else{
     client = await SigningStargateClient.offline( wallet, { registry });
   }
