@@ -8,3 +8,5 @@ export * as ITxNFTmngr from "./modules/sixnft/thesixnetwork.sixnft.nftmngr/modul
 export * as ITxNFTadmin from "./modules/sixnft/thesixnetwork.sixnft.nftadmin/module/types/nftadmin/tx"
 export * as ITxNFToracle from "./modules/sixnft/thesixnetwork.sixnft.nftoracle/module/types/nftoracle/tx"
 export * as fee from "@cosmjs/stargate/build/fee"
+export * as typesTxNFTManager from "./modules/sixnft/thesixnetwork.sixnft.nftmngr/module/types/nftmngr/tx"
+export * as typesQueryNFTManager from "./modules/sixnft/thesixnetwork.sixnft.nftmngr/module/types/nftmngr/query"
