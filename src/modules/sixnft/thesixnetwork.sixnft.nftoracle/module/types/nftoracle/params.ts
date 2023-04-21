@@ -9,6 +9,8 @@ export interface Params {
   mint_request_active_duration: Duration | undefined;
   action_request_active_duration: Duration | undefined;
   verify_request_active_duration: Duration | undefined;
+  action_signer_active_duration: Duration | undefined;
+  sync_action_signer_active_duration: Duration | undefined;
 }
 
 const baseParams: object = {};
@@ -31,6 +33,18 @@ export const Params = {
       Duration.encode(
         message.verify_request_active_duration,
         writer.uint32(26).fork()
+      ).ldelim();
+    }
+    if (message.action_signer_active_duration !== undefined) {
+      Duration.encode(
+        message.action_signer_active_duration,
+        writer.uint32(34).fork()
+      ).ldelim();
+    }
+    if (message.sync_action_signer_active_duration !== undefined) {
+      Duration.encode(
+        message.sync_action_signer_active_duration,
+        writer.uint32(42).fork()
       ).ldelim();
     }
     return writer;
@@ -57,6 +71,18 @@ export const Params = {
           break;
         case 3:
           message.verify_request_active_duration = Duration.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        case 4:
+          message.action_signer_active_duration = Duration.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        case 5:
+          message.sync_action_signer_active_duration = Duration.decode(
             reader,
             reader.uint32()
           );
@@ -101,6 +127,26 @@ export const Params = {
     } else {
       message.verify_request_active_duration = undefined;
     }
+    if (
+      object.action_signer_active_duration !== undefined &&
+      object.action_signer_active_duration !== null
+    ) {
+      message.action_signer_active_duration = Duration.fromJSON(
+        object.action_signer_active_duration
+      );
+    } else {
+      message.action_signer_active_duration = undefined;
+    }
+    if (
+      object.sync_action_signer_active_duration !== undefined &&
+      object.sync_action_signer_active_duration !== null
+    ) {
+      message.sync_action_signer_active_duration = Duration.fromJSON(
+        object.sync_action_signer_active_duration
+      );
+    } else {
+      message.sync_action_signer_active_duration = undefined;
+    }
     return message;
   },
 
@@ -117,6 +163,14 @@ export const Params = {
     message.verify_request_active_duration !== undefined &&
       (obj.verify_request_active_duration = message.verify_request_active_duration
         ? Duration.toJSON(message.verify_request_active_duration)
+        : undefined);
+    message.action_signer_active_duration !== undefined &&
+      (obj.action_signer_active_duration = message.action_signer_active_duration
+        ? Duration.toJSON(message.action_signer_active_duration)
+        : undefined);
+    message.sync_action_signer_active_duration !== undefined &&
+      (obj.sync_action_signer_active_duration = message.sync_action_signer_active_duration
+        ? Duration.toJSON(message.sync_action_signer_active_duration)
         : undefined);
     return obj;
   },
@@ -152,6 +206,26 @@ export const Params = {
       );
     } else {
       message.verify_request_active_duration = undefined;
+    }
+    if (
+      object.action_signer_active_duration !== undefined &&
+      object.action_signer_active_duration !== null
+    ) {
+      message.action_signer_active_duration = Duration.fromPartial(
+        object.action_signer_active_duration
+      );
+    } else {
+      message.action_signer_active_duration = undefined;
+    }
+    if (
+      object.sync_action_signer_active_duration !== undefined &&
+      object.sync_action_signer_active_duration !== null
+    ) {
+      message.sync_action_signer_active_duration = Duration.fromPartial(
+        object.sync_action_signer_active_duration
+      );
+    } else {
+      message.sync_action_signer_active_duration = undefined;
     }
     return message;
   },

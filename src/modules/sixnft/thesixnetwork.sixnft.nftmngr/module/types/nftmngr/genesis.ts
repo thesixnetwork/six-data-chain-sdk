@@ -4,6 +4,10 @@ import { NFTSchema } from "../nftmngr/nft_schema";
 import { NftData } from "../nftmngr/nft_data";
 import { ActionByRefId } from "../nftmngr/action_by_ref_id";
 import { Organization } from "../nftmngr/organization";
+import { NFTSchemaByContract } from "../nftmngr/nft_schema_by_contract";
+import { NFTFeeConfig } from "../nftmngr/nft_fee_config";
+import { NFTFeeBalance } from "../nftmngr/nft_fee_balance";
+import { MetadataCreator } from "../nftmngr/metadata_creator";
 import { NftCollection } from "../nftmngr/nft_collection";
 import { Writer, Reader } from "protobufjs/minimal";
 
@@ -16,6 +20,10 @@ export interface GenesisState {
   nftDataList: NftData[];
   actionByRefIdList: ActionByRefId[];
   organizationList: Organization[];
+  nFTSchemaByContractList: NFTSchemaByContract[];
+  nft_fee_config: NFTFeeConfig | undefined;
+  nFTFeeBalance: NFTFeeBalance | undefined;
+  metadataCreatorList: MetadataCreator[];
   /** this line is used by starport scaffolding # genesis/proto/state */
   nftCollectionList: NftCollection[];
 }
@@ -39,8 +47,26 @@ export const GenesisState = {
     for (const v of message.organizationList) {
       Organization.encode(v!, writer.uint32(42).fork()).ldelim();
     }
+    for (const v of message.nFTSchemaByContractList) {
+      NFTSchemaByContract.encode(v!, writer.uint32(58).fork()).ldelim();
+    }
+    if (message.nft_fee_config !== undefined) {
+      NFTFeeConfig.encode(
+        message.nft_fee_config,
+        writer.uint32(66).fork()
+      ).ldelim();
+    }
+    if (message.nFTFeeBalance !== undefined) {
+      NFTFeeBalance.encode(
+        message.nFTFeeBalance,
+        writer.uint32(74).fork()
+      ).ldelim();
+    }
+    for (const v of message.metadataCreatorList) {
+      MetadataCreator.encode(v!, writer.uint32(82).fork()).ldelim();
+    }
     for (const v of message.nftCollectionList) {
-      NftCollection.encode(v!, writer.uint32(50).fork()).ldelim();
+      NftCollection.encode(v!, writer.uint32(90).fork()).ldelim();
     }
     return writer;
   },
@@ -53,6 +79,8 @@ export const GenesisState = {
     message.nftDataList = [];
     message.actionByRefIdList = [];
     message.organizationList = [];
+    message.nFTSchemaByContractList = [];
+    message.metadataCreatorList = [];
     message.nftCollectionList = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -76,7 +104,23 @@ export const GenesisState = {
             Organization.decode(reader, reader.uint32())
           );
           break;
-        case 6:
+        case 7:
+          message.nFTSchemaByContractList.push(
+            NFTSchemaByContract.decode(reader, reader.uint32())
+          );
+          break;
+        case 8:
+          message.nft_fee_config = NFTFeeConfig.decode(reader, reader.uint32());
+          break;
+        case 9:
+          message.nFTFeeBalance = NFTFeeBalance.decode(reader, reader.uint32());
+          break;
+        case 10:
+          message.metadataCreatorList.push(
+            MetadataCreator.decode(reader, reader.uint32())
+          );
+          break;
+        case 11:
           message.nftCollectionList.push(
             NftCollection.decode(reader, reader.uint32())
           );
@@ -95,6 +139,8 @@ export const GenesisState = {
     message.nftDataList = [];
     message.actionByRefIdList = [];
     message.organizationList = [];
+    message.nFTSchemaByContractList = [];
+    message.metadataCreatorList = [];
     message.nftCollectionList = [];
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromJSON(object.params);
@@ -125,6 +171,32 @@ export const GenesisState = {
     ) {
       for (const e of object.organizationList) {
         message.organizationList.push(Organization.fromJSON(e));
+      }
+    }
+    if (
+      object.nFTSchemaByContractList !== undefined &&
+      object.nFTSchemaByContractList !== null
+    ) {
+      for (const e of object.nFTSchemaByContractList) {
+        message.nFTSchemaByContractList.push(NFTSchemaByContract.fromJSON(e));
+      }
+    }
+    if (object.nft_fee_config !== undefined && object.nft_fee_config !== null) {
+      message.nft_fee_config = NFTFeeConfig.fromJSON(object.nft_fee_config);
+    } else {
+      message.nft_fee_config = undefined;
+    }
+    if (object.nFTFeeBalance !== undefined && object.nFTFeeBalance !== null) {
+      message.nFTFeeBalance = NFTFeeBalance.fromJSON(object.nFTFeeBalance);
+    } else {
+      message.nFTFeeBalance = undefined;
+    }
+    if (
+      object.metadataCreatorList !== undefined &&
+      object.metadataCreatorList !== null
+    ) {
+      for (const e of object.metadataCreatorList) {
+        message.metadataCreatorList.push(MetadataCreator.fromJSON(e));
       }
     }
     if (
@@ -170,6 +242,28 @@ export const GenesisState = {
     } else {
       obj.organizationList = [];
     }
+    if (message.nFTSchemaByContractList) {
+      obj.nFTSchemaByContractList = message.nFTSchemaByContractList.map((e) =>
+        e ? NFTSchemaByContract.toJSON(e) : undefined
+      );
+    } else {
+      obj.nFTSchemaByContractList = [];
+    }
+    message.nft_fee_config !== undefined &&
+      (obj.nft_fee_config = message.nft_fee_config
+        ? NFTFeeConfig.toJSON(message.nft_fee_config)
+        : undefined);
+    message.nFTFeeBalance !== undefined &&
+      (obj.nFTFeeBalance = message.nFTFeeBalance
+        ? NFTFeeBalance.toJSON(message.nFTFeeBalance)
+        : undefined);
+    if (message.metadataCreatorList) {
+      obj.metadataCreatorList = message.metadataCreatorList.map((e) =>
+        e ? MetadataCreator.toJSON(e) : undefined
+      );
+    } else {
+      obj.metadataCreatorList = [];
+    }
     if (message.nftCollectionList) {
       obj.nftCollectionList = message.nftCollectionList.map((e) =>
         e ? NftCollection.toJSON(e) : undefined
@@ -186,6 +280,8 @@ export const GenesisState = {
     message.nftDataList = [];
     message.actionByRefIdList = [];
     message.organizationList = [];
+    message.nFTSchemaByContractList = [];
+    message.metadataCreatorList = [];
     message.nftCollectionList = [];
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromPartial(object.params);
@@ -216,6 +312,34 @@ export const GenesisState = {
     ) {
       for (const e of object.organizationList) {
         message.organizationList.push(Organization.fromPartial(e));
+      }
+    }
+    if (
+      object.nFTSchemaByContractList !== undefined &&
+      object.nFTSchemaByContractList !== null
+    ) {
+      for (const e of object.nFTSchemaByContractList) {
+        message.nFTSchemaByContractList.push(
+          NFTSchemaByContract.fromPartial(e)
+        );
+      }
+    }
+    if (object.nft_fee_config !== undefined && object.nft_fee_config !== null) {
+      message.nft_fee_config = NFTFeeConfig.fromPartial(object.nft_fee_config);
+    } else {
+      message.nft_fee_config = undefined;
+    }
+    if (object.nFTFeeBalance !== undefined && object.nFTFeeBalance !== null) {
+      message.nFTFeeBalance = NFTFeeBalance.fromPartial(object.nFTFeeBalance);
+    } else {
+      message.nFTFeeBalance = undefined;
+    }
+    if (
+      object.metadataCreatorList !== undefined &&
+      object.metadataCreatorList !== null
+    ) {
+      for (const e of object.metadataCreatorList) {
+        message.metadataCreatorList.push(MetadataCreator.fromPartial(e));
       }
     }
     if (

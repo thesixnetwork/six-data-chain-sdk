@@ -1,13 +1,13 @@
 const { BASE64, SixDataChainConnector } = require("@sixnetwork/six-data-chain-sdk");
-const exampleNFTData = require("./tmp/nft-data-example.json")
+const exampleNFTData = require("./tmp/nft-metadata-example.json")
 const main = async () => {
-    const sixConnector = new SixDataChainConnector("http://127.0.0.1")
+    const sixConnector = new SixDataChainConnector()
     
      // Or direct config (require uri with port) 
     // use when node split url
     // const sixConnector = new SixDataChainConnector()
-    // sixConnector.apiUrl = "http://example1.node:1317"
-    // sixConnector.rpcUrl = "http://example2.node:26657"
+    sixConnector.apiUrl = "http://example1.node:1317"
+    sixConnector.rpcUrl = "http://example2.node:26657"
     
     const accountSigner = await sixConnector.accounts.privateKeyToAccount("pk or mnomic")
     // get wallet address

@@ -64,12 +64,133 @@ export interface MsgCreateVerifyCollectionOwnerRequestResponse {
 export interface MsgSubmitVerifyCollectionOwner {
   creator: string;
   verifyRequestID: number;
-  schemaCode: string;
-  base64OriginTxInfo: string;
+  nftSchemaCode: string;
+  base64OriginContractInfo: string;
 }
 
 export interface MsgSubmitVerifyCollectionOwnerResponse {
   verifyRequestID: number;
+}
+
+export interface MsgSetMinimumConfirmation {
+  creator: string;
+  newConfirmation: string;
+}
+
+export interface MsgSetMinimumConfirmationResponse {
+  newConfirmation: string;
+}
+
+export interface MsgCreateActionSigner {
+  creator: string;
+  base64EncodedSetSignerAction: string;
+}
+
+export interface MsgCreateActionSignerResponse {
+  ownerAddress: string;
+  signerAddress: string;
+  expireAt: string;
+}
+
+export interface MsgUpdateActionSigner {
+  creator: string;
+  base64EncodedSetSignerAction: string;
+}
+
+export interface MsgUpdateActionSignerResponse {
+  ownerAddress: string;
+  signerAddress: string;
+  expireAt: string;
+}
+
+export interface MsgDeleteActionSigner {
+  creator: string;
+  base64EncodedSetSignerAction: string;
+}
+
+export interface MsgDeleteActionSignerResponse {
+  ownerAddress: string;
+  signerAddress: string;
+}
+
+export interface MsgCreateActionSignerConfig {
+  creator: string;
+  chain: string;
+  rpc_endpoint: string;
+  contractAddress: string;
+  contractName: string;
+  contractOwner: string;
+}
+
+export interface MsgCreateActionSignerConfigResponse {
+  chain: string;
+  rpc_endpoint: string;
+  contractAddress: string;
+  contractName: string;
+  contractOwner: string;
+}
+
+export interface MsgUpdateActionSignerConfig {
+  creator: string;
+  chain: string;
+  rpc_endpoint: string;
+  contractAddress: string;
+  contractName: string;
+  contractOwner: string;
+}
+
+export interface MsgUpdateActionSignerConfigResponse {
+  chain: string;
+  rpc_endpoint: string;
+  new_rpc_endpoint: string;
+  contractAddress: string;
+  new_contractAddress: string;
+  contractName: string;
+  new_contractName: string;
+  contractOwner: string;
+  new_contractOwner: string;
+}
+
+export interface MsgDeleteActionSignerConfig {
+  creator: string;
+  chain: string;
+}
+
+export interface MsgDeleteActionSignerConfigResponse {
+  chain: string;
+}
+
+export interface MsgCreateSyncActionSigner {
+  creator: string;
+  chain: string;
+  actorAddress: string;
+  ownerAddress: string;
+  requiredConfirm: number;
+}
+
+export interface MsgCreateSyncActionSignerResponse {
+  id: number;
+  chain: string;
+  ownerAddress: string;
+  actorAddress: string;
+}
+
+export interface MsgSubmitSyncActionSigner {
+  creator: string;
+  syncId: number;
+  chain: string;
+  actorAddress: string;
+  ownerAddress: string;
+  /**
+   * usign epoch because the data will came from smart contract
+   * and it is easier to make communication between smart contract and cosmos
+   */
+  expire_epoch: string;
+}
+
+export interface MsgSubmitSyncActionSignerResponse {
+  verifyRequestID: number;
+  expireAt: string;
 }
 
 const baseMsgCreateMintRequest: object = {
@@ -1115,8 +1236,8 @@ export const MsgCreateVerifyCollectionOwnerRequestResponse = {
 const baseMsgSubmitVerifyCollectionOwner: object = {
   creator: "",
   verifyRequestID: 0,
-  schemaCode: "",
-  base64OriginTxInfo: "",
+  nftSchemaCode: "",
+  base64OriginContractInfo: "",
 };
 
 export const MsgSubmitVerifyCollectionOwner = {
@@ -1130,11 +1251,11 @@ export const MsgSubmitVerifyCollectionOwner = {
     if (message.verifyRequestID !== 0) {
       writer.uint32(16).uint64(message.verifyRequestID);
     }
-    if (message.schemaCode !== "") {
-      writer.uint32(26).string(message.schemaCode);
+    if (message.nftSchemaCode !== "") {
+      writer.uint32(26).string(message.nftSchemaCode);
     }
-    if (message.base64OriginTxInfo !== "") {
-      writer.uint32(34).string(message.base64OriginTxInfo);
+    if (message.base64OriginContractInfo !== "") {
+      writer.uint32(34).string(message.base64OriginContractInfo);
     }
     return writer;
   },
@@ -1158,10 +1279,10 @@ export const MsgSubmitVerifyCollectionOwner = {
           message.verifyRequestID = longToNumber(reader.uint64() as Long);
           break;
         case 3:
-          message.schemaCode = reader.string();
+          message.nftSchemaCode = reader.string();
           break;
         case 4:
-          message.base64OriginTxInfo = reader.string();
+          message.base64OriginContractInfo = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1188,18 +1309,20 @@ export const MsgSubmitVerifyCollectionOwner = {
     } else {
       message.verifyRequestID = 0;
     }
-    if (object.schemaCode !== undefined && object.schemaCode !== null) {
-      message.schemaCode = String(object.schemaCode);
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = String(object.nftSchemaCode);
     } else {
-      message.schemaCode = "";
+      message.nftSchemaCode = "";
     }
     if (
-      object.base64OriginTxInfo !== undefined &&
-      object.base64OriginTxInfo !== null
+      object.base64OriginContractInfo !== undefined &&
+      object.base64OriginContractInfo !== null
     ) {
-      message.base64OriginTxInfo = String(object.base64OriginTxInfo);
+      message.base64OriginContractInfo = String(
+        object.base64OriginContractInfo
+      );
     } else {
-      message.base64OriginTxInfo = "";
+      message.base64OriginContractInfo = "";
     }
     return message;
   },
@@ -1209,9 +1332,10 @@ export const MsgSubmitVerifyCollectionOwner = {
     message.creator !== undefined && (obj.creator = message.creator);
     message.verifyRequestID !== undefined &&
       (obj.verifyRequestID = message.verifyRequestID);
-    message.schemaCode !== undefined && (obj.schemaCode = message.schemaCode);
-    message.base64OriginTxInfo !== undefined &&
-      (obj.base64OriginTxInfo = message.base64OriginTxInfo);
+    message.nftSchemaCode !== undefined &&
+      (obj.nftSchemaCode = message.nftSchemaCode);
+    message.base64OriginContractInfo !== undefined &&
+      (obj.base64OriginContractInfo = message.base64OriginContractInfo);
     return obj;
   },
 
@@ -1234,18 +1358,18 @@ export const MsgSubmitVerifyCollectionOwner = {
     } else {
       message.verifyRequestID = 0;
     }
-    if (object.schemaCode !== undefined && object.schemaCode !== null) {
-      message.schemaCode = object.schemaCode;
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = object.nftSchemaCode;
     } else {
-      message.schemaCode = "";
+      message.nftSchemaCode = "";
     }
     if (
-      object.base64OriginTxInfo !== undefined &&
-      object.base64OriginTxInfo !== null
+      object.base64OriginContractInfo !== undefined &&
+      object.base64OriginContractInfo !== null
     ) {
-      message.base64OriginTxInfo = object.base64OriginTxInfo;
+      message.base64OriginContractInfo = object.base64OriginContractInfo;
     } else {
-      message.base64OriginTxInfo = "";
+      message.base64OriginContractInfo = "";
     }
     return message;
   },
@@ -1329,6 +1453,2199 @@ export const MsgSubmitVerifyCollectionOwnerResponse = {
   },
 };
 
+const baseMsgSetMinimumConfirmation: object = {
+  creator: "",
+  newConfirmation: "",
+};
+
+export const MsgSetMinimumConfirmation = {
+  encode(
+    message: MsgSetMinimumConfirmation,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.newConfirmation !== "") {
+      writer.uint32(18).string(message.newConfirmation);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgSetMinimumConfirmation {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgSetMinimumConfirmation,
+    } as MsgSetMinimumConfirmation;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.newConfirmation = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSetMinimumConfirmation {
+    const message = {
+      ...baseMsgSetMinimumConfirmation,
+    } as MsgSetMinimumConfirmation;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (
+      object.newConfirmation !== undefined &&
+      object.newConfirmation !== null
+    ) {
+      message.newConfirmation = String(object.newConfirmation);
+    } else {
+      message.newConfirmation = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgSetMinimumConfirmation): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.newConfirmation !== undefined &&
+      (obj.newConfirmation = message.newConfirmation);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgSetMinimumConfirmation>
+  ): MsgSetMinimumConfirmation {
+    const message = {
+      ...baseMsgSetMinimumConfirmation,
+    } as MsgSetMinimumConfirmation;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (
+      object.newConfirmation !== undefined &&
+      object.newConfirmation !== null
+    ) {
+      message.newConfirmation = object.newConfirmation;
+    } else {
+      message.newConfirmation = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgSetMinimumConfirmationResponse: object = { newConfirmation: "" };
+
+export const MsgSetMinimumConfirmationResponse = {
+  encode(
+    message: MsgSetMinimumConfirmationResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.newConfirmation !== "") {
+      writer.uint32(10).string(message.newConfirmation);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgSetMinimumConfirmationResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgSetMinimumConfirmationResponse,
+    } as MsgSetMinimumConfirmationResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.newConfirmation = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSetMinimumConfirmationResponse {
+    const message = {
+      ...baseMsgSetMinimumConfirmationResponse,
+    } as MsgSetMinimumConfirmationResponse;
+    if (
+      object.newConfirmation !== undefined &&
+      object.newConfirmation !== null
+    ) {
+      message.newConfirmation = String(object.newConfirmation);
+    } else {
+      message.newConfirmation = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgSetMinimumConfirmationResponse): unknown {
+    const obj: any = {};
+    message.newConfirmation !== undefined &&
+      (obj.newConfirmation = message.newConfirmation);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgSetMinimumConfirmationResponse>
+  ): MsgSetMinimumConfirmationResponse {
+    const message = {
+      ...baseMsgSetMinimumConfirmationResponse,
+    } as MsgSetMinimumConfirmationResponse;
+    if (
+      object.newConfirmation !== undefined &&
+      object.newConfirmation !== null
+    ) {
+      message.newConfirmation = object.newConfirmation;
+    } else {
+      message.newConfirmation = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgCreateActionSigner: object = {
+  creator: "",
+  base64EncodedSetSignerAction: "",
+};
+
+export const MsgCreateActionSigner = {
+  encode(
+    message: MsgCreateActionSigner,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.base64EncodedSetSignerAction !== "") {
+      writer.uint32(18).string(message.base64EncodedSetSignerAction);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgCreateActionSigner {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgCreateActionSigner } as MsgCreateActionSigner;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.base64EncodedSetSignerAction = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgCreateActionSigner {
+    const message = { ...baseMsgCreateActionSigner } as MsgCreateActionSigner;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (
+      object.base64EncodedSetSignerAction !== undefined &&
+      object.base64EncodedSetSignerAction !== null
+    ) {
+      message.base64EncodedSetSignerAction = String(
+        object.base64EncodedSetSignerAction
+      );
+    } else {
+      message.base64EncodedSetSignerAction = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgCreateActionSigner): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.base64EncodedSetSignerAction !== undefined &&
+      (obj.base64EncodedSetSignerAction = message.base64EncodedSetSignerAction);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgCreateActionSigner>
+  ): MsgCreateActionSigner {
+    const message = { ...baseMsgCreateActionSigner } as MsgCreateActionSigner;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (
+      object.base64EncodedSetSignerAction !== undefined &&
+      object.base64EncodedSetSignerAction !== null
+    ) {
+      message.base64EncodedSetSignerAction =
+        object.base64EncodedSetSignerAction;
+    } else {
+      message.base64EncodedSetSignerAction = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgCreateActionSignerResponse: object = {
+  ownerAddress: "",
+  signerAddress: "",
+  expireAt: "",
+};
+
+export const MsgCreateActionSignerResponse = {
+  encode(
+    message: MsgCreateActionSignerResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.ownerAddress !== "") {
+      writer.uint32(10).string(message.ownerAddress);
+    }
+    if (message.signerAddress !== "") {
+      writer.uint32(18).string(message.signerAddress);
+    }
+    if (message.expireAt !== "") {
+      writer.uint32(26).string(message.expireAt);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgCreateActionSignerResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgCreateActionSignerResponse,
+    } as MsgCreateActionSignerResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.ownerAddress = reader.string();
+          break;
+        case 2:
+          message.signerAddress = reader.string();
+          break;
+        case 3:
+          message.expireAt = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgCreateActionSignerResponse {
+    const message = {
+      ...baseMsgCreateActionSignerResponse,
+    } as MsgCreateActionSignerResponse;
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = String(object.ownerAddress);
+    } else {
+      message.ownerAddress = "";
+    }
+    if (object.signerAddress !== undefined && object.signerAddress !== null) {
+      message.signerAddress = String(object.signerAddress);
+    } else {
+      message.signerAddress = "";
+    }
+    if (object.expireAt !== undefined && object.expireAt !== null) {
+      message.expireAt = String(object.expireAt);
+    } else {
+      message.expireAt = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgCreateActionSignerResponse): unknown {
+    const obj: any = {};
+    message.ownerAddress !== undefined &&
+      (obj.ownerAddress = message.ownerAddress);
+    message.signerAddress !== undefined &&
+      (obj.signerAddress = message.signerAddress);
+    message.expireAt !== undefined && (obj.expireAt = message.expireAt);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgCreateActionSignerResponse>
+  ): MsgCreateActionSignerResponse {
+    const message = {
+      ...baseMsgCreateActionSignerResponse,
+    } as MsgCreateActionSignerResponse;
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = object.ownerAddress;
+    } else {
+      message.ownerAddress = "";
+    }
+    if (object.signerAddress !== undefined && object.signerAddress !== null) {
+      message.signerAddress = object.signerAddress;
+    } else {
+      message.signerAddress = "";
+    }
+    if (object.expireAt !== undefined && object.expireAt !== null) {
+      message.expireAt = object.expireAt;
+    } else {
+      message.expireAt = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgUpdateActionSigner: object = {
+  creator: "",
+  base64EncodedSetSignerAction: "",
+};
+
+export const MsgUpdateActionSigner = {
+  encode(
+    message: MsgUpdateActionSigner,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.base64EncodedSetSignerAction !== "") {
+      writer.uint32(18).string(message.base64EncodedSetSignerAction);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgUpdateActionSigner {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgUpdateActionSigner } as MsgUpdateActionSigner;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.base64EncodedSetSignerAction = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateActionSigner {
+    const message = { ...baseMsgUpdateActionSigner } as MsgUpdateActionSigner;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (
+      object.base64EncodedSetSignerAction !== undefined &&
+      object.base64EncodedSetSignerAction !== null
+    ) {
+      message.base64EncodedSetSignerAction = String(
+        object.base64EncodedSetSignerAction
+      );
+    } else {
+      message.base64EncodedSetSignerAction = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgUpdateActionSigner): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.base64EncodedSetSignerAction !== undefined &&
+      (obj.base64EncodedSetSignerAction = message.base64EncodedSetSignerAction);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgUpdateActionSigner>
+  ): MsgUpdateActionSigner {
+    const message = { ...baseMsgUpdateActionSigner } as MsgUpdateActionSigner;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (
+      object.base64EncodedSetSignerAction !== undefined &&
+      object.base64EncodedSetSignerAction !== null
+    ) {
+      message.base64EncodedSetSignerAction =
+        object.base64EncodedSetSignerAction;
+    } else {
+      message.base64EncodedSetSignerAction = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgUpdateActionSignerResponse: object = {
+  ownerAddress: "",
+  signerAddress: "",
+  expireAt: "",
+};
+
+export const MsgUpdateActionSignerResponse = {
+  encode(
+    message: MsgUpdateActionSignerResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.ownerAddress !== "") {
+      writer.uint32(10).string(message.ownerAddress);
+    }
+    if (message.signerAddress !== "") {
+      writer.uint32(18).string(message.signerAddress);
+    }
+    if (message.expireAt !== "") {
+      writer.uint32(26).string(message.expireAt);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgUpdateActionSignerResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgUpdateActionSignerResponse,
+    } as MsgUpdateActionSignerResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.ownerAddress = reader.string();
+          break;
+        case 2:
+          message.signerAddress = reader.string();
+          break;
+        case 3:
+          message.expireAt = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateActionSignerResponse {
+    const message = {
+      ...baseMsgUpdateActionSignerResponse,
+    } as MsgUpdateActionSignerResponse;
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = String(object.ownerAddress);
+    } else {
+      message.ownerAddress = "";
+    }
+    if (object.signerAddress !== undefined && object.signerAddress !== null) {
+      message.signerAddress = String(object.signerAddress);
+    } else {
+      message.signerAddress = "";
+    }
+    if (object.expireAt !== undefined && object.expireAt !== null) {
+      message.expireAt = String(object.expireAt);
+    } else {
+      message.expireAt = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgUpdateActionSignerResponse): unknown {
+    const obj: any = {};
+    message.ownerAddress !== undefined &&
+      (obj.ownerAddress = message.ownerAddress);
+    message.signerAddress !== undefined &&
+      (obj.signerAddress = message.signerAddress);
+    message.expireAt !== undefined && (obj.expireAt = message.expireAt);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgUpdateActionSignerResponse>
+  ): MsgUpdateActionSignerResponse {
+    const message = {
+      ...baseMsgUpdateActionSignerResponse,
+    } as MsgUpdateActionSignerResponse;
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = object.ownerAddress;
+    } else {
+      message.ownerAddress = "";
+    }
+    if (object.signerAddress !== undefined && object.signerAddress !== null) {
+      message.signerAddress = object.signerAddress;
+    } else {
+      message.signerAddress = "";
+    }
+    if (object.expireAt !== undefined && object.expireAt !== null) {
+      message.expireAt = object.expireAt;
+    } else {
+      message.expireAt = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgDeleteActionSigner: object = {
+  creator: "",
+  base64EncodedSetSignerAction: "",
+};
+
+export const MsgDeleteActionSigner = {
+  encode(
+    message: MsgDeleteActionSigner,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.base64EncodedSetSignerAction !== "") {
+      writer.uint32(18).string(message.base64EncodedSetSignerAction);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgDeleteActionSigner {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgDeleteActionSigner } as MsgDeleteActionSigner;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.base64EncodedSetSignerAction = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgDeleteActionSigner {
+    const message = { ...baseMsgDeleteActionSigner } as MsgDeleteActionSigner;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (
+      object.base64EncodedSetSignerAction !== undefined &&
+      object.base64EncodedSetSignerAction !== null
+    ) {
+      message.base64EncodedSetSignerAction = String(
+        object.base64EncodedSetSignerAction
+      );
+    } else {
+      message.base64EncodedSetSignerAction = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgDeleteActionSigner): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.base64EncodedSetSignerAction !== undefined &&
+      (obj.base64EncodedSetSignerAction = message.base64EncodedSetSignerAction);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgDeleteActionSigner>
+  ): MsgDeleteActionSigner {
+    const message = { ...baseMsgDeleteActionSigner } as MsgDeleteActionSigner;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (
+      object.base64EncodedSetSignerAction !== undefined &&
+      object.base64EncodedSetSignerAction !== null
+    ) {
+      message.base64EncodedSetSignerAction =
+        object.base64EncodedSetSignerAction;
+    } else {
+      message.base64EncodedSetSignerAction = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgDeleteActionSignerResponse: object = {
+  ownerAddress: "",
+  signerAddress: "",
+};
+
+export const MsgDeleteActionSignerResponse = {
+  encode(
+    message: MsgDeleteActionSignerResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.ownerAddress !== "") {
+      writer.uint32(10).string(message.ownerAddress);
+    }
+    if (message.signerAddress !== "") {
+      writer.uint32(18).string(message.signerAddress);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgDeleteActionSignerResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgDeleteActionSignerResponse,
+    } as MsgDeleteActionSignerResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.ownerAddress = reader.string();
+          break;
+        case 2:
+          message.signerAddress = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgDeleteActionSignerResponse {
+    const message = {
+      ...baseMsgDeleteActionSignerResponse,
+    } as MsgDeleteActionSignerResponse;
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = String(object.ownerAddress);
+    } else {
+      message.ownerAddress = "";
+    }
+    if (object.signerAddress !== undefined && object.signerAddress !== null) {
+      message.signerAddress = String(object.signerAddress);
+    } else {
+      message.signerAddress = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgDeleteActionSignerResponse): unknown {
+    const obj: any = {};
+    message.ownerAddress !== undefined &&
+      (obj.ownerAddress = message.ownerAddress);
+    message.signerAddress !== undefined &&
+      (obj.signerAddress = message.signerAddress);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgDeleteActionSignerResponse>
+  ): MsgDeleteActionSignerResponse {
+    const message = {
+      ...baseMsgDeleteActionSignerResponse,
+    } as MsgDeleteActionSignerResponse;
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = object.ownerAddress;
+    } else {
+      message.ownerAddress = "";
+    }
+    if (object.signerAddress !== undefined && object.signerAddress !== null) {
+      message.signerAddress = object.signerAddress;
+    } else {
+      message.signerAddress = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgCreateActionSignerConfig: object = {
+  creator: "",
+  chain: "",
+  rpc_endpoint: "",
+  contractAddress: "",
+  contractName: "",
+  contractOwner: "",
+};
+
+export const MsgCreateActionSignerConfig = {
+  encode(
+    message: MsgCreateActionSignerConfig,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.chain !== "") {
+      writer.uint32(18).string(message.chain);
+    }
+    if (message.rpc_endpoint !== "") {
+      writer.uint32(26).string(message.rpc_endpoint);
+    }
+    if (message.contractAddress !== "") {
+      writer.uint32(34).string(message.contractAddress);
+    }
+    if (message.contractName !== "") {
+      writer.uint32(42).string(message.contractName);
+    }
+    if (message.contractOwner !== "") {
+      writer.uint32(50).string(message.contractOwner);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgCreateActionSignerConfig {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgCreateActionSignerConfig,
+    } as MsgCreateActionSignerConfig;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.chain = reader.string();
+          break;
+        case 3:
+          message.rpc_endpoint = reader.string();
+          break;
+        case 4:
+          message.contractAddress = reader.string();
+          break;
+        case 5:
+          message.contractName = reader.string();
+          break;
+        case 6:
+          message.contractOwner = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgCreateActionSignerConfig {
+    const message = {
+      ...baseMsgCreateActionSignerConfig,
+    } as MsgCreateActionSignerConfig;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = String(object.chain);
+    } else {
+      message.chain = "";
+    }
+    if (object.rpc_endpoint !== undefined && object.rpc_endpoint !== null) {
+      message.rpc_endpoint = String(object.rpc_endpoint);
+    } else {
+      message.rpc_endpoint = "";
+    }
+    if (
+      object.contractAddress !== undefined &&
+      object.contractAddress !== null
+    ) {
+      message.contractAddress = String(object.contractAddress);
+    } else {
+      message.contractAddress = "";
+    }
+    if (object.contractName !== undefined && object.contractName !== null) {
+      message.contractName = String(object.contractName);
+    } else {
+      message.contractName = "";
+    }
+    if (object.contractOwner !== undefined && object.contractOwner !== null) {
+      message.contractOwner = String(object.contractOwner);
+    } else {
+      message.contractOwner = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgCreateActionSignerConfig): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.chain !== undefined && (obj.chain = message.chain);
+    message.rpc_endpoint !== undefined &&
+      (obj.rpc_endpoint = message.rpc_endpoint);
+    message.contractAddress !== undefined &&
+      (obj.contractAddress = message.contractAddress);
+    message.contractName !== undefined &&
+      (obj.contractName = message.contractName);
+    message.contractOwner !== undefined &&
+      (obj.contractOwner = message.contractOwner);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgCreateActionSignerConfig>
+  ): MsgCreateActionSignerConfig {
+    const message = {
+      ...baseMsgCreateActionSignerConfig,
+    } as MsgCreateActionSignerConfig;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = object.chain;
+    } else {
+      message.chain = "";
+    }
+    if (object.rpc_endpoint !== undefined && object.rpc_endpoint !== null) {
+      message.rpc_endpoint = object.rpc_endpoint;
+    } else {
+      message.rpc_endpoint = "";
+    }
+    if (
+      object.contractAddress !== undefined &&
+      object.contractAddress !== null
+    ) {
+      message.contractAddress = object.contractAddress;
+    } else {
+      message.contractAddress = "";
+    }
+    if (object.contractName !== undefined && object.contractName !== null) {
+      message.contractName = object.contractName;
+    } else {
+      message.contractName = "";
+    }
+    if (object.contractOwner !== undefined && object.contractOwner !== null) {
+      message.contractOwner = object.contractOwner;
+    } else {
+      message.contractOwner = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgCreateActionSignerConfigResponse: object = {
+  chain: "",
+  rpc_endpoint: "",
+  contractAddress: "",
+  contractName: "",
+  contractOwner: "",
+};
+
+export const MsgCreateActionSignerConfigResponse = {
+  encode(
+    message: MsgCreateActionSignerConfigResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.chain !== "") {
+      writer.uint32(10).string(message.chain);
+    }
+    if (message.rpc_endpoint !== "") {
+      writer.uint32(18).string(message.rpc_endpoint);
+    }
+    if (message.contractAddress !== "") {
+      writer.uint32(26).string(message.contractAddress);
+    }
+    if (message.contractName !== "") {
+      writer.uint32(34).string(message.contractName);
+    }
+    if (message.contractOwner !== "") {
+      writer.uint32(42).string(message.contractOwner);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgCreateActionSignerConfigResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgCreateActionSignerConfigResponse,
+    } as MsgCreateActionSignerConfigResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.chain = reader.string();
+          break;
+        case 2:
+          message.rpc_endpoint = reader.string();
+          break;
+        case 3:
+          message.contractAddress = reader.string();
+          break;
+        case 4:
+          message.contractName = reader.string();
+          break;
+        case 5:
+          message.contractOwner = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgCreateActionSignerConfigResponse {
+    const message = {
+      ...baseMsgCreateActionSignerConfigResponse,
+    } as MsgCreateActionSignerConfigResponse;
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = String(object.chain);
+    } else {
+      message.chain = "";
+    }
+    if (object.rpc_endpoint !== undefined && object.rpc_endpoint !== null) {
+      message.rpc_endpoint = String(object.rpc_endpoint);
+    } else {
+      message.rpc_endpoint = "";
+    }
+    if (
+      object.contractAddress !== undefined &&
+      object.contractAddress !== null
+    ) {
+      message.contractAddress = String(object.contractAddress);
+    } else {
+      message.contractAddress = "";
+    }
+    if (object.contractName !== undefined && object.contractName !== null) {
+      message.contractName = String(object.contractName);
+    } else {
+      message.contractName = "";
+    }
+    if (object.contractOwner !== undefined && object.contractOwner !== null) {
+      message.contractOwner = String(object.contractOwner);
+    } else {
+      message.contractOwner = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgCreateActionSignerConfigResponse): unknown {
+    const obj: any = {};
+    message.chain !== undefined && (obj.chain = message.chain);
+    message.rpc_endpoint !== undefined &&
+      (obj.rpc_endpoint = message.rpc_endpoint);
+    message.contractAddress !== undefined &&
+      (obj.contractAddress = message.contractAddress);
+    message.contractName !== undefined &&
+      (obj.contractName = message.contractName);
+    message.contractOwner !== undefined &&
+      (obj.contractOwner = message.contractOwner);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgCreateActionSignerConfigResponse>
+  ): MsgCreateActionSignerConfigResponse {
+    const message = {
+      ...baseMsgCreateActionSignerConfigResponse,
+    } as MsgCreateActionSignerConfigResponse;
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = object.chain;
+    } else {
+      message.chain = "";
+    }
+    if (object.rpc_endpoint !== undefined && object.rpc_endpoint !== null) {
+      message.rpc_endpoint = object.rpc_endpoint;
+    } else {
+      message.rpc_endpoint = "";
+    }
+    if (
+      object.contractAddress !== undefined &&
+      object.contractAddress !== null
+    ) {
+      message.contractAddress = object.contractAddress;
+    } else {
+      message.contractAddress = "";
+    }
+    if (object.contractName !== undefined && object.contractName !== null) {
+      message.contractName = object.contractName;
+    } else {
+      message.contractName = "";
+    }
+    if (object.contractOwner !== undefined && object.contractOwner !== null) {
+      message.contractOwner = object.contractOwner;
+    } else {
+      message.contractOwner = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgUpdateActionSignerConfig: object = {
+  creator: "",
+  chain: "",
+  rpc_endpoint: "",
+  contractAddress: "",
+  contractName: "",
+  contractOwner: "",
+};
+
+export const MsgUpdateActionSignerConfig = {
+  encode(
+    message: MsgUpdateActionSignerConfig,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.chain !== "") {
+      writer.uint32(18).string(message.chain);
+    }
+    if (message.rpc_endpoint !== "") {
+      writer.uint32(26).string(message.rpc_endpoint);
+    }
+    if (message.contractAddress !== "") {
+      writer.uint32(34).string(message.contractAddress);
+    }
+    if (message.contractName !== "") {
+      writer.uint32(42).string(message.contractName);
+    }
+    if (message.contractOwner !== "") {
+      writer.uint32(50).string(message.contractOwner);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgUpdateActionSignerConfig {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgUpdateActionSignerConfig,
+    } as MsgUpdateActionSignerConfig;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.chain = reader.string();
+          break;
+        case 3:
+          message.rpc_endpoint = reader.string();
+          break;
+        case 4:
+          message.contractAddress = reader.string();
+          break;
+        case 5:
+          message.contractName = reader.string();
+          break;
+        case 6:
+          message.contractOwner = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateActionSignerConfig {
+    const message = {
+      ...baseMsgUpdateActionSignerConfig,
+    } as MsgUpdateActionSignerConfig;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = String(object.chain);
+    } else {
+      message.chain = "";
+    }
+    if (object.rpc_endpoint !== undefined && object.rpc_endpoint !== null) {
+      message.rpc_endpoint = String(object.rpc_endpoint);
+    } else {
+      message.rpc_endpoint = "";
+    }
+    if (
+      object.contractAddress !== undefined &&
+      object.contractAddress !== null
+    ) {
+      message.contractAddress = String(object.contractAddress);
+    } else {
+      message.contractAddress = "";
+    }
+    if (object.contractName !== undefined && object.contractName !== null) {
+      message.contractName = String(object.contractName);
+    } else {
+      message.contractName = "";
+    }
+    if (object.contractOwner !== undefined && object.contractOwner !== null) {
+      message.contractOwner = String(object.contractOwner);
+    } else {
+      message.contractOwner = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgUpdateActionSignerConfig): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.chain !== undefined && (obj.chain = message.chain);
+    message.rpc_endpoint !== undefined &&
+      (obj.rpc_endpoint = message.rpc_endpoint);
+    message.contractAddress !== undefined &&
+      (obj.contractAddress = message.contractAddress);
+    message.contractName !== undefined &&
+      (obj.contractName = message.contractName);
+    message.contractOwner !== undefined &&
+      (obj.contractOwner = message.contractOwner);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgUpdateActionSignerConfig>
+  ): MsgUpdateActionSignerConfig {
+    const message = {
+      ...baseMsgUpdateActionSignerConfig,
+    } as MsgUpdateActionSignerConfig;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = object.chain;
+    } else {
+      message.chain = "";
+    }
+    if (object.rpc_endpoint !== undefined && object.rpc_endpoint !== null) {
+      message.rpc_endpoint = object.rpc_endpoint;
+    } else {
+      message.rpc_endpoint = "";
+    }
+    if (
+      object.contractAddress !== undefined &&
+      object.contractAddress !== null
+    ) {
+      message.contractAddress = object.contractAddress;
+    } else {
+      message.contractAddress = "";
+    }
+    if (object.contractName !== undefined && object.contractName !== null) {
+      message.contractName = object.contractName;
+    } else {
+      message.contractName = "";
+    }
+    if (object.contractOwner !== undefined && object.contractOwner !== null) {
+      message.contractOwner = object.contractOwner;
+    } else {
+      message.contractOwner = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgUpdateActionSignerConfigResponse: object = {
+  chain: "",
+  rpc_endpoint: "",
+  new_rpc_endpoint: "",
+  contractAddress: "",
+  new_contractAddress: "",
+  contractName: "",
+  new_contractName: "",
+  contractOwner: "",
+  new_contractOwner: "",
+};
+
+export const MsgUpdateActionSignerConfigResponse = {
+  encode(
+    message: MsgUpdateActionSignerConfigResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.chain !== "") {
+      writer.uint32(10).string(message.chain);
+    }
+    if (message.rpc_endpoint !== "") {
+      writer.uint32(18).string(message.rpc_endpoint);
+    }
+    if (message.new_rpc_endpoint !== "") {
+      writer.uint32(26).string(message.new_rpc_endpoint);
+    }
+    if (message.contractAddress !== "") {
+      writer.uint32(34).string(message.contractAddress);
+    }
+    if (message.new_contractAddress !== "") {
+      writer.uint32(42).string(message.new_contractAddress);
+    }
+    if (message.contractName !== "") {
+      writer.uint32(50).string(message.contractName);
+    }
+    if (message.new_contractName !== "") {
+      writer.uint32(58).string(message.new_contractName);
+    }
+    if (message.contractOwner !== "") {
+      writer.uint32(66).string(message.contractOwner);
+    }
+    if (message.new_contractOwner !== "") {
+      writer.uint32(74).string(message.new_contractOwner);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgUpdateActionSignerConfigResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgUpdateActionSignerConfigResponse,
+    } as MsgUpdateActionSignerConfigResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.chain = reader.string();
+          break;
+        case 2:
+          message.rpc_endpoint = reader.string();
+          break;
+        case 3:
+          message.new_rpc_endpoint = reader.string();
+          break;
+        case 4:
+          message.contractAddress = reader.string();
+          break;
+        case 5:
+          message.new_contractAddress = reader.string();
+          break;
+        case 6:
+          message.contractName = reader.string();
+          break;
+        case 7:
+          message.new_contractName = reader.string();
+          break;
+        case 8:
+          message.contractOwner = reader.string();
+          break;
+        case 9:
+          message.new_contractOwner = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateActionSignerConfigResponse {
+    const message = {
+      ...baseMsgUpdateActionSignerConfigResponse,
+    } as MsgUpdateActionSignerConfigResponse;
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = String(object.chain);
+    } else {
+      message.chain = "";
+    }
+    if (object.rpc_endpoint !== undefined && object.rpc_endpoint !== null) {
+      message.rpc_endpoint = String(object.rpc_endpoint);
+    } else {
+      message.rpc_endpoint = "";
+    }
+    if (
+      object.new_rpc_endpoint !== undefined &&
+      object.new_rpc_endpoint !== null
+    ) {
+      message.new_rpc_endpoint = String(object.new_rpc_endpoint);
+    } else {
+      message.new_rpc_endpoint = "";
+    }
+    if (
+      object.contractAddress !== undefined &&
+      object.contractAddress !== null
+    ) {
+      message.contractAddress = String(object.contractAddress);
+    } else {
+      message.contractAddress = "";
+    }
+    if (
+      object.new_contractAddress !== undefined &&
+      object.new_contractAddress !== null
+    ) {
+      message.new_contractAddress = String(object.new_contractAddress);
+    } else {
+      message.new_contractAddress = "";
+    }
+    if (object.contractName !== undefined && object.contractName !== null) {
+      message.contractName = String(object.contractName);
+    } else {
+      message.contractName = "";
+    }
+    if (
+      object.new_contractName !== undefined &&
+      object.new_contractName !== null
+    ) {
+      message.new_contractName = String(object.new_contractName);
+    } else {
+      message.new_contractName = "";
+    }
+    if (object.contractOwner !== undefined && object.contractOwner !== null) {
+      message.contractOwner = String(object.contractOwner);
+    } else {
+      message.contractOwner = "";
+    }
+    if (
+      object.new_contractOwner !== undefined &&
+      object.new_contractOwner !== null
+    ) {
+      message.new_contractOwner = String(object.new_contractOwner);
+    } else {
+      message.new_contractOwner = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgUpdateActionSignerConfigResponse): unknown {
+    const obj: any = {};
+    message.chain !== undefined && (obj.chain = message.chain);
+    message.rpc_endpoint !== undefined &&
+      (obj.rpc_endpoint = message.rpc_endpoint);
+    message.new_rpc_endpoint !== undefined &&
+      (obj.new_rpc_endpoint = message.new_rpc_endpoint);
+    message.contractAddress !== undefined &&
+      (obj.contractAddress = message.contractAddress);
+    message.new_contractAddress !== undefined &&
+      (obj.new_contractAddress = message.new_contractAddress);
+    message.contractName !== undefined &&
+      (obj.contractName = message.contractName);
+    message.new_contractName !== undefined &&
+      (obj.new_contractName = message.new_contractName);
+    message.contractOwner !== undefined &&
+      (obj.contractOwner = message.contractOwner);
+    message.new_contractOwner !== undefined &&
+      (obj.new_contractOwner = message.new_contractOwner);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgUpdateActionSignerConfigResponse>
+  ): MsgUpdateActionSignerConfigResponse {
+    const message = {
+      ...baseMsgUpdateActionSignerConfigResponse,
+    } as MsgUpdateActionSignerConfigResponse;
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = object.chain;
+    } else {
+      message.chain = "";
+    }
+    if (object.rpc_endpoint !== undefined && object.rpc_endpoint !== null) {
+      message.rpc_endpoint = object.rpc_endpoint;
+    } else {
+      message.rpc_endpoint = "";
+    }
+    if (
+      object.new_rpc_endpoint !== undefined &&
+      object.new_rpc_endpoint !== null
+    ) {
+      message.new_rpc_endpoint = object.new_rpc_endpoint;
+    } else {
+      message.new_rpc_endpoint = "";
+    }
+    if (
+      object.contractAddress !== undefined &&
+      object.contractAddress !== null
+    ) {
+      message.contractAddress = object.contractAddress;
+    } else {
+      message.contractAddress = "";
+    }
+    if (
+      object.new_contractAddress !== undefined &&
+      object.new_contractAddress !== null
+    ) {
+      message.new_contractAddress = object.new_contractAddress;
+    } else {
+      message.new_contractAddress = "";
+    }
+    if (object.contractName !== undefined && object.contractName !== null) {
+      message.contractName = object.contractName;
+    } else {
+      message.contractName = "";
+    }
+    if (
+      object.new_contractName !== undefined &&
+      object.new_contractName !== null
+    ) {
+      message.new_contractName = object.new_contractName;
+    } else {
+      message.new_contractName = "";
+    }
+    if (object.contractOwner !== undefined && object.contractOwner !== null) {
+      message.contractOwner = object.contractOwner;
+    } else {
+      message.contractOwner = "";
+    }
+    if (
+      object.new_contractOwner !== undefined &&
+      object.new_contractOwner !== null
+    ) {
+      message.new_contractOwner = object.new_contractOwner;
+    } else {
+      message.new_contractOwner = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgDeleteActionSignerConfig: object = { creator: "", chain: "" };
+
+export const MsgDeleteActionSignerConfig = {
+  encode(
+    message: MsgDeleteActionSignerConfig,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.chain !== "") {
+      writer.uint32(18).string(message.chain);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgDeleteActionSignerConfig {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgDeleteActionSignerConfig,
+    } as MsgDeleteActionSignerConfig;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.chain = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgDeleteActionSignerConfig {
+    const message = {
+      ...baseMsgDeleteActionSignerConfig,
+    } as MsgDeleteActionSignerConfig;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = String(object.chain);
+    } else {
+      message.chain = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgDeleteActionSignerConfig): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.chain !== undefined && (obj.chain = message.chain);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgDeleteActionSignerConfig>
+  ): MsgDeleteActionSignerConfig {
+    const message = {
+      ...baseMsgDeleteActionSignerConfig,
+    } as MsgDeleteActionSignerConfig;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = object.chain;
+    } else {
+      message.chain = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgDeleteActionSignerConfigResponse: object = { chain: "" };
+
+export const MsgDeleteActionSignerConfigResponse = {
+  encode(
+    message: MsgDeleteActionSignerConfigResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.chain !== "") {
+      writer.uint32(10).string(message.chain);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgDeleteActionSignerConfigResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgDeleteActionSignerConfigResponse,
+    } as MsgDeleteActionSignerConfigResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.chain = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgDeleteActionSignerConfigResponse {
+    const message = {
+      ...baseMsgDeleteActionSignerConfigResponse,
+    } as MsgDeleteActionSignerConfigResponse;
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = String(object.chain);
+    } else {
+      message.chain = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgDeleteActionSignerConfigResponse): unknown {
+    const obj: any = {};
+    message.chain !== undefined && (obj.chain = message.chain);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgDeleteActionSignerConfigResponse>
+  ): MsgDeleteActionSignerConfigResponse {
+    const message = {
+      ...baseMsgDeleteActionSignerConfigResponse,
+    } as MsgDeleteActionSignerConfigResponse;
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = object.chain;
+    } else {
+      message.chain = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgCreateSyncActionSigner: object = {
+  creator: "",
+  chain: "",
+  actorAddress: "",
+  ownerAddress: "",
+  requiredConfirm: 0,
+};
+
+export const MsgCreateSyncActionSigner = {
+  encode(
+    message: MsgCreateSyncActionSigner,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.chain !== "") {
+      writer.uint32(18).string(message.chain);
+    }
+    if (message.actorAddress !== "") {
+      writer.uint32(26).string(message.actorAddress);
+    }
+    if (message.ownerAddress !== "") {
+      writer.uint32(34).string(message.ownerAddress);
+    }
+    if (message.requiredConfirm !== 0) {
+      writer.uint32(40).uint64(message.requiredConfirm);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgCreateSyncActionSigner {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgCreateSyncActionSigner,
+    } as MsgCreateSyncActionSigner;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.chain = reader.string();
+          break;
+        case 3:
+          message.actorAddress = reader.string();
+          break;
+        case 4:
+          message.ownerAddress = reader.string();
+          break;
+        case 5:
+          message.requiredConfirm = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgCreateSyncActionSigner {
+    const message = {
+      ...baseMsgCreateSyncActionSigner,
+    } as MsgCreateSyncActionSigner;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = String(object.chain);
+    } else {
+      message.chain = "";
+    }
+    if (object.actorAddress !== undefined && object.actorAddress !== null) {
+      message.actorAddress = String(object.actorAddress);
+    } else {
+      message.actorAddress = "";
+    }
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = String(object.ownerAddress);
+    } else {
+      message.ownerAddress = "";
+    }
+    if (
+      object.requiredConfirm !== undefined &&
+      object.requiredConfirm !== null
+    ) {
+      message.requiredConfirm = Number(object.requiredConfirm);
+    } else {
+      message.requiredConfirm = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: MsgCreateSyncActionSigner): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.chain !== undefined && (obj.chain = message.chain);
+    message.actorAddress !== undefined &&
+      (obj.actorAddress = message.actorAddress);
+    message.ownerAddress !== undefined &&
+      (obj.ownerAddress = message.ownerAddress);
+    message.requiredConfirm !== undefined &&
+      (obj.requiredConfirm = message.requiredConfirm);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgCreateSyncActionSigner>
+  ): MsgCreateSyncActionSigner {
+    const message = {
+      ...baseMsgCreateSyncActionSigner,
+    } as MsgCreateSyncActionSigner;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = object.chain;
+    } else {
+      message.chain = "";
+    }
+    if (object.actorAddress !== undefined && object.actorAddress !== null) {
+      message.actorAddress = object.actorAddress;
+    } else {
+      message.actorAddress = "";
+    }
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = object.ownerAddress;
+    } else {
+      message.ownerAddress = "";
+    }
+    if (
+      object.requiredConfirm !== undefined &&
+      object.requiredConfirm !== null
+    ) {
+      message.requiredConfirm = object.requiredConfirm;
+    } else {
+      message.requiredConfirm = 0;
+    }
+    return message;
+  },
+};
+
+const baseMsgCreateSyncActionSignerResponse: object = {
+  id: 0,
+  chain: "",
+  ownerAddress: "",
+  actorAddress: "",
+};
+
+export const MsgCreateSyncActionSignerResponse = {
+  encode(
+    message: MsgCreateSyncActionSignerResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.id !== 0) {
+      writer.uint32(8).uint64(message.id);
+    }
+    if (message.chain !== "") {
+      writer.uint32(18).string(message.chain);
+    }
+    if (message.ownerAddress !== "") {
+      writer.uint32(26).string(message.ownerAddress);
+    }
+    if (message.actorAddress !== "") {
+      writer.uint32(34).string(message.actorAddress);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgCreateSyncActionSignerResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgCreateSyncActionSignerResponse,
+    } as MsgCreateSyncActionSignerResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = longToNumber(reader.uint64() as Long);
+          break;
+        case 2:
+          message.chain = reader.string();
+          break;
+        case 3:
+          message.ownerAddress = reader.string();
+          break;
+        case 4:
+          message.actorAddress = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgCreateSyncActionSignerResponse {
+    const message = {
+      ...baseMsgCreateSyncActionSignerResponse,
+    } as MsgCreateSyncActionSignerResponse;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = Number(object.id);
+    } else {
+      message.id = 0;
+    }
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = String(object.chain);
+    } else {
+      message.chain = "";
+    }
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = String(object.ownerAddress);
+    } else {
+      message.ownerAddress = "";
+    }
+    if (object.actorAddress !== undefined && object.actorAddress !== null) {
+      message.actorAddress = String(object.actorAddress);
+    } else {
+      message.actorAddress = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgCreateSyncActionSignerResponse): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.chain !== undefined && (obj.chain = message.chain);
+    message.ownerAddress !== undefined &&
+      (obj.ownerAddress = message.ownerAddress);
+    message.actorAddress !== undefined &&
+      (obj.actorAddress = message.actorAddress);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgCreateSyncActionSignerResponse>
+  ): MsgCreateSyncActionSignerResponse {
+    const message = {
+      ...baseMsgCreateSyncActionSignerResponse,
+    } as MsgCreateSyncActionSignerResponse;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = 0;
+    }
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = object.chain;
+    } else {
+      message.chain = "";
+    }
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = object.ownerAddress;
+    } else {
+      message.ownerAddress = "";
+    }
+    if (object.actorAddress !== undefined && object.actorAddress !== null) {
+      message.actorAddress = object.actorAddress;
+    } else {
+      message.actorAddress = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgSubmitSyncActionSigner: object = {
+  creator: "",
+  syncId: 0,
+  chain: "",
+  actorAddress: "",
+  ownerAddress: "",
+  expire_epoch: "",
+};
+
+export const MsgSubmitSyncActionSigner = {
+  encode(
+    message: MsgSubmitSyncActionSigner,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.syncId !== 0) {
+      writer.uint32(16).uint64(message.syncId);
+    }
+    if (message.chain !== "") {
+      writer.uint32(26).string(message.chain);
+    }
+    if (message.actorAddress !== "") {
+      writer.uint32(34).string(message.actorAddress);
+    }
+    if (message.ownerAddress !== "") {
+      writer.uint32(42).string(message.ownerAddress);
+    }
+    if (message.expire_epoch !== "") {
+      writer.uint32(50).string(message.expire_epoch);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgSubmitSyncActionSigner {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgSubmitSyncActionSigner,
+    } as MsgSubmitSyncActionSigner;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.syncId = longToNumber(reader.uint64() as Long);
+          break;
+        case 3:
+          message.chain = reader.string();
+          break;
+        case 4:
+          message.actorAddress = reader.string();
+          break;
+        case 5:
+          message.ownerAddress = reader.string();
+          break;
+        case 6:
+          message.expire_epoch = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSubmitSyncActionSigner {
+    const message = {
+      ...baseMsgSubmitSyncActionSigner,
+    } as MsgSubmitSyncActionSigner;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.syncId !== undefined && object.syncId !== null) {
+      message.syncId = Number(object.syncId);
+    } else {
+      message.syncId = 0;
+    }
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = String(object.chain);
+    } else {
+      message.chain = "";
+    }
+    if (object.actorAddress !== undefined && object.actorAddress !== null) {
+      message.actorAddress = String(object.actorAddress);
+    } else {
+      message.actorAddress = "";
+    }
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = String(object.ownerAddress);
+    } else {
+      message.ownerAddress = "";
+    }
+    if (object.expire_epoch !== undefined && object.expire_epoch !== null) {
+      message.expire_epoch = String(object.expire_epoch);
+    } else {
+      message.expire_epoch = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgSubmitSyncActionSigner): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.syncId !== undefined && (obj.syncId = message.syncId);
+    message.chain !== undefined && (obj.chain = message.chain);
+    message.actorAddress !== undefined &&
+      (obj.actorAddress = message.actorAddress);
+    message.ownerAddress !== undefined &&
+      (obj.ownerAddress = message.ownerAddress);
+    message.expire_epoch !== undefined &&
+      (obj.expire_epoch = message.expire_epoch);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgSubmitSyncActionSigner>
+  ): MsgSubmitSyncActionSigner {
+    const message = {
+      ...baseMsgSubmitSyncActionSigner,
+    } as MsgSubmitSyncActionSigner;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.syncId !== undefined && object.syncId !== null) {
+      message.syncId = object.syncId;
+    } else {
+      message.syncId = 0;
+    }
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = object.chain;
+    } else {
+      message.chain = "";
+    }
+    if (object.actorAddress !== undefined && object.actorAddress !== null) {
+      message.actorAddress = object.actorAddress;
+    } else {
+      message.actorAddress = "";
+    }
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = object.ownerAddress;
+    } else {
+      message.ownerAddress = "";
+    }
+    if (object.expire_epoch !== undefined && object.expire_epoch !== null) {
+      message.expire_epoch = object.expire_epoch;
+    } else {
+      message.expire_epoch = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgSubmitSyncActionSignerResponse: object = {
+  verifyRequestID: 0,
+  expireAt: "",
+};
+
+export const MsgSubmitSyncActionSignerResponse = {
+  encode(
+    message: MsgSubmitSyncActionSignerResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.verifyRequestID !== 0) {
+      writer.uint32(8).uint64(message.verifyRequestID);
+    }
+    if (message.expireAt !== "") {
+      writer.uint32(18).string(message.expireAt);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): MsgSubmitSyncActionSignerResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgSubmitSyncActionSignerResponse,
+    } as MsgSubmitSyncActionSignerResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.verifyRequestID = longToNumber(reader.uint64() as Long);
+          break;
+        case 2:
+          message.expireAt = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgSubmitSyncActionSignerResponse {
+    const message = {
+      ...baseMsgSubmitSyncActionSignerResponse,
+    } as MsgSubmitSyncActionSignerResponse;
+    if (
+      object.verifyRequestID !== undefined &&
+      object.verifyRequestID !== null
+    ) {
+      message.verifyRequestID = Number(object.verifyRequestID);
+    } else {
+      message.verifyRequestID = 0;
+    }
+    if (object.expireAt !== undefined && object.expireAt !== null) {
+      message.expireAt = String(object.expireAt);
+    } else {
+      message.expireAt = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgSubmitSyncActionSignerResponse): unknown {
+    const obj: any = {};
+    message.verifyRequestID !== undefined &&
+      (obj.verifyRequestID = message.verifyRequestID);
+    message.expireAt !== undefined && (obj.expireAt = message.expireAt);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<MsgSubmitSyncActionSignerResponse>
+  ): MsgSubmitSyncActionSignerResponse {
+    const message = {
+      ...baseMsgSubmitSyncActionSignerResponse,
+    } as MsgSubmitSyncActionSignerResponse;
+    if (
+      object.verifyRequestID !== undefined &&
+      object.verifyRequestID !== null
+    ) {
+      message.verifyRequestID = object.verifyRequestID;
+    } else {
+      message.verifyRequestID = 0;
+    }
+    if (object.expireAt !== undefined && object.expireAt !== null) {
+      message.expireAt = object.expireAt;
+    } else {
+      message.expireAt = "";
+    }
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   CreateMintRequest(
@@ -1346,10 +3663,37 @@ export interface Msg {
   CreateVerifyCollectionOwnerRequest(
     request: MsgCreateVerifyCollectionOwnerRequest
   ): Promise<MsgCreateVerifyCollectionOwnerRequestResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   SubmitVerifyCollectionOwner(
     request: MsgSubmitVerifyCollectionOwner
   ): Promise<MsgSubmitVerifyCollectionOwnerResponse>;
+  SetMinimumConfirmation(
+    request: MsgSetMinimumConfirmation
+  ): Promise<MsgSetMinimumConfirmationResponse>;
+  CreateActionSigner(
+    request: MsgCreateActionSigner
+  ): Promise<MsgCreateActionSignerResponse>;
+  UpdateActionSigner(
+    request: MsgUpdateActionSigner
+  ): Promise<MsgUpdateActionSignerResponse>;
+  DeleteActionSigner(
+    request: MsgDeleteActionSigner
+  ): Promise<MsgDeleteActionSignerResponse>;
+  CreateActionSignerConfig(
+    request: MsgCreateActionSignerConfig
+  ): Promise<MsgCreateActionSignerConfigResponse>;
+  UpdateActionSignerConfig(
+    request: MsgUpdateActionSignerConfig
+  ): Promise<MsgUpdateActionSignerConfigResponse>;
+  DeleteActionSignerConfig(
+    request: MsgDeleteActionSignerConfig
+  ): Promise<MsgDeleteActionSignerConfigResponse>;
+  CreateSyncActionSigner(
+    request: MsgCreateSyncActionSigner
+  ): Promise<MsgCreateSyncActionSignerResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  SubmitSyncActionSigner(
+    request: MsgSubmitSyncActionSigner
+  ): Promise<MsgSubmitSyncActionSignerResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -1440,6 +3784,132 @@ export class MsgClientImpl implements Msg {
       MsgSubmitVerifyCollectionOwnerResponse.decode(new Reader(data))
     );
   }
+
+  SetMinimumConfirmation(
+    request: MsgSetMinimumConfirmation
+  ): Promise<MsgSetMinimumConfirmationResponse> {
+    const data = MsgSetMinimumConfirmation.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Msg",
+      "SetMinimumConfirmation",
+      data
+    );
+    return promise.then((data) =>
+      MsgSetMinimumConfirmationResponse.decode(new Reader(data))
+    );
+  }
+
+  CreateActionSigner(
+    request: MsgCreateActionSigner
+  ): Promise<MsgCreateActionSignerResponse> {
+    const data = MsgCreateActionSigner.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Msg",
+      "CreateActionSigner",
+      data
+    );
+    return promise.then((data) =>
+      MsgCreateActionSignerResponse.decode(new Reader(data))
+    );
+  }
+
+  UpdateActionSigner(
+    request: MsgUpdateActionSigner
+  ): Promise<MsgUpdateActionSignerResponse> {
+    const data = MsgUpdateActionSigner.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Msg",
+      "UpdateActionSigner",
+      data
+    );
+    return promise.then((data) =>
+      MsgUpdateActionSignerResponse.decode(new Reader(data))
+    );
+  }
+
+  DeleteActionSigner(
+    request: MsgDeleteActionSigner
+  ): Promise<MsgDeleteActionSignerResponse> {
+    const data = MsgDeleteActionSigner.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Msg",
+      "DeleteActionSigner",
+      data
+    );
+    return promise.then((data) =>
+      MsgDeleteActionSignerResponse.decode(new Reader(data))
+    );
+  }
+
+  CreateActionSignerConfig(
+    request: MsgCreateActionSignerConfig
+  ): Promise<MsgCreateActionSignerConfigResponse> {
+    const data = MsgCreateActionSignerConfig.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Msg",
+      "CreateActionSignerConfig",
+      data
+    );
+    return promise.then((data) =>
+      MsgCreateActionSignerConfigResponse.decode(new Reader(data))
+    );
+  }
+
+  UpdateActionSignerConfig(
+    request: MsgUpdateActionSignerConfig
+  ): Promise<MsgUpdateActionSignerConfigResponse> {
+    const data = MsgUpdateActionSignerConfig.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Msg",
+      "UpdateActionSignerConfig",
+      data
+    );
+    return promise.then((data) =>
+      MsgUpdateActionSignerConfigResponse.decode(new Reader(data))
+    );
+  }
+
+  DeleteActionSignerConfig(
+    request: MsgDeleteActionSignerConfig
+  ): Promise<MsgDeleteActionSignerConfigResponse> {
+    const data = MsgDeleteActionSignerConfig.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Msg",
+      "DeleteActionSignerConfig",
+      data
+    );
+    return promise.then((data) =>
+      MsgDeleteActionSignerConfigResponse.decode(new Reader(data))
+    );
+  }
+
+  CreateSyncActionSigner(
+    request: MsgCreateSyncActionSigner
+  ): Promise<MsgCreateSyncActionSignerResponse> {
+    const data = MsgCreateSyncActionSigner.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Msg",
+      "CreateSyncActionSigner",
+      data
+    );
+    return promise.then((data) =>
+      MsgCreateSyncActionSignerResponse.decode(new Reader(data))
+    );
+  }
+
+  SubmitSyncActionSigner(
+    request: MsgSubmitSyncActionSigner
+  ): Promise<MsgSubmitSyncActionSignerResponse> {
+    const data = MsgSubmitSyncActionSigner.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Msg",
+      "SubmitSyncActionSigner",
+      data
+    );
+    return promise.then((data) =>
+      MsgSubmitSyncActionSignerResponse.decode(new Reader(data))
+    );
+  }
 }
 
 interface Rpc {
@@ -1478,7 +3948,4 @@ function longToNumber(long: Long): number {
   return long.toNumber();
 }
 
-if (util.Long !== Long) {
-  util.Long = Long as any;
-  configure();
-}
+

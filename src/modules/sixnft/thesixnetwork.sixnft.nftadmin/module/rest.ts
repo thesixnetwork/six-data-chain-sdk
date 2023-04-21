@@ -18,18 +18,8 @@ export interface NftadminAuthorization {
   permissions?: NftadminPermissions;
 }
 
-export interface NftadminMsgBurnResponse {
-  amount?: string;
-  token?: string;
-}
-
 export interface NftadminMsgGrantPermissionResponse {
   grantee?: string;
-}
-
-export interface NftadminMsgMintResponse {
-  amount?: string;
-  token?: string;
 }
 
 export interface NftadminMsgRevokePermissionResponse {
@@ -41,8 +31,13 @@ export interface NftadminMsgRevokePermissionResponse {
  */
 export type NftadminParams = object;
 
+export interface NftadminPermission {
+  name?: string;
+  addresses?: NftadminAddressList;
+}
+
 export interface NftadminPermissions {
-  map_name?: Record<string, NftadminAddressList>;
+  permissions?: NftadminPermission[];
 }
 
 export interface NftadminQueryGetAuthorizationResponse {
@@ -270,11 +265,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryAuthorization
    * @summary Queries a Authorization by index.
-   * @request GET:/sixnft/nftadmin/authorization
+   * @request GET:/thesixnetwork/sixnft/nftadmin/authorization
    */
   queryAuthorization = (params: RequestParams = {}) =>
     this.request<NftadminQueryGetAuthorizationResponse, RpcStatus>({
-      path: `/sixnft/nftadmin/authorization`,
+      path: `/thesixnetwork/sixnft/nftadmin/authorization`,
       method: "GET",
       format: "json",
       ...params,
@@ -286,11 +281,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryParams
    * @summary Parameters queries the parameters of the module.
-   * @request GET:/sixnft/nftadmin/params
+   * @request GET:/thesixnetwork/sixnft/nftadmin/params
    */
   queryParams = (params: RequestParams = {}) =>
     this.request<NftadminQueryParamsResponse, RpcStatus>({
-      path: `/sixnft/nftadmin/params`,
+      path: `/thesixnetwork/sixnft/nftadmin/params`,
       method: "GET",
       format: "json",
       ...params,

@@ -1,19 +1,15 @@
 
 
 import { Accounts } from "./Accounts"
+import { SigningStargateClientOptions} from "@cosmjs/stargate";
 import { OfflineSigner } from "@cosmjs/proto-signing";
-
-// import * as nftmngrModuleGenerate from "../modules/sixnft/sixnft.nftmngr/module/index"
 import * as nftmngrModuleGenerate from "../modules/sixnft/thesixnetwork.sixnft.nftmngr/module/index"
-
-// import * as nftoracleModuleGenerate from "../modules/sixnft/sixnft.nftoracle/module/index"
 import * as nftoracleModuleGenerate from "../modules/sixnft/thesixnetwork.sixnft.nftoracle/module/index"
-
-// import * as sixNftAdminGenerate from "../modules/sixnft/sixnft.admin/module/index"
-import * as sixNFTNFTadmin from "../modules/sixnft/thesixnetwork.sixnft.nftadmin/module/index"
-// import * as evmsupportModuleGenerate from "../modules/sixnft/sixnft.evmsupport/module/index"
-import * as evmsupportModuleGenerate from "../modules/sixnft/thesixnetwork.sixnft.evmsupport/module/index"
-
+import * as nftadminModuleGenerate from "../modules/sixnft/thesixnetwork.sixnft.nftadmin/module/index"
+import * as tokenmngrModuleGenerate from "../modules/six-protocol/thesixnetwork.sixprotocol.tokenmngr/module/index"
+import * as protocoladminModuleGenerate from "../modules/six-protocol/thesixnetwork.sixprotocol.protocoladmin/module/index"
+import * as cosmosbankModuleGenerate from "../modules/cosmos/cosmos-sdk/cosmos.bank.v1beta1/module/index"
+import * as cosmosstakingModuleGenerate from "../modules/cosmos/cosmos-sdk/cosmos.staking.v1beta1/module/index"
 
 
 type Module = {
@@ -48,23 +44,29 @@ export class SixDataChainConnector {
     connectAPIClient = async () => {
         const [
             nftmngrModule,
-            evmsupportModule,
-            // adminModule,
             nftoracleModule,
-            nftAdmin
+            nftAdminModule,
+            tokenmngrModule,
+            protocolAdminModule,
+            cosmosBankModule,
+            cosmosStakingModule,
         ] = await Promise.all([
             nftmngrModuleGenerate.queryClient({ addr: this.apiUrl }),
-            evmsupportModuleGenerate.queryClient({ addr: this.apiUrl }),
-            // sixNftAdminGenerate.queryClient({ addr: this.apiUrl }),
             nftoracleModuleGenerate.queryClient({ addr: this.apiUrl }),
-            sixNFTNFTadmin.queryClient({ addr: this.apiUrl })
+            nftadminModuleGenerate.queryClient({ addr: this.apiUrl }),
+            tokenmngrModuleGenerate.queryClient({ addr: this.apiUrl }),
+            protocoladminModuleGenerate.queryClient({ addr: this.apiUrl }),
+            cosmosbankModuleGenerate.queryClient({ addr: this.apiUrl }),
+            cosmosstakingModuleGenerate.queryClient({ addr: this.apiUrl })
         ])
         return {
             nftmngrModule,
-            evmsupportModule,
-            // adminModule,
             nftoracleModule,
-            nftAdmin
+            nftAdminModule,
+            tokenmngrModule,
+            protocolAdminModule,
+            cosmosBankModule,
+            cosmosStakingModule,
         }
     }
 
@@ -75,25 +77,32 @@ export class SixDataChainConnector {
     * const txClient = await sixConnector.connectRPCClient(signer)
     * @description connect to RPC client use for send transaction
     **/
-    connectRPCClient = async (accountSigner: OfflineSigner) => {
+    connectRPCClient = async (accountSigner: OfflineSigner,options?:SigningStargateClientOptions) => {
         const [
             nftmngrModule,
-            evmsupportModule,
-            adminModule,
+            nftadminModule,
             nftoracleModule,
+            tokenmngrModule,
+            protocolAdminModule,
+            cosmosBankModule,
+            cosmosStakingModule,
         ] = await Promise.all([
-            nftmngrModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl }),
-            evmsupportModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl }),
-            // sixNftAdminGenerate.txClient(accountSigner, { addr: this.rpcUrl }),
-            nftoracleModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl }),
-            sixNFTNFTadmin.txClient(accountSigner, { addr: this.rpcUrl })
+            nftmngrModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options),
+            nftadminModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options),
+            nftoracleModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options),
+            tokenmngrModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options),
+            protocoladminModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options),
+            cosmosbankModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options),
+            cosmosstakingModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options)
         ])
         return {
             nftmngrModule,
-            evmsupportModule,
-            adminModule,
+            nftadminModule,
             nftoracleModule,
-            sixNFTNFTadmin
+            tokenmngrModule,
+            protocolAdminModule,
+            cosmosBankModule,
+            cosmosStakingModule,
         }
     }
 

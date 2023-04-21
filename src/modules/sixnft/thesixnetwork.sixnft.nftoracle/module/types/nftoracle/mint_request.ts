@@ -18,17 +18,12 @@ export interface MintRequest {
   required_confirm: number;
   status: RequestStatus;
   current_confirm: number;
-  confirmers: { [key: string]: boolean };
+  confirmers: string[];
   /** NftOriginData nft_origin_data = 8; */
   created_at: Date | undefined;
   valid_until: Date | undefined;
   data_hashes: DataHash[];
   expired_height: number;
-}
-
-export interface MintRequest_ConfirmersEntry {
-  key: string;
-  value: boolean;
 }
 
 const baseMintRequest: object = {
@@ -38,6 +33,7 @@ const baseMintRequest: object = {
   required_confirm: 0,
   status: 0,
   current_confirm: 0,
+  confirmers: "",
   expired_height: 0,
 };
 
@@ -61,12 +57,9 @@ export const MintRequest = {
     if (message.current_confirm !== 0) {
       writer.uint32(48).uint64(message.current_confirm);
     }
-    Object.entries(message.confirmers).forEach(([key, value]) => {
-      MintRequest_ConfirmersEntry.encode(
-        { key: key as any, value },
-        writer.uint32(58).fork()
-      ).ldelim();
-    });
+    for (const v of message.confirmers) {
+      writer.uint32(58).string(v!);
+    }
     if (message.created_at !== undefined) {
       Timestamp.encode(
         toTimestamp(message.created_at),
@@ -92,7 +85,7 @@ export const MintRequest = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseMintRequest } as MintRequest;
-    message.confirmers = {};
+    message.confirmers = [];
     message.data_hashes = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -116,13 +109,7 @@ export const MintRequest = {
           message.current_confirm = longToNumber(reader.uint64() as Long);
           break;
         case 7:
-          const entry7 = MintRequest_ConfirmersEntry.decode(
-            reader,
-            reader.uint32()
-          );
-          if (entry7.value !== undefined) {
-            message.confirmers[entry7.key] = entry7.value;
-          }
+          message.confirmers.push(reader.string());
           break;
         case 8:
           message.created_at = fromTimestamp(
@@ -150,7 +137,7 @@ export const MintRequest = {
 
   fromJSON(object: any): MintRequest {
     const message = { ...baseMintRequest } as MintRequest;
-    message.confirmers = {};
+    message.confirmers = [];
     message.data_hashes = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = Number(object.id);
@@ -192,9 +179,9 @@ export const MintRequest = {
       message.current_confirm = 0;
     }
     if (object.confirmers !== undefined && object.confirmers !== null) {
-      Object.entries(object.confirmers).forEach(([key, value]) => {
-        message.confirmers[key] = Boolean(value);
-      });
+      for (const e of object.confirmers) {
+        message.confirmers.push(String(e));
+      }
     }
     if (object.created_at !== undefined && object.created_at !== null) {
       message.created_at = fromJsonTimestamp(object.created_at);
@@ -231,11 +218,10 @@ export const MintRequest = {
       (obj.status = requestStatusToJSON(message.status));
     message.current_confirm !== undefined &&
       (obj.current_confirm = message.current_confirm);
-    obj.confirmers = {};
     if (message.confirmers) {
-      Object.entries(message.confirmers).forEach(([k, v]) => {
-        obj.confirmers[k] = v;
-      });
+      obj.confirmers = message.confirmers.map((e) => e);
+    } else {
+      obj.confirmers = [];
     }
     message.created_at !== undefined &&
       (obj.created_at =
@@ -261,7 +247,7 @@ export const MintRequest = {
 
   fromPartial(object: DeepPartial<MintRequest>): MintRequest {
     const message = { ...baseMintRequest } as MintRequest;
-    message.confirmers = {};
+    message.confirmers = [];
     message.data_hashes = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
@@ -303,11 +289,9 @@ export const MintRequest = {
       message.current_confirm = 0;
     }
     if (object.confirmers !== undefined && object.confirmers !== null) {
-      Object.entries(object.confirmers).forEach(([key, value]) => {
-        if (value !== undefined) {
-          message.confirmers[key] = Boolean(value);
-        }
-      });
+      for (const e of object.confirmers) {
+        message.confirmers.push(e);
+      }
     }
     if (object.created_at !== undefined && object.created_at !== null) {
       message.created_at = object.created_at;
@@ -328,92 +312,6 @@ export const MintRequest = {
       message.expired_height = object.expired_height;
     } else {
       message.expired_height = 0;
-    }
-    return message;
-  },
-};
-
-const baseMintRequest_ConfirmersEntry: object = { key: "", value: false };
-
-export const MintRequest_ConfirmersEntry = {
-  encode(
-    message: MintRequest_ConfirmersEntry,
-    writer: Writer = Writer.create()
-  ): Writer {
-    if (message.key !== "") {
-      writer.uint32(10).string(message.key);
-    }
-    if (message.value === true) {
-      writer.uint32(16).bool(message.value);
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): MintRequest_ConfirmersEntry {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMintRequest_ConfirmersEntry,
-    } as MintRequest_ConfirmersEntry;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.key = reader.string();
-          break;
-        case 2:
-          message.value = reader.bool();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): MintRequest_ConfirmersEntry {
-    const message = {
-      ...baseMintRequest_ConfirmersEntry,
-    } as MintRequest_ConfirmersEntry;
-    if (object.key !== undefined && object.key !== null) {
-      message.key = String(object.key);
-    } else {
-      message.key = "";
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = Boolean(object.value);
-    } else {
-      message.value = false;
-    }
-    return message;
-  },
-
-  toJSON(message: MintRequest_ConfirmersEntry): unknown {
-    const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value);
-    return obj;
-  },
-
-  fromPartial(
-    object: DeepPartial<MintRequest_ConfirmersEntry>
-  ): MintRequest_ConfirmersEntry {
-    const message = {
-      ...baseMintRequest_ConfirmersEntry,
-    } as MintRequest_ConfirmersEntry;
-    if (object.key !== undefined && object.key !== null) {
-      message.key = object.key;
-    } else {
-      message.key = "";
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = object.value;
-    } else {
-      message.value = false;
     }
     return message;
   },
@@ -469,7 +367,4 @@ function longToNumber(long: Long): number {
   return long.toNumber();
 }
 
-if (util.Long !== Long) {
-  util.Long = Long as any;
-  configure();
-}
+

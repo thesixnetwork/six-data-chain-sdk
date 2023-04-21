@@ -9,7 +9,7 @@ const main = async () => {
 
     const msg = await rpcClient.nftmngrModule.msgResyncAttributes({
         creator: address,
-        nftSchemaCode: "buakaw99",
+        nftSchemaCode: "test_nft_schema_code",
         tokenId:"0"
     })
     const txResponse = await rpcClient.nftmngrModule.signAndBroadcast([msg])
