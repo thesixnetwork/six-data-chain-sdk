@@ -59,6 +59,7 @@ export interface Action {
   params: action_params[];
 }
 
+/** will be deprecated next version (074) */
 export interface ActionV063 {
   name: string;
   desc: string;

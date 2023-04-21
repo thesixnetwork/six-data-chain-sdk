@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { Reader, Writer } from "protobufjs/minimal";
 import { Params } from "../nftmngr/params";
-import { NFTSchema, NFTSchemaV063 } from "../nftmngr/nft_schema";
+import { NFTSchema, NFTSchemaV063, NFTSchemaV072 } from "../nftmngr/nft_schema";
 import {
   PageRequest,
   PageResponse,
@@ -33,8 +33,14 @@ export interface QueryGetNFTSchemaResponse {
   nFTSchema: NFTSchema | undefined;
 }
 
+/** will be deprecated next version (074) */
 export interface QueryGetNFTSchemaResponseV063 {
   nFTSchemaV063: NFTSchemaV063 | undefined;
+}
+
+/** will be deprecated next version (074) */
+export interface QueryGetNFTSchemaResponseV072 {
+  nFTSchemaV072: NFTSchemaV072 | undefined;
 }
 
 export interface QueryAllNFTSchemaRequest {
@@ -46,8 +52,15 @@ export interface QueryAllNFTSchemaResponse {
   pagination: PageResponse | undefined;
 }
 
+/** will be deprecated next version (074) */
 export interface QueryAllNFTSchemaResponseV063 {
   nFTSchemaV063: NFTSchemaV063[];
+  pagination: PageResponse | undefined;
+}
+
+/** will be deprecated next version (074) */
+export interface QueryAllNFTSchemaResponseV072 {
+  nFTSchemaV072: NFTSchemaV072[];
   pagination: PageResponse | undefined;
 }
 
@@ -472,6 +485,81 @@ export const QueryGetNFTSchemaResponseV063 = {
   },
 };
 
+const baseQueryGetNFTSchemaResponseV072: object = {};
+
+export const QueryGetNFTSchemaResponseV072 = {
+  encode(
+    message: QueryGetNFTSchemaResponseV072,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.nFTSchemaV072 !== undefined) {
+      NFTSchemaV072.encode(
+        message.nFTSchemaV072,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetNFTSchemaResponseV072 {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetNFTSchemaResponseV072,
+    } as QueryGetNFTSchemaResponseV072;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.nFTSchemaV072 = NFTSchemaV072.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetNFTSchemaResponseV072 {
+    const message = {
+      ...baseQueryGetNFTSchemaResponseV072,
+    } as QueryGetNFTSchemaResponseV072;
+    if (object.nFTSchemaV072 !== undefined && object.nFTSchemaV072 !== null) {
+      message.nFTSchemaV072 = NFTSchemaV072.fromJSON(object.nFTSchemaV072);
+    } else {
+      message.nFTSchemaV072 = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetNFTSchemaResponseV072): unknown {
+    const obj: any = {};
+    message.nFTSchemaV072 !== undefined &&
+      (obj.nFTSchemaV072 = message.nFTSchemaV072
+        ? NFTSchemaV072.toJSON(message.nFTSchemaV072)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetNFTSchemaResponseV072>
+  ): QueryGetNFTSchemaResponseV072 {
+    const message = {
+      ...baseQueryGetNFTSchemaResponseV072,
+    } as QueryGetNFTSchemaResponseV072;
+    if (object.nFTSchemaV072 !== undefined && object.nFTSchemaV072 !== null) {
+      message.nFTSchemaV072 = NFTSchemaV072.fromPartial(object.nFTSchemaV072);
+    } else {
+      message.nFTSchemaV072 = undefined;
+    }
+    return message;
+  },
+};
+
 const baseQueryAllNFTSchemaRequest: object = {};
 
 export const QueryAllNFTSchemaRequest = {
@@ -737,6 +825,109 @@ export const QueryAllNFTSchemaResponseV063 = {
     if (object.nFTSchemaV063 !== undefined && object.nFTSchemaV063 !== null) {
       for (const e of object.nFTSchemaV063) {
         message.nFTSchemaV063.push(NFTSchemaV063.fromPartial(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllNFTSchemaResponseV072: object = {};
+
+export const QueryAllNFTSchemaResponseV072 = {
+  encode(
+    message: QueryAllNFTSchemaResponseV072,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.nFTSchemaV072) {
+      NFTSchemaV072.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllNFTSchemaResponseV072 {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllNFTSchemaResponseV072,
+    } as QueryAllNFTSchemaResponseV072;
+    message.nFTSchemaV072 = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.nFTSchemaV072.push(
+            NFTSchemaV072.decode(reader, reader.uint32())
+          );
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllNFTSchemaResponseV072 {
+    const message = {
+      ...baseQueryAllNFTSchemaResponseV072,
+    } as QueryAllNFTSchemaResponseV072;
+    message.nFTSchemaV072 = [];
+    if (object.nFTSchemaV072 !== undefined && object.nFTSchemaV072 !== null) {
+      for (const e of object.nFTSchemaV072) {
+        message.nFTSchemaV072.push(NFTSchemaV072.fromJSON(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllNFTSchemaResponseV072): unknown {
+    const obj: any = {};
+    if (message.nFTSchemaV072) {
+      obj.nFTSchemaV072 = message.nFTSchemaV072.map((e) =>
+        e ? NFTSchemaV072.toJSON(e) : undefined
+      );
+    } else {
+      obj.nFTSchemaV072 = [];
+    }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageResponse.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllNFTSchemaResponseV072>
+  ): QueryAllNFTSchemaResponseV072 {
+    const message = {
+      ...baseQueryAllNFTSchemaResponseV072,
+    } as QueryAllNFTSchemaResponseV072;
+    message.nFTSchemaV072 = [];
+    if (object.nFTSchemaV072 !== undefined && object.nFTSchemaV072 !== null) {
+      for (const e of object.nFTSchemaV072) {
+        message.nFTSchemaV072.push(NFTSchemaV072.fromPartial(e));
       }
     }
     if (object.pagination !== undefined && object.pagination !== null) {
@@ -2833,18 +3024,32 @@ export interface Query {
   NFTSchema(
     request: QueryGetNFTSchemaRequest
   ): Promise<QueryGetNFTSchemaResponse>;
-  /** Queries a NFTSchema by index. */
+  /**
+   * will be deprecated next version (074)
+   * Queries a NFTSchema by index.
+   */
   NFTSchemaV063(
     request: QueryGetNFTSchemaRequest
   ): Promise<QueryGetNFTSchemaResponseV063>;
+  /** Queries a NFTSchema by index. */
+  NFTSchemaV072(
+    request: QueryGetNFTSchemaRequest
+  ): Promise<QueryGetNFTSchemaResponseV072>;
   /** Queries a list of NFTSchema items. */
   NFTSchemaAll(
     request: QueryAllNFTSchemaRequest
   ): Promise<QueryAllNFTSchemaResponse>;
-  /** Queries a list of NFTSchema items. */
+  /**
+   * will be deprecated next version (074)
+   * Queries a list of NFTSchema items.
+   */
   NFTSchemaAllV063(
     request: QueryAllNFTSchemaRequest
   ): Promise<QueryAllNFTSchemaResponseV063>;
+  /** Queries a list of NFTSchema items. */
+  NFTSchemaAllV072(
+    request: QueryAllNFTSchemaRequest
+  ): Promise<QueryAllNFTSchemaResponseV072>;
   /** Queries a NftData by index. */
   NftData(request: QueryGetNftDataRequest): Promise<QueryGetNftDataResponse>;
   /** Queries a list of NftData items. */
@@ -2938,6 +3143,20 @@ export class QueryClientImpl implements Query {
     );
   }
 
+  NFTSchemaV072(
+    request: QueryGetNFTSchemaRequest
+  ): Promise<QueryGetNFTSchemaResponseV072> {
+    const data = QueryGetNFTSchemaRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftmngr.Query",
+      "NFTSchemaV072",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetNFTSchemaResponseV072.decode(new Reader(data))
+    );
+  }
+
   NFTSchemaAll(
     request: QueryAllNFTSchemaRequest
   ): Promise<QueryAllNFTSchemaResponse> {
@@ -2963,6 +3182,20 @@ export class QueryClientImpl implements Query {
     );
     return promise.then((data) =>
       QueryAllNFTSchemaResponseV063.decode(new Reader(data))
+    );
+  }
+
+  NFTSchemaAllV072(
+    request: QueryAllNFTSchemaRequest
+  ): Promise<QueryAllNFTSchemaResponseV072> {
+    const data = QueryAllNFTSchemaRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftmngr.Query",
+      "NFTSchemaAllV072",
+      data
+    );
+    return promise.then((data) =>
+      QueryAllNFTSchemaResponseV072.decode(new Reader(data))
     );
   }
 

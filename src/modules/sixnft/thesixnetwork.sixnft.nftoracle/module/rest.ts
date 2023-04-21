@@ -44,6 +44,35 @@ export interface NftoracleActionParameter {
   value?: string;
 }
 
+export interface NftoracleActionRequestV063 {
+  /** @format uint64 */
+  id?: string;
+  nft_schema_code?: string;
+  token_id?: string;
+  action?: string;
+  caller?: string;
+  ref_id?: string;
+
+  /** @format uint64 */
+  required_confirm?: string;
+  status?: NftoracleRequestStatus;
+
+  /** @format uint64 */
+  current_confirm?: string;
+  confirmers?: string[];
+
+  /** @format date-time */
+  created_at?: string;
+
+  /** @format date-time */
+  valid_until?: string;
+  data_hashes?: NftoracleDataHash[];
+
+  /** @format int64 */
+  expired_height?: string;
+  execution_error_message?: string;
+}
+
 export interface NftoracleActionSigner {
   actor_address?: string;
   owner_address?: string;
@@ -54,6 +83,21 @@ export interface NftoracleActionSigner {
   /** @format date-time */
   expired_at?: string;
   creator?: string;
+  creation_flow?: NftoracleCreationFlow;
+}
+
+export interface NftoracleActionSignerConfig {
+  chain?: string;
+  contractAddress?: string;
+  creator?: string;
+}
+
+export interface NftoracleBindedSigner {
+  ownerAddress?: string;
+  signers?: NftoracleSetSignerParams[];
+
+  /** @format uint64 */
+  actorCount?: string;
 }
 
 export interface NftoracleCollectionOwnerRequest {
@@ -79,6 +123,19 @@ export interface NftoracleCollectionOwnerRequest {
 
   /** @format int64 */
   expired_height?: string;
+}
+
+export interface NftoracleContractInfoHash {
+  contract_param?: NftoracleParameterSyncSignerByOracle;
+
+  /** @format byte */
+  hash?: string;
+  confirmers?: string[];
+}
+
+export enum NftoracleCreationFlow {
+  ORACLE = "ORACLE",
+  INTERNAL_OWNER = "INTERNAL_OWNER",
 }
 
 export interface NftoracleDataHash {
@@ -119,6 +176,14 @@ export interface NftoracleMsgCreateActionRequestResponse {
   id?: string;
 }
 
+export interface NftoracleMsgCreateActionSignerConfigResponse {
+  chain?: string;
+  rpc_endpoint?: string;
+  contractAddress?: string;
+  contractName?: string;
+  contractOwner?: string;
+}
+
 export interface NftoracleMsgCreateActionSignerResponse {
   ownerAddress?: string;
   signerAddress?: string;
@@ -132,11 +197,23 @@ export interface NftoracleMsgCreateMintRequestResponse {
   tokenId?: string;
 }
 
+export interface NftoracleMsgCreateSyncActionSignerResponse {
+  /** @format uint64 */
+  id?: string;
+  chain?: string;
+  ownerAddress?: string;
+  actorAddress?: string;
+}
+
 export interface NftoracleMsgCreateVerifyCollectionOwnerRequestResponse {
   /** @format uint64 */
   id?: string;
   nftSchemaCode?: string;
   ownerAddress?: string;
+}
+
+export interface NftoracleMsgDeleteActionSignerConfigResponse {
+  chain?: string;
 }
 
 export interface NftoracleMsgDeleteActionSignerResponse {
@@ -156,9 +233,27 @@ export interface NftoracleMsgSubmitMintResponseResponse {
   mintRequestID?: string;
 }
 
+export interface NftoracleMsgSubmitSyncActionSignerResponse {
+  /** @format uint64 */
+  verifyRequestID?: string;
+  expireAt?: string;
+}
+
 export interface NftoracleMsgSubmitVerifyCollectionOwnerResponse {
   /** @format uint64 */
   verifyRequestID?: string;
+}
+
+export interface NftoracleMsgUpdateActionSignerConfigResponse {
+  chain?: string;
+  rpc_endpoint?: string;
+  new_rpc_endpoint?: string;
+  contractAddress?: string;
+  new_contractAddress?: string;
+  contractName?: string;
+  new_contractName?: string;
+  contractOwner?: string;
+  new_contractOwner?: string;
 }
 
 export interface NftoracleMsgUpdateActionSignerResponse {
@@ -195,6 +290,13 @@ export interface NftoracleOriginContractParam {
   request_expire?: string;
 }
 
+export interface NftoracleParameterSyncSignerByOracle {
+  chain?: string;
+  owner_address?: string;
+  actor_address?: string;
+  expire_epoch?: string;
+}
+
 /**
  * Params defines the parameters for the module.
  */
@@ -203,10 +305,41 @@ export interface NftoracleParams {
   action_request_active_duration?: string;
   verify_request_active_duration?: string;
   action_signer_active_duration?: string;
+  sync_action_signer_active_duration?: string;
 }
 
 export interface NftoracleQueryAllActionRequestResponse {
   ActionOracleRequest?: NftoracleActionOracleRequest[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
+export interface NftoracleQueryAllActionRequestResponseV063 {
+  ActionRequestV063?: NftoracleActionRequestV063[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
+export interface NftoracleQueryAllActionSignerConfigResponse {
+  actionSignerConfig?: NftoracleActionSignerConfig[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -265,12 +398,39 @@ export interface NftoracleQueryAllMintRequestResponse {
   pagination?: V1Beta1PageResponse;
 }
 
+export interface NftoracleQueryAllSyncActionSignerResponse {
+  SyncActionSigner?: NftoracleSyncActionSigner[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
 export interface NftoracleQueryGetActionRequestResponse {
   ActionOracleRequest?: NftoracleActionOracleRequest;
 }
 
+export interface NftoracleQueryGetActionRequestResponseV063 {
+  ActionRequestV063?: NftoracleActionRequestV063;
+}
+
+export interface NftoracleQueryGetActionSignerConfigResponse {
+  actionSignerConfig?: NftoracleActionSignerConfig;
+}
+
 export interface NftoracleQueryGetActionSignerResponse {
   actionSigner?: NftoracleActionSigner;
+}
+
+export interface NftoracleQueryGetBindedSignerResponse {
+  bindedSigner?: NftoracleBindedSigner;
 }
 
 export interface NftoracleQueryGetCollectionOwnerRequestResponse {
@@ -283,6 +443,10 @@ export interface NftoracleQueryGetMintRequestResponse {
 
 export interface NftoracleQueryGetOracleConfigResponse {
   OracleConfig?: NftoracleOracleConfig;
+}
+
+export interface NftoracleQueryGetSyncActionSignerResponse {
+  SyncActionSigner?: NftoracleSyncActionSigner;
 }
 
 /**
@@ -302,11 +466,46 @@ export enum NftoracleRequestStatus {
   FAILED_REJECT_BY_CONSENSUS = "FAILED_REJECT_BY_CONSENSUS",
 }
 
+export interface NftoracleSyncActionSigner {
+  /** @format uint64 */
+  id?: string;
+  chain?: string;
+  actor_address?: string;
+  owner_address?: string;
+  caller?: string;
+
+  /** @format uint64 */
+  required_confirm?: string;
+  status?: NftoracleRequestStatus;
+
+  /** @format uint64 */
+  current_confirm?: string;
+  confirmers?: string[];
+
+  /** @format date-time */
+  created_at?: string;
+
+  /** @format date-time */
+  valid_until?: string;
+  data_hashes?: NftoracleContractInfoHash[];
+
+  /** @format int64 */
+  expired_height?: string;
+  execution_error_message?: string;
+}
+
 export interface NftoracleTrait {
   trait_type?: string;
   value?: string;
   display_type?: string;
   max_value?: string;
+}
+
+export interface NftoracleSetSignerParams {
+  actor_address?: string;
+
+  /** @format date-time */
+  expired_at?: string;
 }
 
 export interface ProtobufAny {
@@ -617,6 +816,47 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
+   * @name QueryActionRequestAllV063
+   * @summary Queries a list of ActionRequest items.
+   * @request GET:/thesixnetwork/sixnft/nftoracle/action_request_063
+   */
+  queryActionRequestAllV063 = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<NftoracleQueryAllActionRequestResponseV063, RpcStatus>({
+      path: `/thesixnetwork/sixnft/nftoracle/action_request_063`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryActionOracleRequestV063
+   * @summary Queries a ActionRequest by id.
+   * @request GET:/thesixnetwork/sixnft/nftoracle/action_request_063/{id}
+   */
+  queryActionOracleRequestV063 = (id: string, params: RequestParams = {}) =>
+    this.request<NftoracleQueryGetActionRequestResponseV063, RpcStatus>({
+      path: `/thesixnetwork/sixnft/nftoracle/action_request_063/${id}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
    * @name QueryActionSignerAll
    * @summary Queries a list of ActionSigner items.
    * @request GET:/thesixnetwork/sixnft/nftoracle/action_signer
@@ -644,13 +884,69 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryActionSigner
    * @summary Queries a ActionSigner by index.
-   * @request GET:/thesixnetwork/sixnft/nftoracle/action_signer/{actorAddress}
+   * @request GET:/thesixnetwork/sixnft/nftoracle/action_signer/{actorAddress}/{ownerAddress}
    */
-  queryActionSigner = (actorAddress: string, query?: { ownerAddress?: string }, params: RequestParams = {}) =>
+  queryActionSigner = (actorAddress: string, ownerAddress: string, params: RequestParams = {}) =>
     this.request<NftoracleQueryGetActionSignerResponse, RpcStatus>({
-      path: `/thesixnetwork/sixnft/nftoracle/action_signer/${actorAddress}`,
+      path: `/thesixnetwork/sixnft/nftoracle/action_signer/${actorAddress}/${ownerAddress}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryActionSignerConfigAll
+   * @summary Queries a list of ActionSignerConfig items.
+   * @request GET:/thesixnetwork/sixnft/nftoracle/action_signer_config
+   */
+  queryActionSignerConfigAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<NftoracleQueryAllActionSignerConfigResponse, RpcStatus>({
+      path: `/thesixnetwork/sixnft/nftoracle/action_signer_config`,
       method: "GET",
       query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryActionSignerConfig
+   * @summary Queries a ActionSignerConfig by index.
+   * @request GET:/thesixnetwork/sixnft/nftoracle/action_signer_config/{chain}
+   */
+  queryActionSignerConfig = (chain: string, params: RequestParams = {}) =>
+    this.request<NftoracleQueryGetActionSignerConfigResponse, RpcStatus>({
+      path: `/thesixnetwork/sixnft/nftoracle/action_signer_config/${chain}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryBindedSigner
+   * @summary Queries a BindedSigner by index.
+   * @request GET:/thesixnetwork/sixnft/nftoracle/binded_signer/{ownerAddress}
+   */
+  queryBindedSigner = (ownerAddress: string, params: RequestParams = {}) =>
+    this.request<NftoracleQueryGetBindedSignerResponse, RpcStatus>({
+      path: `/thesixnetwork/sixnft/nftoracle/binded_signer/${ownerAddress}`,
+      method: "GET",
       format: "json",
       ...params,
     });
@@ -764,6 +1060,47 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryParams = (params: RequestParams = {}) =>
     this.request<NftoracleQueryParamsResponse, RpcStatus>({
       path: `/thesixnetwork/sixnft/nftoracle/params`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySyncActionSignerAll
+   * @summary Queries a list of SyncActionSigner items.
+   * @request GET:/thesixnetwork/sixnft/nftoracle/sync_action_signer
+   */
+  querySyncActionSignerAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<NftoracleQueryAllSyncActionSignerResponse, RpcStatus>({
+      path: `/thesixnetwork/sixnft/nftoracle/sync_action_signer`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySyncActionSigner
+   * @summary Queries a SyncActionSigner by id.
+   * @request GET:/thesixnetwork/sixnft/nftoracle/sync_action_signer/{id}
+   */
+  querySyncActionSigner = (id: string, params: RequestParams = {}) =>
+    this.request<NftoracleQueryGetSyncActionSignerResponse, RpcStatus>({
+      path: `/thesixnetwork/sixnft/nftoracle/sync_action_signer/${id}`,
       method: "GET",
       format: "json",
       ...params,

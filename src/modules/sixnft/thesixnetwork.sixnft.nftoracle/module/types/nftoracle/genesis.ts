@@ -7,6 +7,9 @@ import { ActionOracleRequest } from "../nftoracle/action_request";
 import { CollectionOwnerRequest } from "../nftoracle/collection_owner_request";
 import { OracleConfig } from "../nftoracle/oracle_config";
 import { ActionSigner } from "../nftoracle/action_signer";
+import { BindedSigner } from "../nftoracle/binded_signer";
+import { ActionSignerConfig } from "../nftoracle/action_signer_config";
+import { SyncActionSigner } from "../nftoracle/sync_action_signer";
 
 export const protobufPackage = "thesixnetwork.sixnft.nftoracle";
 
@@ -20,14 +23,19 @@ export interface GenesisState {
   collectionOwnerRequestList: CollectionOwnerRequest[];
   collectionOwnerRequestCount: number;
   oracle_config: OracleConfig | undefined;
-  /** this line is used by starport scaffolding # genesis/proto/state */
   actionSignerList: ActionSigner[];
+  bindedSignerList: BindedSigner[];
+  actionSignerConfigList: ActionSignerConfig[];
+  syncActionSignerList: SyncActionSigner[];
+  /** this line is used by starport scaffolding # genesis/proto/state */
+  syncActionSignerCount: number;
 }
 
 const baseGenesisState: object = {
   mintRequestCount: 0,
   actionRequestCount: 0,
   collectionOwnerRequestCount: 0,
+  syncActionSignerCount: 0,
 };
 
 export const GenesisState = {
@@ -62,6 +70,18 @@ export const GenesisState = {
     for (const v of message.actionSignerList) {
       ActionSigner.encode(v!, writer.uint32(74).fork()).ldelim();
     }
+    for (const v of message.bindedSignerList) {
+      BindedSigner.encode(v!, writer.uint32(82).fork()).ldelim();
+    }
+    for (const v of message.actionSignerConfigList) {
+      ActionSignerConfig.encode(v!, writer.uint32(106).fork()).ldelim();
+    }
+    for (const v of message.syncActionSignerList) {
+      SyncActionSigner.encode(v!, writer.uint32(114).fork()).ldelim();
+    }
+    if (message.syncActionSignerCount !== 0) {
+      writer.uint32(120).uint64(message.syncActionSignerCount);
+    }
     return writer;
   },
 
@@ -73,6 +93,9 @@ export const GenesisState = {
     message.actionRequestList = [];
     message.collectionOwnerRequestList = [];
     message.actionSignerList = [];
+    message.bindedSignerList = [];
+    message.actionSignerConfigList = [];
+    message.syncActionSignerList = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -113,6 +136,24 @@ export const GenesisState = {
             ActionSigner.decode(reader, reader.uint32())
           );
           break;
+        case 10:
+          message.bindedSignerList.push(
+            BindedSigner.decode(reader, reader.uint32())
+          );
+          break;
+        case 13:
+          message.actionSignerConfigList.push(
+            ActionSignerConfig.decode(reader, reader.uint32())
+          );
+          break;
+        case 14:
+          message.syncActionSignerList.push(
+            SyncActionSigner.decode(reader, reader.uint32())
+          );
+          break;
+        case 15:
+          message.syncActionSignerCount = longToNumber(reader.uint64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -127,6 +168,9 @@ export const GenesisState = {
     message.actionRequestList = [];
     message.collectionOwnerRequestList = [];
     message.actionSignerList = [];
+    message.bindedSignerList = [];
+    message.actionSignerConfigList = [];
+    message.syncActionSignerList = [];
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromJSON(object.params);
     } else {
@@ -197,6 +241,38 @@ export const GenesisState = {
         message.actionSignerList.push(ActionSigner.fromJSON(e));
       }
     }
+    if (
+      object.bindedSignerList !== undefined &&
+      object.bindedSignerList !== null
+    ) {
+      for (const e of object.bindedSignerList) {
+        message.bindedSignerList.push(BindedSigner.fromJSON(e));
+      }
+    }
+    if (
+      object.actionSignerConfigList !== undefined &&
+      object.actionSignerConfigList !== null
+    ) {
+      for (const e of object.actionSignerConfigList) {
+        message.actionSignerConfigList.push(ActionSignerConfig.fromJSON(e));
+      }
+    }
+    if (
+      object.syncActionSignerList !== undefined &&
+      object.syncActionSignerList !== null
+    ) {
+      for (const e of object.syncActionSignerList) {
+        message.syncActionSignerList.push(SyncActionSigner.fromJSON(e));
+      }
+    }
+    if (
+      object.syncActionSignerCount !== undefined &&
+      object.syncActionSignerCount !== null
+    ) {
+      message.syncActionSignerCount = Number(object.syncActionSignerCount);
+    } else {
+      message.syncActionSignerCount = 0;
+    }
     return message;
   },
 
@@ -242,6 +318,29 @@ export const GenesisState = {
     } else {
       obj.actionSignerList = [];
     }
+    if (message.bindedSignerList) {
+      obj.bindedSignerList = message.bindedSignerList.map((e) =>
+        e ? BindedSigner.toJSON(e) : undefined
+      );
+    } else {
+      obj.bindedSignerList = [];
+    }
+    if (message.actionSignerConfigList) {
+      obj.actionSignerConfigList = message.actionSignerConfigList.map((e) =>
+        e ? ActionSignerConfig.toJSON(e) : undefined
+      );
+    } else {
+      obj.actionSignerConfigList = [];
+    }
+    if (message.syncActionSignerList) {
+      obj.syncActionSignerList = message.syncActionSignerList.map((e) =>
+        e ? SyncActionSigner.toJSON(e) : undefined
+      );
+    } else {
+      obj.syncActionSignerList = [];
+    }
+    message.syncActionSignerCount !== undefined &&
+      (obj.syncActionSignerCount = message.syncActionSignerCount);
     return obj;
   },
 
@@ -251,6 +350,9 @@ export const GenesisState = {
     message.actionRequestList = [];
     message.collectionOwnerRequestList = [];
     message.actionSignerList = [];
+    message.bindedSignerList = [];
+    message.actionSignerConfigList = [];
+    message.syncActionSignerList = [];
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromPartial(object.params);
     } else {
@@ -318,6 +420,38 @@ export const GenesisState = {
       for (const e of object.actionSignerList) {
         message.actionSignerList.push(ActionSigner.fromPartial(e));
       }
+    }
+    if (
+      object.bindedSignerList !== undefined &&
+      object.bindedSignerList !== null
+    ) {
+      for (const e of object.bindedSignerList) {
+        message.bindedSignerList.push(BindedSigner.fromPartial(e));
+      }
+    }
+    if (
+      object.actionSignerConfigList !== undefined &&
+      object.actionSignerConfigList !== null
+    ) {
+      for (const e of object.actionSignerConfigList) {
+        message.actionSignerConfigList.push(ActionSignerConfig.fromPartial(e));
+      }
+    }
+    if (
+      object.syncActionSignerList !== undefined &&
+      object.syncActionSignerList !== null
+    ) {
+      for (const e of object.syncActionSignerList) {
+        message.syncActionSignerList.push(SyncActionSigner.fromPartial(e));
+      }
+    }
+    if (
+      object.syncActionSignerCount !== undefined &&
+      object.syncActionSignerCount !== null
+    ) {
+      message.syncActionSignerCount = object.syncActionSignerCount;
+    } else {
+      message.syncActionSignerCount = 0;
     }
     return message;
   },

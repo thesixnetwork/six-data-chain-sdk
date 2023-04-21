@@ -7,10 +7,16 @@ import {
   PageRequest,
   PageResponse,
 } from "../cosmos/base/query/v1beta1/pagination";
-import { ActionOracleRequest } from "../nftoracle/action_request";
+import {
+  ActionOracleRequest,
+  ActionRequestV063,
+} from "../nftoracle/action_request";
 import { CollectionOwnerRequest } from "../nftoracle/collection_owner_request";
 import { OracleConfig } from "../nftoracle/oracle_config";
 import { ActionSigner } from "../nftoracle/action_signer";
+import { BindedSigner } from "../nftoracle/binded_signer";
+import { ActionSignerConfig } from "../nftoracle/action_signer_config";
+import { SyncActionSigner } from "../nftoracle/sync_action_signer";
 
 export const protobufPackage = "thesixnetwork.sixnft.nftoracle";
 
@@ -48,12 +54,21 @@ export interface QueryGetActionRequestResponse {
   ActionOracleRequest: ActionOracleRequest | undefined;
 }
 
+export interface QueryGetActionRequestResponseV063 {
+  ActionRequestV063: ActionRequestV063 | undefined;
+}
+
 export interface QueryAllActionRequestRequest {
   pagination: PageRequest | undefined;
 }
 
 export interface QueryAllActionRequestResponse {
   ActionOracleRequest: ActionOracleRequest[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryAllActionRequestResponseV063 {
+  ActionRequestV063: ActionRequestV063[];
   pagination: PageResponse | undefined;
 }
 
@@ -95,6 +110,48 @@ export interface QueryAllActionSignerRequest {
 
 export interface QueryAllActionSignerResponse {
   actionSigner: ActionSigner[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryGetBindedSignerRequest {
+  ownerAddress: string;
+}
+
+export interface QueryGetBindedSignerResponse {
+  bindedSigner: BindedSigner | undefined;
+}
+
+export interface QueryGetActionSignerConfigRequest {
+  chain: string;
+}
+
+export interface QueryGetActionSignerConfigResponse {
+  actionSignerConfig: ActionSignerConfig | undefined;
+}
+
+export interface QueryAllActionSignerConfigRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryAllActionSignerConfigResponse {
+  actionSignerConfig: ActionSignerConfig[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryGetSyncActionSignerRequest {
+  id: number;
+}
+
+export interface QueryGetSyncActionSignerResponse {
+  SyncActionSigner: SyncActionSigner | undefined;
+}
+
+export interface QueryAllSyncActionSignerRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryAllSyncActionSignerResponse {
+  SyncActionSigner: SyncActionSigner[];
   pagination: PageResponse | undefined;
 }
 
@@ -669,6 +726,94 @@ export const QueryGetActionRequestResponse = {
   },
 };
 
+const baseQueryGetActionRequestResponseV063: object = {};
+
+export const QueryGetActionRequestResponseV063 = {
+  encode(
+    message: QueryGetActionRequestResponseV063,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.ActionRequestV063 !== undefined) {
+      ActionRequestV063.encode(
+        message.ActionRequestV063,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetActionRequestResponseV063 {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetActionRequestResponseV063,
+    } as QueryGetActionRequestResponseV063;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.ActionRequestV063 = ActionRequestV063.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetActionRequestResponseV063 {
+    const message = {
+      ...baseQueryGetActionRequestResponseV063,
+    } as QueryGetActionRequestResponseV063;
+    if (
+      object.ActionRequestV063 !== undefined &&
+      object.ActionRequestV063 !== null
+    ) {
+      message.ActionRequestV063 = ActionRequestV063.fromJSON(
+        object.ActionRequestV063
+      );
+    } else {
+      message.ActionRequestV063 = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetActionRequestResponseV063): unknown {
+    const obj: any = {};
+    message.ActionRequestV063 !== undefined &&
+      (obj.ActionRequestV063 = message.ActionRequestV063
+        ? ActionRequestV063.toJSON(message.ActionRequestV063)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetActionRequestResponseV063>
+  ): QueryGetActionRequestResponseV063 {
+    const message = {
+      ...baseQueryGetActionRequestResponseV063,
+    } as QueryGetActionRequestResponseV063;
+    if (
+      object.ActionRequestV063 !== undefined &&
+      object.ActionRequestV063 !== null
+    ) {
+      message.ActionRequestV063 = ActionRequestV063.fromPartial(
+        object.ActionRequestV063
+      );
+    } else {
+      message.ActionRequestV063 = undefined;
+    }
+    return message;
+  },
+};
+
 const baseQueryAllActionRequestRequest: object = {};
 
 export const QueryAllActionRequestRequest = {
@@ -839,6 +984,115 @@ export const QueryAllActionRequestResponse = {
     ) {
       for (const e of object.ActionOracleRequest) {
         message.ActionOracleRequest.push(ActionOracleRequest.fromPartial(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllActionRequestResponseV063: object = {};
+
+export const QueryAllActionRequestResponseV063 = {
+  encode(
+    message: QueryAllActionRequestResponseV063,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.ActionRequestV063) {
+      ActionRequestV063.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllActionRequestResponseV063 {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllActionRequestResponseV063,
+    } as QueryAllActionRequestResponseV063;
+    message.ActionRequestV063 = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.ActionRequestV063.push(
+            ActionRequestV063.decode(reader, reader.uint32())
+          );
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllActionRequestResponseV063 {
+    const message = {
+      ...baseQueryAllActionRequestResponseV063,
+    } as QueryAllActionRequestResponseV063;
+    message.ActionRequestV063 = [];
+    if (
+      object.ActionRequestV063 !== undefined &&
+      object.ActionRequestV063 !== null
+    ) {
+      for (const e of object.ActionRequestV063) {
+        message.ActionRequestV063.push(ActionRequestV063.fromJSON(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllActionRequestResponseV063): unknown {
+    const obj: any = {};
+    if (message.ActionRequestV063) {
+      obj.ActionRequestV063 = message.ActionRequestV063.map((e) =>
+        e ? ActionRequestV063.toJSON(e) : undefined
+      );
+    } else {
+      obj.ActionRequestV063 = [];
+    }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageResponse.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllActionRequestResponseV063>
+  ): QueryAllActionRequestResponseV063 {
+    const message = {
+      ...baseQueryAllActionRequestResponseV063,
+    } as QueryAllActionRequestResponseV063;
+    message.ActionRequestV063 = [];
+    if (
+      object.ActionRequestV063 !== undefined &&
+      object.ActionRequestV063 !== null
+    ) {
+      for (const e of object.ActionRequestV063) {
+        message.ActionRequestV063.push(ActionRequestV063.fromPartial(e));
       }
     }
     if (object.pagination !== undefined && object.pagination !== null) {
@@ -1658,6 +1912,827 @@ export const QueryAllActionSignerResponse = {
   },
 };
 
+const baseQueryGetBindedSignerRequest: object = { ownerAddress: "" };
+
+export const QueryGetBindedSignerRequest = {
+  encode(
+    message: QueryGetBindedSignerRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.ownerAddress !== "") {
+      writer.uint32(10).string(message.ownerAddress);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetBindedSignerRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetBindedSignerRequest,
+    } as QueryGetBindedSignerRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.ownerAddress = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetBindedSignerRequest {
+    const message = {
+      ...baseQueryGetBindedSignerRequest,
+    } as QueryGetBindedSignerRequest;
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = String(object.ownerAddress);
+    } else {
+      message.ownerAddress = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetBindedSignerRequest): unknown {
+    const obj: any = {};
+    message.ownerAddress !== undefined &&
+      (obj.ownerAddress = message.ownerAddress);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetBindedSignerRequest>
+  ): QueryGetBindedSignerRequest {
+    const message = {
+      ...baseQueryGetBindedSignerRequest,
+    } as QueryGetBindedSignerRequest;
+    if (object.ownerAddress !== undefined && object.ownerAddress !== null) {
+      message.ownerAddress = object.ownerAddress;
+    } else {
+      message.ownerAddress = "";
+    }
+    return message;
+  },
+};
+
+const baseQueryGetBindedSignerResponse: object = {};
+
+export const QueryGetBindedSignerResponse = {
+  encode(
+    message: QueryGetBindedSignerResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.bindedSigner !== undefined) {
+      BindedSigner.encode(
+        message.bindedSigner,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetBindedSignerResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetBindedSignerResponse,
+    } as QueryGetBindedSignerResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.bindedSigner = BindedSigner.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetBindedSignerResponse {
+    const message = {
+      ...baseQueryGetBindedSignerResponse,
+    } as QueryGetBindedSignerResponse;
+    if (object.bindedSigner !== undefined && object.bindedSigner !== null) {
+      message.bindedSigner = BindedSigner.fromJSON(object.bindedSigner);
+    } else {
+      message.bindedSigner = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetBindedSignerResponse): unknown {
+    const obj: any = {};
+    message.bindedSigner !== undefined &&
+      (obj.bindedSigner = message.bindedSigner
+        ? BindedSigner.toJSON(message.bindedSigner)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetBindedSignerResponse>
+  ): QueryGetBindedSignerResponse {
+    const message = {
+      ...baseQueryGetBindedSignerResponse,
+    } as QueryGetBindedSignerResponse;
+    if (object.bindedSigner !== undefined && object.bindedSigner !== null) {
+      message.bindedSigner = BindedSigner.fromPartial(object.bindedSigner);
+    } else {
+      message.bindedSigner = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryGetActionSignerConfigRequest: object = { chain: "" };
+
+export const QueryGetActionSignerConfigRequest = {
+  encode(
+    message: QueryGetActionSignerConfigRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.chain !== "") {
+      writer.uint32(10).string(message.chain);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetActionSignerConfigRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetActionSignerConfigRequest,
+    } as QueryGetActionSignerConfigRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.chain = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetActionSignerConfigRequest {
+    const message = {
+      ...baseQueryGetActionSignerConfigRequest,
+    } as QueryGetActionSignerConfigRequest;
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = String(object.chain);
+    } else {
+      message.chain = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetActionSignerConfigRequest): unknown {
+    const obj: any = {};
+    message.chain !== undefined && (obj.chain = message.chain);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetActionSignerConfigRequest>
+  ): QueryGetActionSignerConfigRequest {
+    const message = {
+      ...baseQueryGetActionSignerConfigRequest,
+    } as QueryGetActionSignerConfigRequest;
+    if (object.chain !== undefined && object.chain !== null) {
+      message.chain = object.chain;
+    } else {
+      message.chain = "";
+    }
+    return message;
+  },
+};
+
+const baseQueryGetActionSignerConfigResponse: object = {};
+
+export const QueryGetActionSignerConfigResponse = {
+  encode(
+    message: QueryGetActionSignerConfigResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.actionSignerConfig !== undefined) {
+      ActionSignerConfig.encode(
+        message.actionSignerConfig,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetActionSignerConfigResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetActionSignerConfigResponse,
+    } as QueryGetActionSignerConfigResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.actionSignerConfig = ActionSignerConfig.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetActionSignerConfigResponse {
+    const message = {
+      ...baseQueryGetActionSignerConfigResponse,
+    } as QueryGetActionSignerConfigResponse;
+    if (
+      object.actionSignerConfig !== undefined &&
+      object.actionSignerConfig !== null
+    ) {
+      message.actionSignerConfig = ActionSignerConfig.fromJSON(
+        object.actionSignerConfig
+      );
+    } else {
+      message.actionSignerConfig = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetActionSignerConfigResponse): unknown {
+    const obj: any = {};
+    message.actionSignerConfig !== undefined &&
+      (obj.actionSignerConfig = message.actionSignerConfig
+        ? ActionSignerConfig.toJSON(message.actionSignerConfig)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetActionSignerConfigResponse>
+  ): QueryGetActionSignerConfigResponse {
+    const message = {
+      ...baseQueryGetActionSignerConfigResponse,
+    } as QueryGetActionSignerConfigResponse;
+    if (
+      object.actionSignerConfig !== undefined &&
+      object.actionSignerConfig !== null
+    ) {
+      message.actionSignerConfig = ActionSignerConfig.fromPartial(
+        object.actionSignerConfig
+      );
+    } else {
+      message.actionSignerConfig = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllActionSignerConfigRequest: object = {};
+
+export const QueryAllActionSignerConfigRequest = {
+  encode(
+    message: QueryAllActionSignerConfigRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllActionSignerConfigRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllActionSignerConfigRequest,
+    } as QueryAllActionSignerConfigRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllActionSignerConfigRequest {
+    const message = {
+      ...baseQueryAllActionSignerConfigRequest,
+    } as QueryAllActionSignerConfigRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllActionSignerConfigRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageRequest.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllActionSignerConfigRequest>
+  ): QueryAllActionSignerConfigRequest {
+    const message = {
+      ...baseQueryAllActionSignerConfigRequest,
+    } as QueryAllActionSignerConfigRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllActionSignerConfigResponse: object = {};
+
+export const QueryAllActionSignerConfigResponse = {
+  encode(
+    message: QueryAllActionSignerConfigResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.actionSignerConfig) {
+      ActionSignerConfig.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllActionSignerConfigResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllActionSignerConfigResponse,
+    } as QueryAllActionSignerConfigResponse;
+    message.actionSignerConfig = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.actionSignerConfig.push(
+            ActionSignerConfig.decode(reader, reader.uint32())
+          );
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllActionSignerConfigResponse {
+    const message = {
+      ...baseQueryAllActionSignerConfigResponse,
+    } as QueryAllActionSignerConfigResponse;
+    message.actionSignerConfig = [];
+    if (
+      object.actionSignerConfig !== undefined &&
+      object.actionSignerConfig !== null
+    ) {
+      for (const e of object.actionSignerConfig) {
+        message.actionSignerConfig.push(ActionSignerConfig.fromJSON(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllActionSignerConfigResponse): unknown {
+    const obj: any = {};
+    if (message.actionSignerConfig) {
+      obj.actionSignerConfig = message.actionSignerConfig.map((e) =>
+        e ? ActionSignerConfig.toJSON(e) : undefined
+      );
+    } else {
+      obj.actionSignerConfig = [];
+    }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageResponse.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllActionSignerConfigResponse>
+  ): QueryAllActionSignerConfigResponse {
+    const message = {
+      ...baseQueryAllActionSignerConfigResponse,
+    } as QueryAllActionSignerConfigResponse;
+    message.actionSignerConfig = [];
+    if (
+      object.actionSignerConfig !== undefined &&
+      object.actionSignerConfig !== null
+    ) {
+      for (const e of object.actionSignerConfig) {
+        message.actionSignerConfig.push(ActionSignerConfig.fromPartial(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryGetSyncActionSignerRequest: object = { id: 0 };
+
+export const QueryGetSyncActionSignerRequest = {
+  encode(
+    message: QueryGetSyncActionSignerRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.id !== 0) {
+      writer.uint32(8).uint64(message.id);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetSyncActionSignerRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetSyncActionSignerRequest,
+    } as QueryGetSyncActionSignerRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetSyncActionSignerRequest {
+    const message = {
+      ...baseQueryGetSyncActionSignerRequest,
+    } as QueryGetSyncActionSignerRequest;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = Number(object.id);
+    } else {
+      message.id = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetSyncActionSignerRequest): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetSyncActionSignerRequest>
+  ): QueryGetSyncActionSignerRequest {
+    const message = {
+      ...baseQueryGetSyncActionSignerRequest,
+    } as QueryGetSyncActionSignerRequest;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = 0;
+    }
+    return message;
+  },
+};
+
+const baseQueryGetSyncActionSignerResponse: object = {};
+
+export const QueryGetSyncActionSignerResponse = {
+  encode(
+    message: QueryGetSyncActionSignerResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.SyncActionSigner !== undefined) {
+      SyncActionSigner.encode(
+        message.SyncActionSigner,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetSyncActionSignerResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetSyncActionSignerResponse,
+    } as QueryGetSyncActionSignerResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.SyncActionSigner = SyncActionSigner.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetSyncActionSignerResponse {
+    const message = {
+      ...baseQueryGetSyncActionSignerResponse,
+    } as QueryGetSyncActionSignerResponse;
+    if (
+      object.SyncActionSigner !== undefined &&
+      object.SyncActionSigner !== null
+    ) {
+      message.SyncActionSigner = SyncActionSigner.fromJSON(
+        object.SyncActionSigner
+      );
+    } else {
+      message.SyncActionSigner = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetSyncActionSignerResponse): unknown {
+    const obj: any = {};
+    message.SyncActionSigner !== undefined &&
+      (obj.SyncActionSigner = message.SyncActionSigner
+        ? SyncActionSigner.toJSON(message.SyncActionSigner)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetSyncActionSignerResponse>
+  ): QueryGetSyncActionSignerResponse {
+    const message = {
+      ...baseQueryGetSyncActionSignerResponse,
+    } as QueryGetSyncActionSignerResponse;
+    if (
+      object.SyncActionSigner !== undefined &&
+      object.SyncActionSigner !== null
+    ) {
+      message.SyncActionSigner = SyncActionSigner.fromPartial(
+        object.SyncActionSigner
+      );
+    } else {
+      message.SyncActionSigner = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllSyncActionSignerRequest: object = {};
+
+export const QueryAllSyncActionSignerRequest = {
+  encode(
+    message: QueryAllSyncActionSignerRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllSyncActionSignerRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllSyncActionSignerRequest,
+    } as QueryAllSyncActionSignerRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllSyncActionSignerRequest {
+    const message = {
+      ...baseQueryAllSyncActionSignerRequest,
+    } as QueryAllSyncActionSignerRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllSyncActionSignerRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageRequest.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllSyncActionSignerRequest>
+  ): QueryAllSyncActionSignerRequest {
+    const message = {
+      ...baseQueryAllSyncActionSignerRequest,
+    } as QueryAllSyncActionSignerRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllSyncActionSignerResponse: object = {};
+
+export const QueryAllSyncActionSignerResponse = {
+  encode(
+    message: QueryAllSyncActionSignerResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.SyncActionSigner) {
+      SyncActionSigner.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllSyncActionSignerResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllSyncActionSignerResponse,
+    } as QueryAllSyncActionSignerResponse;
+    message.SyncActionSigner = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.SyncActionSigner.push(
+            SyncActionSigner.decode(reader, reader.uint32())
+          );
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllSyncActionSignerResponse {
+    const message = {
+      ...baseQueryAllSyncActionSignerResponse,
+    } as QueryAllSyncActionSignerResponse;
+    message.SyncActionSigner = [];
+    if (
+      object.SyncActionSigner !== undefined &&
+      object.SyncActionSigner !== null
+    ) {
+      for (const e of object.SyncActionSigner) {
+        message.SyncActionSigner.push(SyncActionSigner.fromJSON(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllSyncActionSignerResponse): unknown {
+    const obj: any = {};
+    if (message.SyncActionSigner) {
+      obj.SyncActionSigner = message.SyncActionSigner.map((e) =>
+        e ? SyncActionSigner.toJSON(e) : undefined
+      );
+    } else {
+      obj.SyncActionSigner = [];
+    }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageResponse.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllSyncActionSignerResponse>
+  ): QueryAllSyncActionSignerResponse {
+    const message = {
+      ...baseQueryAllSyncActionSignerResponse,
+    } as QueryAllSyncActionSignerResponse;
+    message.SyncActionSigner = [];
+    if (
+      object.SyncActionSigner !== undefined &&
+      object.SyncActionSigner !== null
+    ) {
+      for (const e of object.SyncActionSigner) {
+        message.SyncActionSigner.push(SyncActionSigner.fromPartial(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -1674,10 +2749,18 @@ export interface Query {
   ActionOracleRequest(
     request: QueryGetActionRequestRequest
   ): Promise<QueryGetActionRequestResponse>;
+  /** Queries a ActionRequest by id. */
+  ActionOracleRequestV063(
+    request: QueryGetActionRequestRequest
+  ): Promise<QueryGetActionRequestResponseV063>;
   /** Queries a list of ActionRequest items. */
   ActionRequestAll(
     request: QueryAllActionRequestRequest
   ): Promise<QueryAllActionRequestResponse>;
+  /** Queries a list of ActionRequest items. */
+  ActionRequestAllV063(
+    request: QueryAllActionRequestRequest
+  ): Promise<QueryAllActionRequestResponseV063>;
   /** Queries a CollectionOwnerRequest by id. */
   CollectionOwnerRequest(
     request: QueryGetCollectionOwnerRequestRequest
@@ -1698,6 +2781,26 @@ export interface Query {
   ActionSignerAll(
     request: QueryAllActionSignerRequest
   ): Promise<QueryAllActionSignerResponse>;
+  /** Queries a BindedSigner by index. */
+  BindedSigner(
+    request: QueryGetBindedSignerRequest
+  ): Promise<QueryGetBindedSignerResponse>;
+  /** Queries a ActionSignerConfig by index. */
+  ActionSignerConfig(
+    request: QueryGetActionSignerConfigRequest
+  ): Promise<QueryGetActionSignerConfigResponse>;
+  /** Queries a list of ActionSignerConfig items. */
+  ActionSignerConfigAll(
+    request: QueryAllActionSignerConfigRequest
+  ): Promise<QueryAllActionSignerConfigResponse>;
+  /** Queries a SyncActionSigner by id. */
+  SyncActionSigner(
+    request: QueryGetSyncActionSignerRequest
+  ): Promise<QueryGetSyncActionSignerResponse>;
+  /** Queries a list of SyncActionSigner items. */
+  SyncActionSignerAll(
+    request: QueryAllSyncActionSignerRequest
+  ): Promise<QueryAllSyncActionSignerResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -1757,6 +2860,20 @@ export class QueryClientImpl implements Query {
     );
   }
 
+  ActionOracleRequestV063(
+    request: QueryGetActionRequestRequest
+  ): Promise<QueryGetActionRequestResponseV063> {
+    const data = QueryGetActionRequestRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Query",
+      "ActionOracleRequestV063",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetActionRequestResponseV063.decode(new Reader(data))
+    );
+  }
+
   ActionRequestAll(
     request: QueryAllActionRequestRequest
   ): Promise<QueryAllActionRequestResponse> {
@@ -1768,6 +2885,20 @@ export class QueryClientImpl implements Query {
     );
     return promise.then((data) =>
       QueryAllActionRequestResponse.decode(new Reader(data))
+    );
+  }
+
+  ActionRequestAllV063(
+    request: QueryAllActionRequestRequest
+  ): Promise<QueryAllActionRequestResponseV063> {
+    const data = QueryAllActionRequestRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Query",
+      "ActionRequestAllV063",
+      data
+    );
+    return promise.then((data) =>
+      QueryAllActionRequestResponseV063.decode(new Reader(data))
     );
   }
 
@@ -1838,6 +2969,76 @@ export class QueryClientImpl implements Query {
     );
     return promise.then((data) =>
       QueryAllActionSignerResponse.decode(new Reader(data))
+    );
+  }
+
+  BindedSigner(
+    request: QueryGetBindedSignerRequest
+  ): Promise<QueryGetBindedSignerResponse> {
+    const data = QueryGetBindedSignerRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Query",
+      "BindedSigner",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetBindedSignerResponse.decode(new Reader(data))
+    );
+  }
+
+  ActionSignerConfig(
+    request: QueryGetActionSignerConfigRequest
+  ): Promise<QueryGetActionSignerConfigResponse> {
+    const data = QueryGetActionSignerConfigRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Query",
+      "ActionSignerConfig",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetActionSignerConfigResponse.decode(new Reader(data))
+    );
+  }
+
+  ActionSignerConfigAll(
+    request: QueryAllActionSignerConfigRequest
+  ): Promise<QueryAllActionSignerConfigResponse> {
+    const data = QueryAllActionSignerConfigRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Query",
+      "ActionSignerConfigAll",
+      data
+    );
+    return promise.then((data) =>
+      QueryAllActionSignerConfigResponse.decode(new Reader(data))
+    );
+  }
+
+  SyncActionSigner(
+    request: QueryGetSyncActionSignerRequest
+  ): Promise<QueryGetSyncActionSignerResponse> {
+    const data = QueryGetSyncActionSignerRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Query",
+      "SyncActionSigner",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetSyncActionSignerResponse.decode(new Reader(data))
+    );
+  }
+
+  SyncActionSignerAll(
+    request: QueryAllSyncActionSignerRequest
+  ): Promise<QueryAllSyncActionSignerResponse> {
+    const data = QueryAllSyncActionSignerRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftoracle.Query",
+      "SyncActionSignerAll",
+      data
+    );
+    return promise.then((data) =>
+      QueryAllSyncActionSignerResponse.decode(new Reader(data))
     );
   }
 }

@@ -18,18 +18,8 @@ export interface NftadminAuthorization {
   permissions?: NftadminPermissions;
 }
 
-export interface NftadminMsgBurnResponse {
-  amount?: string;
-  token?: string;
-}
-
 export interface NftadminMsgGrantPermissionResponse {
   grantee?: string;
-}
-
-export interface NftadminMsgMintResponse {
-  amount?: string;
-  token?: string;
 }
 
 export interface NftadminMsgRevokePermissionResponse {
