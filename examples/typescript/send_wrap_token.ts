@@ -1,5 +1,6 @@
-import { SixDataChainConnector, typesTxTokenManager, fee} from "../../src"; // from "@sixnetwork/six-data-chain-sdk";
+import { SixDataChainConnector, fee, typesTxTokenManager } from "../../src"; // from "@sixnetwork/six-data-chain-sdk";
 import { EncodeObject } from "@cosmjs/proto-signing";
+import { GasPrice, calculateFee } from "@cosmjs/stargate/build/fee";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -19,29 +20,29 @@ const main = async () => {
   // Get index of account
   const address = (await accountSigner.getAccounts())[0].address;
   const rpcClient = await sixConnector.connectRPCClient(accountSigner, {
-    gasPrice: fee.GasPrice.fromString("1.25usix"),
+    gasPrice: GasPrice.fromString("1.25usix"),
   });
 
   const msgArray: Array<EncodeObject> = [];
 
-  const wrapTokenMsg: typesTxTokenManager.MsgUnwrapToken = {
+  const sendWrapTokenMsg: typesTxTokenManager.MsgSendWrapToken = {
     creator: address,
+    ethAddress: "0x549a10Dba089E4BFD329aa726d968c8ca4222f47",
     amount: {
       denom: "asix",
       amount: "200000000000000000000",
     },
-    receiver:address, // wrap to self
   };
 
-  const msg = await rpcClient.tokenmngrModule.msgUnwrapToken(
-    wrapTokenMsg
-  );
+  const msg = await rpcClient.tokenmngrModule.msgSendWrapToken(sendWrapTokenMsg);
   msgArray.push(msg);
-  const txResponse =
-    await rpcClient.tokenmngrModule.signAndBroadcast(msgArray, {
+  const txResponse = await rpcClient.tokenmngrModule.signAndBroadcast(
+    msgArray,
+    {
       fee: "auto",
-      memo: "convert asix to alice",
-    });
+      memo: "send asix to 0x549a10Dba089E4BFD329aa726d968c8ca4222f47",
+    }
+  );
   if (txResponse.code) {
     console.log(txResponse.rawLog);
   }
