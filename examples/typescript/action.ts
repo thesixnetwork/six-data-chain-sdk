@@ -1,6 +1,5 @@
-import { SixDataChainConnector } from "../../src/client";
+import { SixDataChainConnector, typesTxNFTManager } from "../../src"; // from "@sixnetwork/six-data-chain-sdk";
 import { EncodeObject } from "@cosmjs/proto-signing";
-import { ITxNFTmngr } from "../../src/";
 
 const main = async () => {
     const sixConnector = new SixDataChainConnector()
@@ -28,7 +27,7 @@ const main = async () => {
     //     }]
     // }
 
-    const action : ITxNFTmngr.MsgPerformActionByAdmin = {
+    const action : typesTxNFTManager.MsgPerformActionByAdmin = {
         creator: address,
         nft_schema_code: "six.rocket_ticket",
         tokenId: "1",

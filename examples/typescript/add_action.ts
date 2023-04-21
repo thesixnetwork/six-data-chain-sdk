@@ -1,6 +1,6 @@
-import { SixDataChainConnector } from "../../src/client";
-import { BASE64 } from "../../src/helper/base64";
+import { SixDataChainConnector, BASE64, typesTxNFTManager, fee } from "../../src"; // from "@sixnetwork/six-data-chain-sdk";
 import exampleNewAction from "./resource/new-action.json";
+
 const main = async () => {
   const sixConnector = new SixDataChainConnector();
   // specify the RPC URL of the chain
@@ -12,16 +12,18 @@ const main = async () => {
   );
   // Get index of account
   const address = (await accountSigner.getAccounts())[0].address;
-  const rpcClient = await sixConnector.connectRPCClient(accountSigner);
+  const rpcClient = await sixConnector.connectRPCClient(accountSigner, { gasPrice: fee.GasPrice.fromString("1.25usix") })
   // Encode NFT data to base64
   const encodeBase64NewAction = BASE64.encode(JSON.stringify(exampleNewAction));
-  const msg = await rpcClient.nftmngrModule.msgAddAction({
+  // Create message
+  const addAction:typesTxNFTManager.MsgAddAction = {
     creator: address,
     code: "six.rocket_ticket",
     base64NewAction: encodeBase64NewAction,
-  });
+  }
+  const msg = await rpcClient.nftmngrModule.msgAddAction(addAction);
   const txResponse = await rpcClient.nftmngrModule.signAndBroadcast([msg], {
-    fee: { amount: [{ denom: "usix", amount: "10000000" }], gas: "1500000" },
+    fee: "auto",
     memo: "Mint NFT Metadata Token 1",
   });
 
