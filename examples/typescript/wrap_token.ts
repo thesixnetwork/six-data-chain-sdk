@@ -29,10 +29,10 @@ const main = async () => {
     creator: address,
     amount: {
       denom: "usix",
-      amount: "100000000",
+      amount: "100000000", // 100000000 == 100000000000000000000asix (100 six)
     },
-    // receiver: "0x549a10Dba089E4BFD329aa726d968c8ca4222f47",
-    receiver:address,
+    receiver: "0x549a10Dba089E4BFD329aa726d968c8ca4222f47", // wrao to evm address
+    // receiver:address, // wrap to self
   };
 
   const msg = await rpcClient.tokenmngrModule.msgWrapToken(
@@ -42,7 +42,7 @@ const main = async () => {
   const txResponse =
     await rpcClient.tokenmngrModule.signAndBroadcast(msgArray, {
       fee: "auto",
-      memo: "convert usix to 0x549a10Dba089E4BFD329aa726d968c8ca4222f47",
+      memo: "wrap usix to 0x549a10Dba089E4BFD329aa726d968c8ca4222f47",
     });
   if (txResponse.code) {
     console.log(txResponse.rawLog);

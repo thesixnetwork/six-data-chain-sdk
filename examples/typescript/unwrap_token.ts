@@ -30,8 +30,7 @@ const main = async () => {
       denom: "asix",
       amount: "200000000000000000000",
     },
-    // receiver: "0x549a10Dba089E4BFD329aa726d968c8ca4222f47",
-    receiver:address,
+    receiver:address, // wrap to self
   };
 
   const msg = await rpcClient.tokenmngrModule.msgUnwrapToken(
