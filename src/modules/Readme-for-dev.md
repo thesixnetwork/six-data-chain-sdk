@@ -2,7 +2,7 @@
 - 1 build sixnft datachain
 - 2 delete index.ts ./sixnft/sixnft.{module}/index.ts
 - 3 search all remove
-```
+```typescript
 if (util.Long !== Long) {
   util.Long = Long as any;
   configure();
