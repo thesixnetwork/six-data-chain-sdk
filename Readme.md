@@ -22,7 +22,7 @@ yarn add six-data-chain-sdk
 
 ## EXAMPLE
 
-You can try example in this link [SIX DATACHAIN EXAMPLE](https://github.com/thesixnetwork/six-data-chain-sdk/tree/release-v3.1.1/examples)
+You can try example in this link [SIX DATACHAIN EXAMPLE](https://github.com/thesixnetwork/six-data-chain-sdk/tree/release-v3.4.0/examples)
 
 ------
 <!-- ## LIBRARY STRUCTURE
