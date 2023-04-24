@@ -1,9 +1,9 @@
-import { SixDataChainConnector } from "../../src/client";
-import { BASE64 } from "../../src/helper/base64";
+import { SixDataChainConnector, BASE64, typesTxNFTManager, fee } from "../../src"; // from "@sixnetwork/six-data-chain-sdk";
 import nft_schema from "./resource/nft-schema-example.json";
 import {StdFee} from "@cosmjs/amino";
 import { Decimal } from "@cosmjs/math";
 import { GasPrice, calculateFee } from "@cosmjs/stargate/build/fee"
+import { coins } from '@cosmjs/proto-signing';
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -20,16 +20,19 @@ const Deploy = async () => {
   // const accountSigner = await sixConnector.accounts.mnemonicKeyToAccount(process.env.MNEMONIC);
 
   const address = (await accountSigner.getAccounts())[0].address;
-  const rpcClient = await sixConnector.connectRPCClient(accountSigner, { gasPrice: GasPrice.fromString("1.25usix") })
-
+  const rpcClient = await sixConnector.connectRPCClient(accountSigner, { gasPrice: fee.GasPrice.fromString("1.25usix") })
+  // fees = 10000000usix
+  const gasPrice = GasPrice.fromString("1.25usix");
   const encodeBase64Schema = BASE64.encode(JSON.stringify(nft_schema));
-  const msg = await rpcClient.nftmngrModule.msgCreateNFTSchema({
+  // create schema message
+  const createMetadata:typesTxNFTManager.MsgCreateNFTSchema = {
     creator: address,
     nftSchemaBase64: encodeBase64Schema,
-  });
+  }
+  const msg = await rpcClient.nftmngrModule.msgCreateNFTSchema(createMetadata);
 
   const txResponse = await rpcClient.nftmngrModule.signAndBroadcast([msg],{
-    fee: 'auto',
+    fee: "auto",
   });
   if (txResponse.code) {
     console.log(txResponse.rawLog);

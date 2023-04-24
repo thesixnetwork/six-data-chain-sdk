@@ -54,6 +54,20 @@ export interface NftmngrAttributeDefinition {
   display_value_field?: string;
   display_option?: NftmngrDisplayOption;
   default_mint_value?: NftmngrDefaultMintValue;
+  hidden_overide?: boolean;
+  hidden_to_marketplace?: boolean;
+
+  /** @format uint64 */
+  index?: string;
+}
+
+export interface NftmngrAttributeDefinitionV072 {
+  name?: string;
+  data_type?: string;
+  required?: boolean;
+  display_value_field?: string;
+  display_option?: NftmngrDisplayOption;
+  default_mint_value?: NftmngrDefaultMintValue;
   hidden_to_marketplace?: boolean;
 
   /** @format uint64 */
@@ -167,6 +181,11 @@ export interface NftmngrMsgCreateMetadataResponse {
   tokenId?: string;
 }
 
+export interface NftmngrMsgCreateMultiMetadataResponse {
+  nftSchemaCode?: string;
+  tokenId?: string[];
+}
+
 export interface NftmngrMsgCreateNFTSchemaResponse {
   code?: string;
 }
@@ -174,6 +193,12 @@ export interface NftmngrMsgCreateNFTSchemaResponse {
 export interface NftmngrMsgPerformActionByAdminResponse {
   nft_schema_code?: string;
   token_id?: string;
+}
+
+export interface NftmngrMsgPerformMultiTokenActionResponse {
+  nftSchemaCode?: string;
+  tokenId?: string[];
+  action?: string[];
 }
 
 export interface NftmngrMsgRemoveSystemActionerResponse {
@@ -185,12 +210,22 @@ export interface NftmngrMsgResyncAttributesResponse {
   nftSchemaCode?: string;
 }
 
+export interface NftmngrMsgSetAttributeOveridingResponse {
+  schemaCode?: string;
+  newOveriding?: string;
+}
+
 export interface NftmngrMsgSetBaseUriResponse {
   code?: string;
   uri?: string;
 }
 
 export type NftmngrMsgSetFeeConfigResponse = object;
+
+export interface NftmngrMsgSetMetadataFormatResponse {
+  schemaCode?: string;
+  newFormat?: string;
+}
 
 export interface NftmngrMsgSetMintauthResponse {
   nftSchemaCode?: string;
@@ -200,6 +235,21 @@ export interface NftmngrMsgSetNFTAttributeResponse {
   nft_schema_code?: string;
   attribute_name?: string;
   nft_attribute_value?: string;
+}
+
+export interface NftmngrMsgSetOriginChainResponse {
+  schemaCode?: string;
+  newOriginChain?: string;
+}
+
+export interface NftmngrMsgSetOriginContractResponse {
+  schemaCode?: string;
+  newContractAddress?: string;
+}
+
+export interface NftmngrMsgSetUriRetrievalMethodResponse {
+  schemaCode?: string;
+  newMethod?: string;
 }
 
 export interface NftmngrMsgShowAttributesResponse {
@@ -243,6 +293,17 @@ export interface NftmngrNFTSchemaV063 {
   system_actioners?: string[];
   origin_data?: NftmngrOriginData;
   onchain_data?: NftmngrOnChainDataV063;
+  isVerified?: boolean;
+  mint_authorization?: string;
+}
+
+export interface NftmngrNFTSchemaV072 {
+  code?: string;
+  name?: string;
+  owner?: string;
+  system_actioners?: string[];
+  origin_data?: NftmngrOriginData;
+  onchain_data?: NftmngrOnChainDataV072;
   isVerified?: boolean;
   mint_authorization?: string;
 }
@@ -293,6 +354,18 @@ export interface NftmngrOnChainDataV063 {
   nft_attributes?: NftmngrAttributeDefinition[];
   token_attributes?: NftmngrAttributeDefinition[];
   actions?: NftmngrActionV063[];
+  status?: NftmngrFlagStatus[];
+  nft_attributes_value?: NftmngrNftAttributeValue[];
+}
+
+export interface NftmngrOnChainDataV072 {
+  reveal_required?: boolean;
+
+  /** @format byte */
+  reveal_secret?: string;
+  nft_attributes?: NftmngrAttributeDefinitionV072[];
+  token_attributes?: NftmngrAttributeDefinitionV072[];
+  actions?: NftmngrAction[];
   status?: NftmngrFlagStatus[];
   nft_attributes_value?: NftmngrNftAttributeValue[];
 }
@@ -405,6 +478,21 @@ export interface NftmngrQueryAllNFTSchemaResponseV063 {
   pagination?: V1Beta1PageResponse;
 }
 
+export interface NftmngrQueryAllNFTSchemaResponseV072 {
+  nFTSchemaV072?: NftmngrNFTSchemaV072[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
 export interface NftmngrQueryAllNftDataResponse {
   nftData?: NftmngrNftData[];
 
@@ -461,6 +549,10 @@ export interface NftmngrQueryGetNFTSchemaResponse {
 
 export interface NftmngrQueryGetNFTSchemaResponseV063 {
   nFTSchemaV063?: NftmngrNFTSchemaV063;
+}
+
+export interface NftmngrQueryGetNFTSchemaResponseV072 {
+  nFTSchemaV072?: NftmngrNFTSchemaV072;
 }
 
 export interface NftmngrQueryGetNftCollectionResponse {
@@ -673,11 +765,7 @@ export interface V1Beta1PageRequest {
    */
   count_total?: boolean;
 
-  /**
-   * reverse is set to true if results are to be returned in the descending order.
-   *
-   * Since: cosmos-sdk 0.43
-   */
+  /** reverse is set to true if results are to be returned in the descending order. */
   reverse?: boolean;
 }
 
@@ -1122,16 +1210,33 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     });
 
   /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryNftSchemaV063
-   * @summary Queries a NFTSchema by index.
-   * @request GET:/thesixnetwork/sixnft/nftmngr/nft_schema_063/{code}
-   */
+ * No description
+ * 
+ * @tags Query
+ * @name QueryNftSchemaV063
+ * @summary will be deprecated next version (074)
+Queries a NFTSchema by index.
+ * @request GET:/thesixnetwork/sixnft/nftmngr/nft_schema_063/{code}
+ */
   queryNftSchemaV063 = (code: string, params: RequestParams = {}) =>
     this.request<NftmngrQueryGetNFTSchemaResponseV063, RpcStatus>({
       path: `/thesixnetwork/sixnft/nftmngr/nft_schema_063/${code}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryNftSchemaV072
+   * @summary Queries a NFTSchema by index.
+   * @request GET:/thesixnetwork/sixnft/nftmngr/nft_schema_072/{code}
+   */
+  queryNftSchemaV072 = (code: string, params: RequestParams = {}) =>
+    this.request<NftmngrQueryGetNFTSchemaResponseV072, RpcStatus>({
+      path: `/thesixnetwork/sixnft/nftmngr/nft_schema_072/${code}`,
       method: "GET",
       format: "json",
       ...params,
@@ -1180,13 +1285,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     });
 
   /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryNftSchemaAllV063
-   * @summary Queries a list of NFTSchema items.
-   * @request GET:/thesixnetwork/sixnft/nftmngr/nft_schema_v063
-   */
+ * No description
+ * 
+ * @tags Query
+ * @name QueryNftSchemaAllV063
+ * @summary will be deprecated next version (074)
+Queries a list of NFTSchema items.
+ * @request GET:/thesixnetwork/sixnft/nftmngr/nft_schema_v063
+ */
   queryNftSchemaAllV063 = (
     query?: {
       "pagination.key"?: string;
@@ -1199,6 +1305,32 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   ) =>
     this.request<NftmngrQueryAllNFTSchemaResponseV063, RpcStatus>({
       path: `/thesixnetwork/sixnft/nftmngr/nft_schema_v063`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryNftSchemaAllV072
+   * @summary Queries a list of NFTSchema items.
+   * @request GET:/thesixnetwork/sixnft/nftmngr/nft_schema_v072
+   */
+  queryNftSchemaAllV072 = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<NftmngrQueryAllNFTSchemaResponseV072, RpcStatus>({
+      path: `/thesixnetwork/sixnft/nftmngr/nft_schema_v072`,
       method: "GET",
       query: query,
       format: "json",

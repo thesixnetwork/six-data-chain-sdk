@@ -1,17 +1,11 @@
-import { SixDataChainConnector } from "../../src/client";
-import { BASE64 } from "../../src/helper/base64";
+import { SixDataChainConnector,typesTxNFTManager, BASE64 } from "../../src"; // from "@sixnetwork/six-data-chain-sdk";
 import { EncodeObject } from "@cosmjs/proto-signing";
 import exampleNFTData from "./resource/nft-metadata-example.json";
-import {StdFee} from "@cosmjs/amino";
-import { Decimal } from "@cosmjs/math";
 import { GasPrice, calculateFee } from "@cosmjs/stargate/build/fee"
 // import { MsgPerformActionByAdmin } from "./interface/IAction";
-import { ITxNFTmngr } from "../../src/";
 import fs from 'fs'
 import dotenv from "dotenv";
 dotenv.config();
-
-const schemaCode = exampleNFTData.nft_schema_code;
 
 const MultiAction = async () => {
   const sixConnector = new SixDataChainConnector();
@@ -47,7 +41,7 @@ const MultiAction = async () => {
       // replace token id
       let token_id = String(tokenCount);
 
-      const action : ITxNFTmngr.MsgPerformActionByAdmin = {
+      const action : typesTxNFTManager.MsgPerformActionByAdmin = {
         creator: address,
         nft_schema_code: exampleNFTData.nft_schema_code,
         tokenId: token_id,
