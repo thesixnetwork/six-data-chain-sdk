@@ -1,7 +1,6 @@
 /* eslint-disable */
-import * as Long from "long";
-import { util, configure, Writer, Reader } from "protobufjs/minimal";
 import { Coin } from "../cosmos/base/v1beta1/coin";
+import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "thesixnetwork.sixprotocol.tokenmngr";
 
@@ -10,14 +9,6 @@ export interface Token {
   name: string;
   base: string;
   maxSupply: Coin | undefined;
-  mintee: string;
-  creator: string;
-}
-
-export interface TokenV202 {
-  name: string;
-  base: string;
-  maxSupply: number;
   mintee: string;
   creator: string;
 }
@@ -182,135 +173,6 @@ export const Token = {
       message.maxSupply = Coin.fromPartial(object.maxSupply);
     } else {
       message.maxSupply = undefined;
-    }
-    if (object.mintee !== undefined && object.mintee !== null) {
-      message.mintee = object.mintee;
-    } else {
-      message.mintee = "";
-    }
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    return message;
-  },
-};
-
-const baseTokenV202: object = {
-  name: "",
-  base: "",
-  maxSupply: 0,
-  mintee: "",
-  creator: "",
-};
-
-export const TokenV202 = {
-  encode(message: TokenV202, writer: Writer = Writer.create()): Writer {
-    if (message.name !== "") {
-      writer.uint32(10).string(message.name);
-    }
-    if (message.base !== "") {
-      writer.uint32(18).string(message.base);
-    }
-    if (message.maxSupply !== 0) {
-      writer.uint32(24).uint64(message.maxSupply);
-    }
-    if (message.mintee !== "") {
-      writer.uint32(34).string(message.mintee);
-    }
-    if (message.creator !== "") {
-      writer.uint32(42).string(message.creator);
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): TokenV202 {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseTokenV202 } as TokenV202;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.name = reader.string();
-          break;
-        case 2:
-          message.base = reader.string();
-          break;
-        case 3:
-          message.maxSupply = longToNumber(reader.uint64() as Long);
-          break;
-        case 4:
-          message.mintee = reader.string();
-          break;
-        case 5:
-          message.creator = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): TokenV202 {
-    const message = { ...baseTokenV202 } as TokenV202;
-    if (object.name !== undefined && object.name !== null) {
-      message.name = String(object.name);
-    } else {
-      message.name = "";
-    }
-    if (object.base !== undefined && object.base !== null) {
-      message.base = String(object.base);
-    } else {
-      message.base = "";
-    }
-    if (object.maxSupply !== undefined && object.maxSupply !== null) {
-      message.maxSupply = Number(object.maxSupply);
-    } else {
-      message.maxSupply = 0;
-    }
-    if (object.mintee !== undefined && object.mintee !== null) {
-      message.mintee = String(object.mintee);
-    } else {
-      message.mintee = "";
-    }
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    return message;
-  },
-
-  toJSON(message: TokenV202): unknown {
-    const obj: any = {};
-    message.name !== undefined && (obj.name = message.name);
-    message.base !== undefined && (obj.base = message.base);
-    message.maxSupply !== undefined && (obj.maxSupply = message.maxSupply);
-    message.mintee !== undefined && (obj.mintee = message.mintee);
-    message.creator !== undefined && (obj.creator = message.creator);
-    return obj;
-  },
-
-  fromPartial(object: DeepPartial<TokenV202>): TokenV202 {
-    const message = { ...baseTokenV202 } as TokenV202;
-    if (object.name !== undefined && object.name !== null) {
-      message.name = object.name;
-    } else {
-      message.name = "";
-    }
-    if (object.base !== undefined && object.base !== null) {
-      message.base = object.base;
-    } else {
-      message.base = "";
-    }
-    if (object.maxSupply !== undefined && object.maxSupply !== null) {
-      message.maxSupply = object.maxSupply;
-    } else {
-      message.maxSupply = 0;
     }
     if (object.mintee !== undefined && object.mintee !== null) {
       message.mintee = object.mintee;
@@ -578,16 +440,6 @@ export const Metadata = {
   },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
-
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
@@ -598,12 +450,3 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-function longToNumber(long: Long): number {
-  if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
-  }
-  return long.toNumber();
-}
-
-

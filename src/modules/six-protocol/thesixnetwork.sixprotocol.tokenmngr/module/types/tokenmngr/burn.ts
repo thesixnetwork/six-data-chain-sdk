@@ -11,13 +11,6 @@ export interface Burn {
   amount: Coin | undefined;
 }
 
-export interface BurnV202 {
-  id: number;
-  creator: string;
-  token: string;
-  amount: number;
-}
-
 const baseBurn: object = { id: 0, creator: "" };
 
 export const Burn = {
@@ -103,112 +96,6 @@ export const Burn = {
       message.amount = Coin.fromPartial(object.amount);
     } else {
       message.amount = undefined;
-    }
-    return message;
-  },
-};
-
-const baseBurnV202: object = { id: 0, creator: "", token: "", amount: 0 };
-
-export const BurnV202 = {
-  encode(message: BurnV202, writer: Writer = Writer.create()): Writer {
-    if (message.id !== 0) {
-      writer.uint32(8).uint64(message.id);
-    }
-    if (message.creator !== "") {
-      writer.uint32(18).string(message.creator);
-    }
-    if (message.token !== "") {
-      writer.uint32(26).string(message.token);
-    }
-    if (message.amount !== 0) {
-      writer.uint32(32).uint64(message.amount);
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): BurnV202 {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseBurnV202 } as BurnV202;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.id = longToNumber(reader.uint64() as Long);
-          break;
-        case 2:
-          message.creator = reader.string();
-          break;
-        case 3:
-          message.token = reader.string();
-          break;
-        case 4:
-          message.amount = longToNumber(reader.uint64() as Long);
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): BurnV202 {
-    const message = { ...baseBurnV202 } as BurnV202;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = Number(object.id);
-    } else {
-      message.id = 0;
-    }
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator);
-    } else {
-      message.creator = "";
-    }
-    if (object.token !== undefined && object.token !== null) {
-      message.token = String(object.token);
-    } else {
-      message.token = "";
-    }
-    if (object.amount !== undefined && object.amount !== null) {
-      message.amount = Number(object.amount);
-    } else {
-      message.amount = 0;
-    }
-    return message;
-  },
-
-  toJSON(message: BurnV202): unknown {
-    const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
-    message.creator !== undefined && (obj.creator = message.creator);
-    message.token !== undefined && (obj.token = message.token);
-    message.amount !== undefined && (obj.amount = message.amount);
-    return obj;
-  },
-
-  fromPartial(object: DeepPartial<BurnV202>): BurnV202 {
-    const message = { ...baseBurnV202 } as BurnV202;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = 0;
-    }
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator;
-    } else {
-      message.creator = "";
-    }
-    if (object.token !== undefined && object.token !== null) {
-      message.token = object.token;
-    } else {
-      message.token = "";
-    }
-    if (object.amount !== undefined && object.amount !== null) {
-      message.amount = object.amount;
-    } else {
-      message.amount = 0;
     }
     return message;
   },
