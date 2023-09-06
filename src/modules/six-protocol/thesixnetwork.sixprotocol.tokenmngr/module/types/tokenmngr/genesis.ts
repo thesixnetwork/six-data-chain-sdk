@@ -1,9 +1,9 @@
 /* eslint-disable */
-import { Params } from "./params";
-import { Token } from "./token";
-import { Mintperm } from "./mintperm";
-import { Options } from "./options";
-import { TokenBurn } from "./token_burn";
+import { Params } from "../tokenmngr/params";
+import { Token } from "../tokenmngr/token";
+import { Mintperm } from "../tokenmngr/mintperm";
+import { Options } from "../tokenmngr/options";
+import { TokenBurn } from "../tokenmngr/token_burn";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "thesixnetwork.sixprotocol.tokenmngr";

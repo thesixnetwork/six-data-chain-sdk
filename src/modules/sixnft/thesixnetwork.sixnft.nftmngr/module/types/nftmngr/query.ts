@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { Reader, Writer } from "protobufjs/minimal";
 import { Params } from "../nftmngr/params";
-import { NFTSchema, NFTSchemaV063, NFTSchemaV072 } from "../nftmngr/nft_schema";
+import { NFTSchema } from "../nftmngr/nft_schema";
 import {
   PageRequest,
   PageResponse,
@@ -13,6 +13,10 @@ import { NFTSchemaByContract } from "../nftmngr/nft_schema_by_contract";
 import { NFTFeeConfig } from "../nftmngr/nft_fee_config";
 import { NFTFeeBalance } from "../nftmngr/nft_fee_balance";
 import { MetadataCreator } from "../nftmngr/metadata_creator";
+import { ActionExecutor } from "../nftmngr/action_executor";
+import { SchemaAttribute } from "../nftmngr/schema_attribute";
+import { ActionOfSchema } from "../nftmngr/action_of_schema";
+import { ExecutorOfSchema } from "../nftmngr/executor_of_schema";
 
 export const protobufPackage = "thesixnetwork.sixnft.nftmngr";
 
@@ -33,16 +37,6 @@ export interface QueryGetNFTSchemaResponse {
   nFTSchema: NFTSchema | undefined;
 }
 
-/** will be deprecated next version (074) */
-export interface QueryGetNFTSchemaResponseV063 {
-  nFTSchemaV063: NFTSchemaV063 | undefined;
-}
-
-/** will be deprecated next version (074) */
-export interface QueryGetNFTSchemaResponseV072 {
-  nFTSchemaV072: NFTSchemaV072 | undefined;
-}
-
 export interface QueryAllNFTSchemaRequest {
   pagination: PageRequest | undefined;
 }
@@ -52,21 +46,10 @@ export interface QueryAllNFTSchemaResponse {
   pagination: PageResponse | undefined;
 }
 
-/** will be deprecated next version (074) */
-export interface QueryAllNFTSchemaResponseV063 {
-  nFTSchemaV063: NFTSchemaV063[];
-  pagination: PageResponse | undefined;
-}
-
-/** will be deprecated next version (074) */
-export interface QueryAllNFTSchemaResponseV072 {
-  nFTSchemaV072: NFTSchemaV072[];
-  pagination: PageResponse | undefined;
-}
-
 export interface QueryGetNftDataRequest {
   nftSchemaCode: string;
   tokenId: string;
+  withGlobal: boolean;
 }
 
 export interface QueryGetNftDataResponse {
@@ -74,6 +57,7 @@ export interface QueryGetNftDataResponse {
 }
 
 export interface QueryAllNftDataRequest {
+  withGlobal: boolean;
   pagination: PageRequest | undefined;
 }
 
@@ -170,6 +154,94 @@ export interface QueryAllMetadataCreatorRequest {
 export interface QueryAllMetadataCreatorResponse {
   metadataCreator: MetadataCreator[];
   pagination: PageResponse | undefined;
+}
+
+export interface QueryGetActionExecutorRequest {
+  nftSchemaCode: string;
+  executorAddress: string;
+}
+
+export interface QueryGetActionExecutorResponse {
+  actionExecutor: ActionExecutor | undefined;
+}
+
+export interface QueryAllActionExecutorRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryAllActionExecutorResponse {
+  actionExecutor: ActionExecutor[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryGetSchemaAttributeRequest {
+  nftSchemaCode: string;
+  name: string;
+}
+
+export interface QueryGetSchemaAttributeResponse {
+  schemaAttribute: SchemaAttribute | undefined;
+}
+
+export interface QueryAllSchemaAttributeRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryAllSchemaAttributeResponse {
+  schemaAttribute: SchemaAttribute[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryListAttributeBySchemaRequest {
+  nftSchemaCode: string;
+}
+
+export interface QueryListAttributeBySchemaResponse {
+  schemaAttribute: SchemaAttribute[];
+}
+
+export interface QueryGetActionOfSchemaRequest {
+  nftSchemaCode: string;
+  name: string;
+}
+
+export interface QueryGetActionOfSchemaResponse {
+  actionOfSchema: ActionOfSchema | undefined;
+}
+
+export interface QueryAllActionOfSchemaRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryAllActionOfSchemaResponse {
+  actionOfSchema: ActionOfSchema[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryGetExecutorOfSchemaRequest {
+  nftSchemaCode: string;
+}
+
+export interface QueryGetExecutorOfSchemaResponse {
+  executorOfSchema: ExecutorOfSchema | undefined;
+}
+
+export interface QueryAllExecutorOfSchemaRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryAllExecutorOfSchemaResponse {
+  executorOfSchema: ExecutorOfSchema[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryGetAttributeOfSchemaRequest {
+  nftSchemaCode: string;
+}
+
+export interface QueryGetAttributeOfSchemaResponse {
+  nftSchemaCode: string;
+  schemaAttribute: SchemaAttribute[];
 }
 
 const baseQueryParamsRequest: object = {};
@@ -410,156 +482,6 @@ export const QueryGetNFTSchemaResponse = {
   },
 };
 
-const baseQueryGetNFTSchemaResponseV063: object = {};
-
-export const QueryGetNFTSchemaResponseV063 = {
-  encode(
-    message: QueryGetNFTSchemaResponseV063,
-    writer: Writer = Writer.create()
-  ): Writer {
-    if (message.nFTSchemaV063 !== undefined) {
-      NFTSchemaV063.encode(
-        message.nFTSchemaV063,
-        writer.uint32(10).fork()
-      ).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): QueryGetNFTSchemaResponseV063 {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryGetNFTSchemaResponseV063,
-    } as QueryGetNFTSchemaResponseV063;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.nFTSchemaV063 = NFTSchemaV063.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): QueryGetNFTSchemaResponseV063 {
-    const message = {
-      ...baseQueryGetNFTSchemaResponseV063,
-    } as QueryGetNFTSchemaResponseV063;
-    if (object.nFTSchemaV063 !== undefined && object.nFTSchemaV063 !== null) {
-      message.nFTSchemaV063 = NFTSchemaV063.fromJSON(object.nFTSchemaV063);
-    } else {
-      message.nFTSchemaV063 = undefined;
-    }
-    return message;
-  },
-
-  toJSON(message: QueryGetNFTSchemaResponseV063): unknown {
-    const obj: any = {};
-    message.nFTSchemaV063 !== undefined &&
-      (obj.nFTSchemaV063 = message.nFTSchemaV063
-        ? NFTSchemaV063.toJSON(message.nFTSchemaV063)
-        : undefined);
-    return obj;
-  },
-
-  fromPartial(
-    object: DeepPartial<QueryGetNFTSchemaResponseV063>
-  ): QueryGetNFTSchemaResponseV063 {
-    const message = {
-      ...baseQueryGetNFTSchemaResponseV063,
-    } as QueryGetNFTSchemaResponseV063;
-    if (object.nFTSchemaV063 !== undefined && object.nFTSchemaV063 !== null) {
-      message.nFTSchemaV063 = NFTSchemaV063.fromPartial(object.nFTSchemaV063);
-    } else {
-      message.nFTSchemaV063 = undefined;
-    }
-    return message;
-  },
-};
-
-const baseQueryGetNFTSchemaResponseV072: object = {};
-
-export const QueryGetNFTSchemaResponseV072 = {
-  encode(
-    message: QueryGetNFTSchemaResponseV072,
-    writer: Writer = Writer.create()
-  ): Writer {
-    if (message.nFTSchemaV072 !== undefined) {
-      NFTSchemaV072.encode(
-        message.nFTSchemaV072,
-        writer.uint32(10).fork()
-      ).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): QueryGetNFTSchemaResponseV072 {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryGetNFTSchemaResponseV072,
-    } as QueryGetNFTSchemaResponseV072;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.nFTSchemaV072 = NFTSchemaV072.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): QueryGetNFTSchemaResponseV072 {
-    const message = {
-      ...baseQueryGetNFTSchemaResponseV072,
-    } as QueryGetNFTSchemaResponseV072;
-    if (object.nFTSchemaV072 !== undefined && object.nFTSchemaV072 !== null) {
-      message.nFTSchemaV072 = NFTSchemaV072.fromJSON(object.nFTSchemaV072);
-    } else {
-      message.nFTSchemaV072 = undefined;
-    }
-    return message;
-  },
-
-  toJSON(message: QueryGetNFTSchemaResponseV072): unknown {
-    const obj: any = {};
-    message.nFTSchemaV072 !== undefined &&
-      (obj.nFTSchemaV072 = message.nFTSchemaV072
-        ? NFTSchemaV072.toJSON(message.nFTSchemaV072)
-        : undefined);
-    return obj;
-  },
-
-  fromPartial(
-    object: DeepPartial<QueryGetNFTSchemaResponseV072>
-  ): QueryGetNFTSchemaResponseV072 {
-    const message = {
-      ...baseQueryGetNFTSchemaResponseV072,
-    } as QueryGetNFTSchemaResponseV072;
-    if (object.nFTSchemaV072 !== undefined && object.nFTSchemaV072 !== null) {
-      message.nFTSchemaV072 = NFTSchemaV072.fromPartial(object.nFTSchemaV072);
-    } else {
-      message.nFTSchemaV072 = undefined;
-    }
-    return message;
-  },
-};
-
 const baseQueryAllNFTSchemaRequest: object = {};
 
 export const QueryAllNFTSchemaRequest = {
@@ -733,213 +655,11 @@ export const QueryAllNFTSchemaResponse = {
   },
 };
 
-const baseQueryAllNFTSchemaResponseV063: object = {};
-
-export const QueryAllNFTSchemaResponseV063 = {
-  encode(
-    message: QueryAllNFTSchemaResponseV063,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.nFTSchemaV063) {
-      NFTSchemaV063.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.pagination !== undefined) {
-      PageResponse.encode(
-        message.pagination,
-        writer.uint32(18).fork()
-      ).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): QueryAllNFTSchemaResponseV063 {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryAllNFTSchemaResponseV063,
-    } as QueryAllNFTSchemaResponseV063;
-    message.nFTSchemaV063 = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.nFTSchemaV063.push(
-            NFTSchemaV063.decode(reader, reader.uint32())
-          );
-          break;
-        case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): QueryAllNFTSchemaResponseV063 {
-    const message = {
-      ...baseQueryAllNFTSchemaResponseV063,
-    } as QueryAllNFTSchemaResponseV063;
-    message.nFTSchemaV063 = [];
-    if (object.nFTSchemaV063 !== undefined && object.nFTSchemaV063 !== null) {
-      for (const e of object.nFTSchemaV063) {
-        message.nFTSchemaV063.push(NFTSchemaV063.fromJSON(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
-  },
-
-  toJSON(message: QueryAllNFTSchemaResponseV063): unknown {
-    const obj: any = {};
-    if (message.nFTSchemaV063) {
-      obj.nFTSchemaV063 = message.nFTSchemaV063.map((e) =>
-        e ? NFTSchemaV063.toJSON(e) : undefined
-      );
-    } else {
-      obj.nFTSchemaV063 = [];
-    }
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
-    return obj;
-  },
-
-  fromPartial(
-    object: DeepPartial<QueryAllNFTSchemaResponseV063>
-  ): QueryAllNFTSchemaResponseV063 {
-    const message = {
-      ...baseQueryAllNFTSchemaResponseV063,
-    } as QueryAllNFTSchemaResponseV063;
-    message.nFTSchemaV063 = [];
-    if (object.nFTSchemaV063 !== undefined && object.nFTSchemaV063 !== null) {
-      for (const e of object.nFTSchemaV063) {
-        message.nFTSchemaV063.push(NFTSchemaV063.fromPartial(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
-  },
+const baseQueryGetNftDataRequest: object = {
+  nftSchemaCode: "",
+  tokenId: "",
+  withGlobal: false,
 };
-
-const baseQueryAllNFTSchemaResponseV072: object = {};
-
-export const QueryAllNFTSchemaResponseV072 = {
-  encode(
-    message: QueryAllNFTSchemaResponseV072,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.nFTSchemaV072) {
-      NFTSchemaV072.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.pagination !== undefined) {
-      PageResponse.encode(
-        message.pagination,
-        writer.uint32(18).fork()
-      ).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): QueryAllNFTSchemaResponseV072 {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryAllNFTSchemaResponseV072,
-    } as QueryAllNFTSchemaResponseV072;
-    message.nFTSchemaV072 = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.nFTSchemaV072.push(
-            NFTSchemaV072.decode(reader, reader.uint32())
-          );
-          break;
-        case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): QueryAllNFTSchemaResponseV072 {
-    const message = {
-      ...baseQueryAllNFTSchemaResponseV072,
-    } as QueryAllNFTSchemaResponseV072;
-    message.nFTSchemaV072 = [];
-    if (object.nFTSchemaV072 !== undefined && object.nFTSchemaV072 !== null) {
-      for (const e of object.nFTSchemaV072) {
-        message.nFTSchemaV072.push(NFTSchemaV072.fromJSON(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
-  },
-
-  toJSON(message: QueryAllNFTSchemaResponseV072): unknown {
-    const obj: any = {};
-    if (message.nFTSchemaV072) {
-      obj.nFTSchemaV072 = message.nFTSchemaV072.map((e) =>
-        e ? NFTSchemaV072.toJSON(e) : undefined
-      );
-    } else {
-      obj.nFTSchemaV072 = [];
-    }
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
-    return obj;
-  },
-
-  fromPartial(
-    object: DeepPartial<QueryAllNFTSchemaResponseV072>
-  ): QueryAllNFTSchemaResponseV072 {
-    const message = {
-      ...baseQueryAllNFTSchemaResponseV072,
-    } as QueryAllNFTSchemaResponseV072;
-    message.nFTSchemaV072 = [];
-    if (object.nFTSchemaV072 !== undefined && object.nFTSchemaV072 !== null) {
-      for (const e of object.nFTSchemaV072) {
-        message.nFTSchemaV072.push(NFTSchemaV072.fromPartial(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
-  },
-};
-
-const baseQueryGetNftDataRequest: object = { nftSchemaCode: "", tokenId: "" };
 
 export const QueryGetNftDataRequest = {
   encode(
@@ -951,6 +671,9 @@ export const QueryGetNftDataRequest = {
     }
     if (message.tokenId !== "") {
       writer.uint32(18).string(message.tokenId);
+    }
+    if (message.withGlobal === true) {
+      writer.uint32(24).bool(message.withGlobal);
     }
     return writer;
   },
@@ -967,6 +690,9 @@ export const QueryGetNftDataRequest = {
           break;
         case 2:
           message.tokenId = reader.string();
+          break;
+        case 3:
+          message.withGlobal = reader.bool();
           break;
         default:
           reader.skipType(tag & 7);
@@ -988,6 +714,11 @@ export const QueryGetNftDataRequest = {
     } else {
       message.tokenId = "";
     }
+    if (object.withGlobal !== undefined && object.withGlobal !== null) {
+      message.withGlobal = Boolean(object.withGlobal);
+    } else {
+      message.withGlobal = false;
+    }
     return message;
   },
 
@@ -996,6 +727,7 @@ export const QueryGetNftDataRequest = {
     message.nftSchemaCode !== undefined &&
       (obj.nftSchemaCode = message.nftSchemaCode);
     message.tokenId !== undefined && (obj.tokenId = message.tokenId);
+    message.withGlobal !== undefined && (obj.withGlobal = message.withGlobal);
     return obj;
   },
 
@@ -1012,6 +744,11 @@ export const QueryGetNftDataRequest = {
       message.tokenId = object.tokenId;
     } else {
       message.tokenId = "";
+    }
+    if (object.withGlobal !== undefined && object.withGlobal !== null) {
+      message.withGlobal = object.withGlobal;
+    } else {
+      message.withGlobal = false;
     }
     return message;
   },
@@ -1086,15 +823,18 @@ export const QueryGetNftDataResponse = {
   },
 };
 
-const baseQueryAllNftDataRequest: object = {};
+const baseQueryAllNftDataRequest: object = { withGlobal: false };
 
 export const QueryAllNftDataRequest = {
   encode(
     message: QueryAllNftDataRequest,
     writer: Writer = Writer.create()
   ): Writer {
+    if (message.withGlobal === true) {
+      writer.uint32(8).bool(message.withGlobal);
+    }
     if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -1107,6 +847,9 @@ export const QueryAllNftDataRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          message.withGlobal = reader.bool();
+          break;
+        case 2:
           message.pagination = PageRequest.decode(reader, reader.uint32());
           break;
         default:
@@ -1119,6 +862,11 @@ export const QueryAllNftDataRequest = {
 
   fromJSON(object: any): QueryAllNftDataRequest {
     const message = { ...baseQueryAllNftDataRequest } as QueryAllNftDataRequest;
+    if (object.withGlobal !== undefined && object.withGlobal !== null) {
+      message.withGlobal = Boolean(object.withGlobal);
+    } else {
+      message.withGlobal = false;
+    }
     if (object.pagination !== undefined && object.pagination !== null) {
       message.pagination = PageRequest.fromJSON(object.pagination);
     } else {
@@ -1129,6 +877,7 @@ export const QueryAllNftDataRequest = {
 
   toJSON(message: QueryAllNftDataRequest): unknown {
     const obj: any = {};
+    message.withGlobal !== undefined && (obj.withGlobal = message.withGlobal);
     message.pagination !== undefined &&
       (obj.pagination = message.pagination
         ? PageRequest.toJSON(message.pagination)
@@ -1140,6 +889,11 @@ export const QueryAllNftDataRequest = {
     object: DeepPartial<QueryAllNftDataRequest>
   ): QueryAllNftDataRequest {
     const message = { ...baseQueryAllNftDataRequest } as QueryAllNftDataRequest;
+    if (object.withGlobal !== undefined && object.withGlobal !== null) {
+      message.withGlobal = object.withGlobal;
+    } else {
+      message.withGlobal = false;
+    }
     if (object.pagination !== undefined && object.pagination !== null) {
       message.pagination = PageRequest.fromPartial(object.pagination);
     } else {
@@ -3016,6 +2770,1731 @@ export const QueryAllMetadataCreatorResponse = {
   },
 };
 
+const baseQueryGetActionExecutorRequest: object = {
+  nftSchemaCode: "",
+  executorAddress: "",
+};
+
+export const QueryGetActionExecutorRequest = {
+  encode(
+    message: QueryGetActionExecutorRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.nftSchemaCode !== "") {
+      writer.uint32(10).string(message.nftSchemaCode);
+    }
+    if (message.executorAddress !== "") {
+      writer.uint32(18).string(message.executorAddress);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetActionExecutorRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetActionExecutorRequest,
+    } as QueryGetActionExecutorRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.nftSchemaCode = reader.string();
+          break;
+        case 2:
+          message.executorAddress = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetActionExecutorRequest {
+    const message = {
+      ...baseQueryGetActionExecutorRequest,
+    } as QueryGetActionExecutorRequest;
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = String(object.nftSchemaCode);
+    } else {
+      message.nftSchemaCode = "";
+    }
+    if (
+      object.executorAddress !== undefined &&
+      object.executorAddress !== null
+    ) {
+      message.executorAddress = String(object.executorAddress);
+    } else {
+      message.executorAddress = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetActionExecutorRequest): unknown {
+    const obj: any = {};
+    message.nftSchemaCode !== undefined &&
+      (obj.nftSchemaCode = message.nftSchemaCode);
+    message.executorAddress !== undefined &&
+      (obj.executorAddress = message.executorAddress);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetActionExecutorRequest>
+  ): QueryGetActionExecutorRequest {
+    const message = {
+      ...baseQueryGetActionExecutorRequest,
+    } as QueryGetActionExecutorRequest;
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = object.nftSchemaCode;
+    } else {
+      message.nftSchemaCode = "";
+    }
+    if (
+      object.executorAddress !== undefined &&
+      object.executorAddress !== null
+    ) {
+      message.executorAddress = object.executorAddress;
+    } else {
+      message.executorAddress = "";
+    }
+    return message;
+  },
+};
+
+const baseQueryGetActionExecutorResponse: object = {};
+
+export const QueryGetActionExecutorResponse = {
+  encode(
+    message: QueryGetActionExecutorResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.actionExecutor !== undefined) {
+      ActionExecutor.encode(
+        message.actionExecutor,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetActionExecutorResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetActionExecutorResponse,
+    } as QueryGetActionExecutorResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.actionExecutor = ActionExecutor.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetActionExecutorResponse {
+    const message = {
+      ...baseQueryGetActionExecutorResponse,
+    } as QueryGetActionExecutorResponse;
+    if (object.actionExecutor !== undefined && object.actionExecutor !== null) {
+      message.actionExecutor = ActionExecutor.fromJSON(object.actionExecutor);
+    } else {
+      message.actionExecutor = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetActionExecutorResponse): unknown {
+    const obj: any = {};
+    message.actionExecutor !== undefined &&
+      (obj.actionExecutor = message.actionExecutor
+        ? ActionExecutor.toJSON(message.actionExecutor)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetActionExecutorResponse>
+  ): QueryGetActionExecutorResponse {
+    const message = {
+      ...baseQueryGetActionExecutorResponse,
+    } as QueryGetActionExecutorResponse;
+    if (object.actionExecutor !== undefined && object.actionExecutor !== null) {
+      message.actionExecutor = ActionExecutor.fromPartial(
+        object.actionExecutor
+      );
+    } else {
+      message.actionExecutor = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllActionExecutorRequest: object = {};
+
+export const QueryAllActionExecutorRequest = {
+  encode(
+    message: QueryAllActionExecutorRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllActionExecutorRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllActionExecutorRequest,
+    } as QueryAllActionExecutorRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllActionExecutorRequest {
+    const message = {
+      ...baseQueryAllActionExecutorRequest,
+    } as QueryAllActionExecutorRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllActionExecutorRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageRequest.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllActionExecutorRequest>
+  ): QueryAllActionExecutorRequest {
+    const message = {
+      ...baseQueryAllActionExecutorRequest,
+    } as QueryAllActionExecutorRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllActionExecutorResponse: object = {};
+
+export const QueryAllActionExecutorResponse = {
+  encode(
+    message: QueryAllActionExecutorResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.actionExecutor) {
+      ActionExecutor.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllActionExecutorResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllActionExecutorResponse,
+    } as QueryAllActionExecutorResponse;
+    message.actionExecutor = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.actionExecutor.push(
+            ActionExecutor.decode(reader, reader.uint32())
+          );
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllActionExecutorResponse {
+    const message = {
+      ...baseQueryAllActionExecutorResponse,
+    } as QueryAllActionExecutorResponse;
+    message.actionExecutor = [];
+    if (object.actionExecutor !== undefined && object.actionExecutor !== null) {
+      for (const e of object.actionExecutor) {
+        message.actionExecutor.push(ActionExecutor.fromJSON(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllActionExecutorResponse): unknown {
+    const obj: any = {};
+    if (message.actionExecutor) {
+      obj.actionExecutor = message.actionExecutor.map((e) =>
+        e ? ActionExecutor.toJSON(e) : undefined
+      );
+    } else {
+      obj.actionExecutor = [];
+    }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageResponse.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllActionExecutorResponse>
+  ): QueryAllActionExecutorResponse {
+    const message = {
+      ...baseQueryAllActionExecutorResponse,
+    } as QueryAllActionExecutorResponse;
+    message.actionExecutor = [];
+    if (object.actionExecutor !== undefined && object.actionExecutor !== null) {
+      for (const e of object.actionExecutor) {
+        message.actionExecutor.push(ActionExecutor.fromPartial(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryGetSchemaAttributeRequest: object = {
+  nftSchemaCode: "",
+  name: "",
+};
+
+export const QueryGetSchemaAttributeRequest = {
+  encode(
+    message: QueryGetSchemaAttributeRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.nftSchemaCode !== "") {
+      writer.uint32(10).string(message.nftSchemaCode);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetSchemaAttributeRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetSchemaAttributeRequest,
+    } as QueryGetSchemaAttributeRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.nftSchemaCode = reader.string();
+          break;
+        case 2:
+          message.name = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetSchemaAttributeRequest {
+    const message = {
+      ...baseQueryGetSchemaAttributeRequest,
+    } as QueryGetSchemaAttributeRequest;
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = String(object.nftSchemaCode);
+    } else {
+      message.nftSchemaCode = "";
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetSchemaAttributeRequest): unknown {
+    const obj: any = {};
+    message.nftSchemaCode !== undefined &&
+      (obj.nftSchemaCode = message.nftSchemaCode);
+    message.name !== undefined && (obj.name = message.name);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetSchemaAttributeRequest>
+  ): QueryGetSchemaAttributeRequest {
+    const message = {
+      ...baseQueryGetSchemaAttributeRequest,
+    } as QueryGetSchemaAttributeRequest;
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = object.nftSchemaCode;
+    } else {
+      message.nftSchemaCode = "";
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    } else {
+      message.name = "";
+    }
+    return message;
+  },
+};
+
+const baseQueryGetSchemaAttributeResponse: object = {};
+
+export const QueryGetSchemaAttributeResponse = {
+  encode(
+    message: QueryGetSchemaAttributeResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.schemaAttribute !== undefined) {
+      SchemaAttribute.encode(
+        message.schemaAttribute,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetSchemaAttributeResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetSchemaAttributeResponse,
+    } as QueryGetSchemaAttributeResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.schemaAttribute = SchemaAttribute.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetSchemaAttributeResponse {
+    const message = {
+      ...baseQueryGetSchemaAttributeResponse,
+    } as QueryGetSchemaAttributeResponse;
+    if (
+      object.schemaAttribute !== undefined &&
+      object.schemaAttribute !== null
+    ) {
+      message.schemaAttribute = SchemaAttribute.fromJSON(
+        object.schemaAttribute
+      );
+    } else {
+      message.schemaAttribute = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetSchemaAttributeResponse): unknown {
+    const obj: any = {};
+    message.schemaAttribute !== undefined &&
+      (obj.schemaAttribute = message.schemaAttribute
+        ? SchemaAttribute.toJSON(message.schemaAttribute)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetSchemaAttributeResponse>
+  ): QueryGetSchemaAttributeResponse {
+    const message = {
+      ...baseQueryGetSchemaAttributeResponse,
+    } as QueryGetSchemaAttributeResponse;
+    if (
+      object.schemaAttribute !== undefined &&
+      object.schemaAttribute !== null
+    ) {
+      message.schemaAttribute = SchemaAttribute.fromPartial(
+        object.schemaAttribute
+      );
+    } else {
+      message.schemaAttribute = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllSchemaAttributeRequest: object = {};
+
+export const QueryAllSchemaAttributeRequest = {
+  encode(
+    message: QueryAllSchemaAttributeRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllSchemaAttributeRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllSchemaAttributeRequest,
+    } as QueryAllSchemaAttributeRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllSchemaAttributeRequest {
+    const message = {
+      ...baseQueryAllSchemaAttributeRequest,
+    } as QueryAllSchemaAttributeRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllSchemaAttributeRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageRequest.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllSchemaAttributeRequest>
+  ): QueryAllSchemaAttributeRequest {
+    const message = {
+      ...baseQueryAllSchemaAttributeRequest,
+    } as QueryAllSchemaAttributeRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllSchemaAttributeResponse: object = {};
+
+export const QueryAllSchemaAttributeResponse = {
+  encode(
+    message: QueryAllSchemaAttributeResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.schemaAttribute) {
+      SchemaAttribute.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllSchemaAttributeResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllSchemaAttributeResponse,
+    } as QueryAllSchemaAttributeResponse;
+    message.schemaAttribute = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.schemaAttribute.push(
+            SchemaAttribute.decode(reader, reader.uint32())
+          );
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllSchemaAttributeResponse {
+    const message = {
+      ...baseQueryAllSchemaAttributeResponse,
+    } as QueryAllSchemaAttributeResponse;
+    message.schemaAttribute = [];
+    if (
+      object.schemaAttribute !== undefined &&
+      object.schemaAttribute !== null
+    ) {
+      for (const e of object.schemaAttribute) {
+        message.schemaAttribute.push(SchemaAttribute.fromJSON(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllSchemaAttributeResponse): unknown {
+    const obj: any = {};
+    if (message.schemaAttribute) {
+      obj.schemaAttribute = message.schemaAttribute.map((e) =>
+        e ? SchemaAttribute.toJSON(e) : undefined
+      );
+    } else {
+      obj.schemaAttribute = [];
+    }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageResponse.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllSchemaAttributeResponse>
+  ): QueryAllSchemaAttributeResponse {
+    const message = {
+      ...baseQueryAllSchemaAttributeResponse,
+    } as QueryAllSchemaAttributeResponse;
+    message.schemaAttribute = [];
+    if (
+      object.schemaAttribute !== undefined &&
+      object.schemaAttribute !== null
+    ) {
+      for (const e of object.schemaAttribute) {
+        message.schemaAttribute.push(SchemaAttribute.fromPartial(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryListAttributeBySchemaRequest: object = { nftSchemaCode: "" };
+
+export const QueryListAttributeBySchemaRequest = {
+  encode(
+    message: QueryListAttributeBySchemaRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.nftSchemaCode !== "") {
+      writer.uint32(10).string(message.nftSchemaCode);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryListAttributeBySchemaRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryListAttributeBySchemaRequest,
+    } as QueryListAttributeBySchemaRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.nftSchemaCode = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryListAttributeBySchemaRequest {
+    const message = {
+      ...baseQueryListAttributeBySchemaRequest,
+    } as QueryListAttributeBySchemaRequest;
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = String(object.nftSchemaCode);
+    } else {
+      message.nftSchemaCode = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QueryListAttributeBySchemaRequest): unknown {
+    const obj: any = {};
+    message.nftSchemaCode !== undefined &&
+      (obj.nftSchemaCode = message.nftSchemaCode);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryListAttributeBySchemaRequest>
+  ): QueryListAttributeBySchemaRequest {
+    const message = {
+      ...baseQueryListAttributeBySchemaRequest,
+    } as QueryListAttributeBySchemaRequest;
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = object.nftSchemaCode;
+    } else {
+      message.nftSchemaCode = "";
+    }
+    return message;
+  },
+};
+
+const baseQueryListAttributeBySchemaResponse: object = {};
+
+export const QueryListAttributeBySchemaResponse = {
+  encode(
+    message: QueryListAttributeBySchemaResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.schemaAttribute) {
+      SchemaAttribute.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryListAttributeBySchemaResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryListAttributeBySchemaResponse,
+    } as QueryListAttributeBySchemaResponse;
+    message.schemaAttribute = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.schemaAttribute.push(
+            SchemaAttribute.decode(reader, reader.uint32())
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryListAttributeBySchemaResponse {
+    const message = {
+      ...baseQueryListAttributeBySchemaResponse,
+    } as QueryListAttributeBySchemaResponse;
+    message.schemaAttribute = [];
+    if (
+      object.schemaAttribute !== undefined &&
+      object.schemaAttribute !== null
+    ) {
+      for (const e of object.schemaAttribute) {
+        message.schemaAttribute.push(SchemaAttribute.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: QueryListAttributeBySchemaResponse): unknown {
+    const obj: any = {};
+    if (message.schemaAttribute) {
+      obj.schemaAttribute = message.schemaAttribute.map((e) =>
+        e ? SchemaAttribute.toJSON(e) : undefined
+      );
+    } else {
+      obj.schemaAttribute = [];
+    }
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryListAttributeBySchemaResponse>
+  ): QueryListAttributeBySchemaResponse {
+    const message = {
+      ...baseQueryListAttributeBySchemaResponse,
+    } as QueryListAttributeBySchemaResponse;
+    message.schemaAttribute = [];
+    if (
+      object.schemaAttribute !== undefined &&
+      object.schemaAttribute !== null
+    ) {
+      for (const e of object.schemaAttribute) {
+        message.schemaAttribute.push(SchemaAttribute.fromPartial(e));
+      }
+    }
+    return message;
+  },
+};
+
+const baseQueryGetActionOfSchemaRequest: object = {
+  nftSchemaCode: "",
+  name: "",
+};
+
+export const QueryGetActionOfSchemaRequest = {
+  encode(
+    message: QueryGetActionOfSchemaRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.nftSchemaCode !== "") {
+      writer.uint32(10).string(message.nftSchemaCode);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetActionOfSchemaRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetActionOfSchemaRequest,
+    } as QueryGetActionOfSchemaRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.nftSchemaCode = reader.string();
+          break;
+        case 2:
+          message.name = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetActionOfSchemaRequest {
+    const message = {
+      ...baseQueryGetActionOfSchemaRequest,
+    } as QueryGetActionOfSchemaRequest;
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = String(object.nftSchemaCode);
+    } else {
+      message.nftSchemaCode = "";
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetActionOfSchemaRequest): unknown {
+    const obj: any = {};
+    message.nftSchemaCode !== undefined &&
+      (obj.nftSchemaCode = message.nftSchemaCode);
+    message.name !== undefined && (obj.name = message.name);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetActionOfSchemaRequest>
+  ): QueryGetActionOfSchemaRequest {
+    const message = {
+      ...baseQueryGetActionOfSchemaRequest,
+    } as QueryGetActionOfSchemaRequest;
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = object.nftSchemaCode;
+    } else {
+      message.nftSchemaCode = "";
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    } else {
+      message.name = "";
+    }
+    return message;
+  },
+};
+
+const baseQueryGetActionOfSchemaResponse: object = {};
+
+export const QueryGetActionOfSchemaResponse = {
+  encode(
+    message: QueryGetActionOfSchemaResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.actionOfSchema !== undefined) {
+      ActionOfSchema.encode(
+        message.actionOfSchema,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetActionOfSchemaResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetActionOfSchemaResponse,
+    } as QueryGetActionOfSchemaResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.actionOfSchema = ActionOfSchema.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetActionOfSchemaResponse {
+    const message = {
+      ...baseQueryGetActionOfSchemaResponse,
+    } as QueryGetActionOfSchemaResponse;
+    if (object.actionOfSchema !== undefined && object.actionOfSchema !== null) {
+      message.actionOfSchema = ActionOfSchema.fromJSON(object.actionOfSchema);
+    } else {
+      message.actionOfSchema = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetActionOfSchemaResponse): unknown {
+    const obj: any = {};
+    message.actionOfSchema !== undefined &&
+      (obj.actionOfSchema = message.actionOfSchema
+        ? ActionOfSchema.toJSON(message.actionOfSchema)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetActionOfSchemaResponse>
+  ): QueryGetActionOfSchemaResponse {
+    const message = {
+      ...baseQueryGetActionOfSchemaResponse,
+    } as QueryGetActionOfSchemaResponse;
+    if (object.actionOfSchema !== undefined && object.actionOfSchema !== null) {
+      message.actionOfSchema = ActionOfSchema.fromPartial(
+        object.actionOfSchema
+      );
+    } else {
+      message.actionOfSchema = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllActionOfSchemaRequest: object = {};
+
+export const QueryAllActionOfSchemaRequest = {
+  encode(
+    message: QueryAllActionOfSchemaRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllActionOfSchemaRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllActionOfSchemaRequest,
+    } as QueryAllActionOfSchemaRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllActionOfSchemaRequest {
+    const message = {
+      ...baseQueryAllActionOfSchemaRequest,
+    } as QueryAllActionOfSchemaRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllActionOfSchemaRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageRequest.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllActionOfSchemaRequest>
+  ): QueryAllActionOfSchemaRequest {
+    const message = {
+      ...baseQueryAllActionOfSchemaRequest,
+    } as QueryAllActionOfSchemaRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllActionOfSchemaResponse: object = {};
+
+export const QueryAllActionOfSchemaResponse = {
+  encode(
+    message: QueryAllActionOfSchemaResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.actionOfSchema) {
+      ActionOfSchema.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllActionOfSchemaResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllActionOfSchemaResponse,
+    } as QueryAllActionOfSchemaResponse;
+    message.actionOfSchema = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.actionOfSchema.push(
+            ActionOfSchema.decode(reader, reader.uint32())
+          );
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllActionOfSchemaResponse {
+    const message = {
+      ...baseQueryAllActionOfSchemaResponse,
+    } as QueryAllActionOfSchemaResponse;
+    message.actionOfSchema = [];
+    if (object.actionOfSchema !== undefined && object.actionOfSchema !== null) {
+      for (const e of object.actionOfSchema) {
+        message.actionOfSchema.push(ActionOfSchema.fromJSON(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllActionOfSchemaResponse): unknown {
+    const obj: any = {};
+    if (message.actionOfSchema) {
+      obj.actionOfSchema = message.actionOfSchema.map((e) =>
+        e ? ActionOfSchema.toJSON(e) : undefined
+      );
+    } else {
+      obj.actionOfSchema = [];
+    }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageResponse.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllActionOfSchemaResponse>
+  ): QueryAllActionOfSchemaResponse {
+    const message = {
+      ...baseQueryAllActionOfSchemaResponse,
+    } as QueryAllActionOfSchemaResponse;
+    message.actionOfSchema = [];
+    if (object.actionOfSchema !== undefined && object.actionOfSchema !== null) {
+      for (const e of object.actionOfSchema) {
+        message.actionOfSchema.push(ActionOfSchema.fromPartial(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryGetExecutorOfSchemaRequest: object = { nftSchemaCode: "" };
+
+export const QueryGetExecutorOfSchemaRequest = {
+  encode(
+    message: QueryGetExecutorOfSchemaRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.nftSchemaCode !== "") {
+      writer.uint32(10).string(message.nftSchemaCode);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetExecutorOfSchemaRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetExecutorOfSchemaRequest,
+    } as QueryGetExecutorOfSchemaRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.nftSchemaCode = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetExecutorOfSchemaRequest {
+    const message = {
+      ...baseQueryGetExecutorOfSchemaRequest,
+    } as QueryGetExecutorOfSchemaRequest;
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = String(object.nftSchemaCode);
+    } else {
+      message.nftSchemaCode = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetExecutorOfSchemaRequest): unknown {
+    const obj: any = {};
+    message.nftSchemaCode !== undefined &&
+      (obj.nftSchemaCode = message.nftSchemaCode);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetExecutorOfSchemaRequest>
+  ): QueryGetExecutorOfSchemaRequest {
+    const message = {
+      ...baseQueryGetExecutorOfSchemaRequest,
+    } as QueryGetExecutorOfSchemaRequest;
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = object.nftSchemaCode;
+    } else {
+      message.nftSchemaCode = "";
+    }
+    return message;
+  },
+};
+
+const baseQueryGetExecutorOfSchemaResponse: object = {};
+
+export const QueryGetExecutorOfSchemaResponse = {
+  encode(
+    message: QueryGetExecutorOfSchemaResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.executorOfSchema !== undefined) {
+      ExecutorOfSchema.encode(
+        message.executorOfSchema,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetExecutorOfSchemaResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetExecutorOfSchemaResponse,
+    } as QueryGetExecutorOfSchemaResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.executorOfSchema = ExecutorOfSchema.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetExecutorOfSchemaResponse {
+    const message = {
+      ...baseQueryGetExecutorOfSchemaResponse,
+    } as QueryGetExecutorOfSchemaResponse;
+    if (
+      object.executorOfSchema !== undefined &&
+      object.executorOfSchema !== null
+    ) {
+      message.executorOfSchema = ExecutorOfSchema.fromJSON(
+        object.executorOfSchema
+      );
+    } else {
+      message.executorOfSchema = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetExecutorOfSchemaResponse): unknown {
+    const obj: any = {};
+    message.executorOfSchema !== undefined &&
+      (obj.executorOfSchema = message.executorOfSchema
+        ? ExecutorOfSchema.toJSON(message.executorOfSchema)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetExecutorOfSchemaResponse>
+  ): QueryGetExecutorOfSchemaResponse {
+    const message = {
+      ...baseQueryGetExecutorOfSchemaResponse,
+    } as QueryGetExecutorOfSchemaResponse;
+    if (
+      object.executorOfSchema !== undefined &&
+      object.executorOfSchema !== null
+    ) {
+      message.executorOfSchema = ExecutorOfSchema.fromPartial(
+        object.executorOfSchema
+      );
+    } else {
+      message.executorOfSchema = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllExecutorOfSchemaRequest: object = {};
+
+export const QueryAllExecutorOfSchemaRequest = {
+  encode(
+    message: QueryAllExecutorOfSchemaRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllExecutorOfSchemaRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllExecutorOfSchemaRequest,
+    } as QueryAllExecutorOfSchemaRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllExecutorOfSchemaRequest {
+    const message = {
+      ...baseQueryAllExecutorOfSchemaRequest,
+    } as QueryAllExecutorOfSchemaRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllExecutorOfSchemaRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageRequest.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllExecutorOfSchemaRequest>
+  ): QueryAllExecutorOfSchemaRequest {
+    const message = {
+      ...baseQueryAllExecutorOfSchemaRequest,
+    } as QueryAllExecutorOfSchemaRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryAllExecutorOfSchemaResponse: object = {};
+
+export const QueryAllExecutorOfSchemaResponse = {
+  encode(
+    message: QueryAllExecutorOfSchemaResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.executorOfSchema) {
+      ExecutorOfSchema.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryAllExecutorOfSchemaResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryAllExecutorOfSchemaResponse,
+    } as QueryAllExecutorOfSchemaResponse;
+    message.executorOfSchema = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.executorOfSchema.push(
+            ExecutorOfSchema.decode(reader, reader.uint32())
+          );
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllExecutorOfSchemaResponse {
+    const message = {
+      ...baseQueryAllExecutorOfSchemaResponse,
+    } as QueryAllExecutorOfSchemaResponse;
+    message.executorOfSchema = [];
+    if (
+      object.executorOfSchema !== undefined &&
+      object.executorOfSchema !== null
+    ) {
+      for (const e of object.executorOfSchema) {
+        message.executorOfSchema.push(ExecutorOfSchema.fromJSON(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryAllExecutorOfSchemaResponse): unknown {
+    const obj: any = {};
+    if (message.executorOfSchema) {
+      obj.executorOfSchema = message.executorOfSchema.map((e) =>
+        e ? ExecutorOfSchema.toJSON(e) : undefined
+      );
+    } else {
+      obj.executorOfSchema = [];
+    }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageResponse.toJSON(message.pagination)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryAllExecutorOfSchemaResponse>
+  ): QueryAllExecutorOfSchemaResponse {
+    const message = {
+      ...baseQueryAllExecutorOfSchemaResponse,
+    } as QueryAllExecutorOfSchemaResponse;
+    message.executorOfSchema = [];
+    if (
+      object.executorOfSchema !== undefined &&
+      object.executorOfSchema !== null
+    ) {
+      for (const e of object.executorOfSchema) {
+        message.executorOfSchema.push(ExecutorOfSchema.fromPartial(e));
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryGetAttributeOfSchemaRequest: object = { nftSchemaCode: "" };
+
+export const QueryGetAttributeOfSchemaRequest = {
+  encode(
+    message: QueryGetAttributeOfSchemaRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.nftSchemaCode !== "") {
+      writer.uint32(10).string(message.nftSchemaCode);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetAttributeOfSchemaRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetAttributeOfSchemaRequest,
+    } as QueryGetAttributeOfSchemaRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.nftSchemaCode = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetAttributeOfSchemaRequest {
+    const message = {
+      ...baseQueryGetAttributeOfSchemaRequest,
+    } as QueryGetAttributeOfSchemaRequest;
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = String(object.nftSchemaCode);
+    } else {
+      message.nftSchemaCode = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetAttributeOfSchemaRequest): unknown {
+    const obj: any = {};
+    message.nftSchemaCode !== undefined &&
+      (obj.nftSchemaCode = message.nftSchemaCode);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetAttributeOfSchemaRequest>
+  ): QueryGetAttributeOfSchemaRequest {
+    const message = {
+      ...baseQueryGetAttributeOfSchemaRequest,
+    } as QueryGetAttributeOfSchemaRequest;
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = object.nftSchemaCode;
+    } else {
+      message.nftSchemaCode = "";
+    }
+    return message;
+  },
+};
+
+const baseQueryGetAttributeOfSchemaResponse: object = { nftSchemaCode: "" };
+
+export const QueryGetAttributeOfSchemaResponse = {
+  encode(
+    message: QueryGetAttributeOfSchemaResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.nftSchemaCode !== "") {
+      writer.uint32(10).string(message.nftSchemaCode);
+    }
+    for (const v of message.schemaAttribute) {
+      SchemaAttribute.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): QueryGetAttributeOfSchemaResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryGetAttributeOfSchemaResponse,
+    } as QueryGetAttributeOfSchemaResponse;
+    message.schemaAttribute = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.nftSchemaCode = reader.string();
+          break;
+        case 2:
+          message.schemaAttribute.push(
+            SchemaAttribute.decode(reader, reader.uint32())
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetAttributeOfSchemaResponse {
+    const message = {
+      ...baseQueryGetAttributeOfSchemaResponse,
+    } as QueryGetAttributeOfSchemaResponse;
+    message.schemaAttribute = [];
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = String(object.nftSchemaCode);
+    } else {
+      message.nftSchemaCode = "";
+    }
+    if (
+      object.schemaAttribute !== undefined &&
+      object.schemaAttribute !== null
+    ) {
+      for (const e of object.schemaAttribute) {
+        message.schemaAttribute.push(SchemaAttribute.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: QueryGetAttributeOfSchemaResponse): unknown {
+    const obj: any = {};
+    message.nftSchemaCode !== undefined &&
+      (obj.nftSchemaCode = message.nftSchemaCode);
+    if (message.schemaAttribute) {
+      obj.schemaAttribute = message.schemaAttribute.map((e) =>
+        e ? SchemaAttribute.toJSON(e) : undefined
+      );
+    } else {
+      obj.schemaAttribute = [];
+    }
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryGetAttributeOfSchemaResponse>
+  ): QueryGetAttributeOfSchemaResponse {
+    const message = {
+      ...baseQueryGetAttributeOfSchemaResponse,
+    } as QueryGetAttributeOfSchemaResponse;
+    message.schemaAttribute = [];
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = object.nftSchemaCode;
+    } else {
+      message.nftSchemaCode = "";
+    }
+    if (
+      object.schemaAttribute !== undefined &&
+      object.schemaAttribute !== null
+    ) {
+      for (const e of object.schemaAttribute) {
+        message.schemaAttribute.push(SchemaAttribute.fromPartial(e));
+      }
+    }
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -3024,32 +4503,10 @@ export interface Query {
   NFTSchema(
     request: QueryGetNFTSchemaRequest
   ): Promise<QueryGetNFTSchemaResponse>;
-  /**
-   * will be deprecated next version (074)
-   * Queries a NFTSchema by index.
-   */
-  NFTSchemaV063(
-    request: QueryGetNFTSchemaRequest
-  ): Promise<QueryGetNFTSchemaResponseV063>;
-  /** Queries a NFTSchema by index. */
-  NFTSchemaV072(
-    request: QueryGetNFTSchemaRequest
-  ): Promise<QueryGetNFTSchemaResponseV072>;
   /** Queries a list of NFTSchema items. */
   NFTSchemaAll(
     request: QueryAllNFTSchemaRequest
   ): Promise<QueryAllNFTSchemaResponse>;
-  /**
-   * will be deprecated next version (074)
-   * Queries a list of NFTSchema items.
-   */
-  NFTSchemaAllV063(
-    request: QueryAllNFTSchemaRequest
-  ): Promise<QueryAllNFTSchemaResponseV063>;
-  /** Queries a list of NFTSchema items. */
-  NFTSchemaAllV072(
-    request: QueryAllNFTSchemaRequest
-  ): Promise<QueryAllNFTSchemaResponseV072>;
   /** Queries a NftData by index. */
   NftData(request: QueryGetNftDataRequest): Promise<QueryGetNftDataResponse>;
   /** Queries a list of NftData items. */
@@ -3098,6 +4555,46 @@ export interface Query {
   MetadataCreatorAll(
     request: QueryAllMetadataCreatorRequest
   ): Promise<QueryAllMetadataCreatorResponse>;
+  /** Queries a ActionExecutor by index. */
+  ActionExecutor(
+    request: QueryGetActionExecutorRequest
+  ): Promise<QueryGetActionExecutorResponse>;
+  /** Queries a list of ActionExecutor items. */
+  ActionExecutorAll(
+    request: QueryAllActionExecutorRequest
+  ): Promise<QueryAllActionExecutorResponse>;
+  /** Queries a SchemaAttribute by index. */
+  SchemaAttribute(
+    request: QueryGetSchemaAttributeRequest
+  ): Promise<QueryGetSchemaAttributeResponse>;
+  /** Queries a list of SchemaAttribute items. */
+  SchemaAttributeAll(
+    request: QueryAllSchemaAttributeRequest
+  ): Promise<QueryAllSchemaAttributeResponse>;
+  /** Queries a list of ListAttributeBySchema items. */
+  ListAttributeBySchema(
+    request: QueryListAttributeBySchemaRequest
+  ): Promise<QueryListAttributeBySchemaResponse>;
+  /** Queries a ActionOfSchema by index. */
+  ActionOfSchema(
+    request: QueryGetActionOfSchemaRequest
+  ): Promise<QueryGetActionOfSchemaResponse>;
+  /** Queries a list of ActionOfSchema items. */
+  ActionOfSchemaAll(
+    request: QueryAllActionOfSchemaRequest
+  ): Promise<QueryAllActionOfSchemaResponse>;
+  /** Queries a ExecutorOfSchema by index. */
+  ExecutorOfSchema(
+    request: QueryGetExecutorOfSchemaRequest
+  ): Promise<QueryGetExecutorOfSchemaResponse>;
+  /** Queries a list of ExecutorOfSchema items. */
+  ExecutorOfSchemaAll(
+    request: QueryAllExecutorOfSchemaRequest
+  ): Promise<QueryAllExecutorOfSchemaResponse>;
+  /** Queries a AttributeOfSchema by index. */
+  AttributeOfSchema(
+    request: QueryGetAttributeOfSchemaRequest
+  ): Promise<QueryGetAttributeOfSchemaResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -3129,34 +4626,6 @@ export class QueryClientImpl implements Query {
     );
   }
 
-  NFTSchemaV063(
-    request: QueryGetNFTSchemaRequest
-  ): Promise<QueryGetNFTSchemaResponseV063> {
-    const data = QueryGetNFTSchemaRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "thesixnetwork.sixnft.nftmngr.Query",
-      "NFTSchemaV063",
-      data
-    );
-    return promise.then((data) =>
-      QueryGetNFTSchemaResponseV063.decode(new Reader(data))
-    );
-  }
-
-  NFTSchemaV072(
-    request: QueryGetNFTSchemaRequest
-  ): Promise<QueryGetNFTSchemaResponseV072> {
-    const data = QueryGetNFTSchemaRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "thesixnetwork.sixnft.nftmngr.Query",
-      "NFTSchemaV072",
-      data
-    );
-    return promise.then((data) =>
-      QueryGetNFTSchemaResponseV072.decode(new Reader(data))
-    );
-  }
-
   NFTSchemaAll(
     request: QueryAllNFTSchemaRequest
   ): Promise<QueryAllNFTSchemaResponse> {
@@ -3168,34 +4637,6 @@ export class QueryClientImpl implements Query {
     );
     return promise.then((data) =>
       QueryAllNFTSchemaResponse.decode(new Reader(data))
-    );
-  }
-
-  NFTSchemaAllV063(
-    request: QueryAllNFTSchemaRequest
-  ): Promise<QueryAllNFTSchemaResponseV063> {
-    const data = QueryAllNFTSchemaRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "thesixnetwork.sixnft.nftmngr.Query",
-      "NFTSchemaAllV063",
-      data
-    );
-    return promise.then((data) =>
-      QueryAllNFTSchemaResponseV063.decode(new Reader(data))
-    );
-  }
-
-  NFTSchemaAllV072(
-    request: QueryAllNFTSchemaRequest
-  ): Promise<QueryAllNFTSchemaResponseV072> {
-    const data = QueryAllNFTSchemaRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "thesixnetwork.sixnft.nftmngr.Query",
-      "NFTSchemaAllV072",
-      data
-    );
-    return promise.then((data) =>
-      QueryAllNFTSchemaResponseV072.decode(new Reader(data))
     );
   }
 
@@ -3376,6 +4817,146 @@ export class QueryClientImpl implements Query {
     );
     return promise.then((data) =>
       QueryAllMetadataCreatorResponse.decode(new Reader(data))
+    );
+  }
+
+  ActionExecutor(
+    request: QueryGetActionExecutorRequest
+  ): Promise<QueryGetActionExecutorResponse> {
+    const data = QueryGetActionExecutorRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftmngr.Query",
+      "ActionExecutor",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetActionExecutorResponse.decode(new Reader(data))
+    );
+  }
+
+  ActionExecutorAll(
+    request: QueryAllActionExecutorRequest
+  ): Promise<QueryAllActionExecutorResponse> {
+    const data = QueryAllActionExecutorRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftmngr.Query",
+      "ActionExecutorAll",
+      data
+    );
+    return promise.then((data) =>
+      QueryAllActionExecutorResponse.decode(new Reader(data))
+    );
+  }
+
+  SchemaAttribute(
+    request: QueryGetSchemaAttributeRequest
+  ): Promise<QueryGetSchemaAttributeResponse> {
+    const data = QueryGetSchemaAttributeRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftmngr.Query",
+      "SchemaAttribute",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetSchemaAttributeResponse.decode(new Reader(data))
+    );
+  }
+
+  SchemaAttributeAll(
+    request: QueryAllSchemaAttributeRequest
+  ): Promise<QueryAllSchemaAttributeResponse> {
+    const data = QueryAllSchemaAttributeRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftmngr.Query",
+      "SchemaAttributeAll",
+      data
+    );
+    return promise.then((data) =>
+      QueryAllSchemaAttributeResponse.decode(new Reader(data))
+    );
+  }
+
+  ListAttributeBySchema(
+    request: QueryListAttributeBySchemaRequest
+  ): Promise<QueryListAttributeBySchemaResponse> {
+    const data = QueryListAttributeBySchemaRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftmngr.Query",
+      "ListAttributeBySchema",
+      data
+    );
+    return promise.then((data) =>
+      QueryListAttributeBySchemaResponse.decode(new Reader(data))
+    );
+  }
+
+  ActionOfSchema(
+    request: QueryGetActionOfSchemaRequest
+  ): Promise<QueryGetActionOfSchemaResponse> {
+    const data = QueryGetActionOfSchemaRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftmngr.Query",
+      "ActionOfSchema",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetActionOfSchemaResponse.decode(new Reader(data))
+    );
+  }
+
+  ActionOfSchemaAll(
+    request: QueryAllActionOfSchemaRequest
+  ): Promise<QueryAllActionOfSchemaResponse> {
+    const data = QueryAllActionOfSchemaRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftmngr.Query",
+      "ActionOfSchemaAll",
+      data
+    );
+    return promise.then((data) =>
+      QueryAllActionOfSchemaResponse.decode(new Reader(data))
+    );
+  }
+
+  ExecutorOfSchema(
+    request: QueryGetExecutorOfSchemaRequest
+  ): Promise<QueryGetExecutorOfSchemaResponse> {
+    const data = QueryGetExecutorOfSchemaRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftmngr.Query",
+      "ExecutorOfSchema",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetExecutorOfSchemaResponse.decode(new Reader(data))
+    );
+  }
+
+  ExecutorOfSchemaAll(
+    request: QueryAllExecutorOfSchemaRequest
+  ): Promise<QueryAllExecutorOfSchemaResponse> {
+    const data = QueryAllExecutorOfSchemaRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftmngr.Query",
+      "ExecutorOfSchemaAll",
+      data
+    );
+    return promise.then((data) =>
+      QueryAllExecutorOfSchemaResponse.decode(new Reader(data))
+    );
+  }
+
+  AttributeOfSchema(
+    request: QueryGetAttributeOfSchemaRequest
+  ): Promise<QueryGetAttributeOfSchemaResponse> {
+    const data = QueryGetAttributeOfSchemaRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "thesixnetwork.sixnft.nftmngr.Query",
+      "AttributeOfSchema",
+      data
+    );
+    return promise.then((data) =>
+      QueryGetAttributeOfSchemaResponse.decode(new Reader(data))
     );
   }
 }

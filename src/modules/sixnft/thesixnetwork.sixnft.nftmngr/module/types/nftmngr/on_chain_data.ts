@@ -1,9 +1,6 @@
 /* eslint-disable */
-import {
-  AttributeDefinition,
-  AttributeDefinitionV072,
-} from "../nftmngr/attribute_definition";
-import { Action, ActionV063 } from "../nftmngr/action";
+import { AttributeDefinition } from "../nftmngr/attribute_definition";
+import { Action } from "../nftmngr/action";
 import { NftAttributeValue } from "../nftmngr/nft_attribute_value";
 import { Writer, Reader } from "protobufjs/minimal";
 
@@ -15,32 +12,26 @@ export interface FlagStatus {
 }
 
 export interface OnChainData {
+  token_attributes: AttributeDefinition[];
+  actions: Action[];
+  status: FlagStatus[];
+}
+
+export interface OnChainDataInput {
+  reveal_required: boolean;
+  reveal_secret: Uint8Array;
+  schema_attributes: AttributeDefinition[];
+  token_attributes: AttributeDefinition[];
+  actions: Action[];
+  status: FlagStatus[];
+}
+
+export interface OnChainDataV1 {
   reveal_required: boolean;
   reveal_secret: Uint8Array;
   nft_attributes: AttributeDefinition[];
   token_attributes: AttributeDefinition[];
   actions: Action[];
-  status: FlagStatus[];
-  nft_attributes_value: NftAttributeValue[];
-}
-
-export interface OnChainDataV072 {
-  reveal_required: boolean;
-  reveal_secret: Uint8Array;
-  nft_attributes: AttributeDefinitionV072[];
-  token_attributes: AttributeDefinitionV072[];
-  actions: Action[];
-  status: FlagStatus[];
-  nft_attributes_value: NftAttributeValue[];
-}
-
-/** will be deprecated next version (074) */
-export interface OnChainDataV063 {
-  reveal_required: boolean;
-  reveal_secret: Uint8Array;
-  nft_attributes: AttributeDefinition[];
-  token_attributes: AttributeDefinition[];
-  actions: ActionV063[];
   status: FlagStatus[];
   nft_attributes_value: NftAttributeValue[];
 }
@@ -119,30 +110,18 @@ export const FlagStatus = {
   },
 };
 
-const baseOnChainData: object = { reveal_required: false };
+const baseOnChainData: object = {};
 
 export const OnChainData = {
   encode(message: OnChainData, writer: Writer = Writer.create()): Writer {
-    if (message.reveal_required === true) {
-      writer.uint32(8).bool(message.reveal_required);
-    }
-    if (message.reveal_secret.length !== 0) {
-      writer.uint32(18).bytes(message.reveal_secret);
-    }
-    for (const v of message.nft_attributes) {
-      AttributeDefinition.encode(v!, writer.uint32(26).fork()).ldelim();
-    }
     for (const v of message.token_attributes) {
-      AttributeDefinition.encode(v!, writer.uint32(34).fork()).ldelim();
+      AttributeDefinition.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     for (const v of message.actions) {
-      Action.encode(v!, writer.uint32(42).fork()).ldelim();
+      Action.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     for (const v of message.status) {
-      FlagStatus.encode(v!, writer.uint32(50).fork()).ldelim();
-    }
-    for (const v of message.nft_attributes_value) {
-      NftAttributeValue.encode(v!, writer.uint32(66).fork()).ldelim();
+      FlagStatus.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -151,40 +130,22 @@ export const OnChainData = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseOnChainData } as OnChainData;
-    message.nft_attributes = [];
     message.token_attributes = [];
     message.actions = [];
     message.status = [];
-    message.nft_attributes_value = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.reveal_required = reader.bool();
-          break;
-        case 2:
-          message.reveal_secret = reader.bytes();
-          break;
-        case 3:
-          message.nft_attributes.push(
-            AttributeDefinition.decode(reader, reader.uint32())
-          );
-          break;
-        case 4:
           message.token_attributes.push(
             AttributeDefinition.decode(reader, reader.uint32())
           );
           break;
-        case 5:
+        case 2:
           message.actions.push(Action.decode(reader, reader.uint32()));
           break;
-        case 6:
+        case 3:
           message.status.push(FlagStatus.decode(reader, reader.uint32()));
-          break;
-        case 8:
-          message.nft_attributes_value.push(
-            NftAttributeValue.decode(reader, reader.uint32())
-          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -196,11 +157,155 @@ export const OnChainData = {
 
   fromJSON(object: any): OnChainData {
     const message = { ...baseOnChainData } as OnChainData;
-    message.nft_attributes = [];
     message.token_attributes = [];
     message.actions = [];
     message.status = [];
-    message.nft_attributes_value = [];
+    if (
+      object.token_attributes !== undefined &&
+      object.token_attributes !== null
+    ) {
+      for (const e of object.token_attributes) {
+        message.token_attributes.push(AttributeDefinition.fromJSON(e));
+      }
+    }
+    if (object.actions !== undefined && object.actions !== null) {
+      for (const e of object.actions) {
+        message.actions.push(Action.fromJSON(e));
+      }
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(FlagStatus.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: OnChainData): unknown {
+    const obj: any = {};
+    if (message.token_attributes) {
+      obj.token_attributes = message.token_attributes.map((e) =>
+        e ? AttributeDefinition.toJSON(e) : undefined
+      );
+    } else {
+      obj.token_attributes = [];
+    }
+    if (message.actions) {
+      obj.actions = message.actions.map((e) =>
+        e ? Action.toJSON(e) : undefined
+      );
+    } else {
+      obj.actions = [];
+    }
+    if (message.status) {
+      obj.status = message.status.map((e) =>
+        e ? FlagStatus.toJSON(e) : undefined
+      );
+    } else {
+      obj.status = [];
+    }
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<OnChainData>): OnChainData {
+    const message = { ...baseOnChainData } as OnChainData;
+    message.token_attributes = [];
+    message.actions = [];
+    message.status = [];
+    if (
+      object.token_attributes !== undefined &&
+      object.token_attributes !== null
+    ) {
+      for (const e of object.token_attributes) {
+        message.token_attributes.push(AttributeDefinition.fromPartial(e));
+      }
+    }
+    if (object.actions !== undefined && object.actions !== null) {
+      for (const e of object.actions) {
+        message.actions.push(Action.fromPartial(e));
+      }
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(FlagStatus.fromPartial(e));
+      }
+    }
+    return message;
+  },
+};
+
+const baseOnChainDataInput: object = { reveal_required: false };
+
+export const OnChainDataInput = {
+  encode(message: OnChainDataInput, writer: Writer = Writer.create()): Writer {
+    if (message.reveal_required === true) {
+      writer.uint32(8).bool(message.reveal_required);
+    }
+    if (message.reveal_secret.length !== 0) {
+      writer.uint32(18).bytes(message.reveal_secret);
+    }
+    for (const v of message.schema_attributes) {
+      AttributeDefinition.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.token_attributes) {
+      AttributeDefinition.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    for (const v of message.actions) {
+      Action.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+    for (const v of message.status) {
+      FlagStatus.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): OnChainDataInput {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseOnChainDataInput } as OnChainDataInput;
+    message.schema_attributes = [];
+    message.token_attributes = [];
+    message.actions = [];
+    message.status = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.reveal_required = reader.bool();
+          break;
+        case 2:
+          message.reveal_secret = reader.bytes();
+          break;
+        case 3:
+          message.schema_attributes.push(
+            AttributeDefinition.decode(reader, reader.uint32())
+          );
+          break;
+        case 4:
+          message.token_attributes.push(
+            AttributeDefinition.decode(reader, reader.uint32())
+          );
+          break;
+        case 5:
+          message.actions.push(Action.decode(reader, reader.uint32()));
+          break;
+        case 6:
+          message.status.push(FlagStatus.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): OnChainDataInput {
+    const message = { ...baseOnChainDataInput } as OnChainDataInput;
+    message.schema_attributes = [];
+    message.token_attributes = [];
+    message.actions = [];
+    message.status = [];
     if (
       object.reveal_required !== undefined &&
       object.reveal_required !== null
@@ -212,9 +317,12 @@ export const OnChainData = {
     if (object.reveal_secret !== undefined && object.reveal_secret !== null) {
       message.reveal_secret = bytesFromBase64(object.reveal_secret);
     }
-    if (object.nft_attributes !== undefined && object.nft_attributes !== null) {
-      for (const e of object.nft_attributes) {
-        message.nft_attributes.push(AttributeDefinition.fromJSON(e));
+    if (
+      object.schema_attributes !== undefined &&
+      object.schema_attributes !== null
+    ) {
+      for (const e of object.schema_attributes) {
+        message.schema_attributes.push(AttributeDefinition.fromJSON(e));
       }
     }
     if (
@@ -235,18 +343,10 @@ export const OnChainData = {
         message.status.push(FlagStatus.fromJSON(e));
       }
     }
-    if (
-      object.nft_attributes_value !== undefined &&
-      object.nft_attributes_value !== null
-    ) {
-      for (const e of object.nft_attributes_value) {
-        message.nft_attributes_value.push(NftAttributeValue.fromJSON(e));
-      }
-    }
     return message;
   },
 
-  toJSON(message: OnChainData): unknown {
+  toJSON(message: OnChainDataInput): unknown {
     const obj: any = {};
     message.reveal_required !== undefined &&
       (obj.reveal_required = message.reveal_required);
@@ -256,12 +356,12 @@ export const OnChainData = {
           ? message.reveal_secret
           : new Uint8Array()
       ));
-    if (message.nft_attributes) {
-      obj.nft_attributes = message.nft_attributes.map((e) =>
+    if (message.schema_attributes) {
+      obj.schema_attributes = message.schema_attributes.map((e) =>
         e ? AttributeDefinition.toJSON(e) : undefined
       );
     } else {
-      obj.nft_attributes = [];
+      obj.schema_attributes = [];
     }
     if (message.token_attributes) {
       obj.token_attributes = message.token_attributes.map((e) =>
@@ -284,23 +384,15 @@ export const OnChainData = {
     } else {
       obj.status = [];
     }
-    if (message.nft_attributes_value) {
-      obj.nft_attributes_value = message.nft_attributes_value.map((e) =>
-        e ? NftAttributeValue.toJSON(e) : undefined
-      );
-    } else {
-      obj.nft_attributes_value = [];
-    }
     return obj;
   },
 
-  fromPartial(object: DeepPartial<OnChainData>): OnChainData {
-    const message = { ...baseOnChainData } as OnChainData;
-    message.nft_attributes = [];
+  fromPartial(object: DeepPartial<OnChainDataInput>): OnChainDataInput {
+    const message = { ...baseOnChainDataInput } as OnChainDataInput;
+    message.schema_attributes = [];
     message.token_attributes = [];
     message.actions = [];
     message.status = [];
-    message.nft_attributes_value = [];
     if (
       object.reveal_required !== undefined &&
       object.reveal_required !== null
@@ -314,9 +406,12 @@ export const OnChainData = {
     } else {
       message.reveal_secret = new Uint8Array();
     }
-    if (object.nft_attributes !== undefined && object.nft_attributes !== null) {
-      for (const e of object.nft_attributes) {
-        message.nft_attributes.push(AttributeDefinition.fromPartial(e));
+    if (
+      object.schema_attributes !== undefined &&
+      object.schema_attributes !== null
+    ) {
+      for (const e of object.schema_attributes) {
+        message.schema_attributes.push(AttributeDefinition.fromPartial(e));
       }
     }
     if (
@@ -337,252 +432,14 @@ export const OnChainData = {
         message.status.push(FlagStatus.fromPartial(e));
       }
     }
-    if (
-      object.nft_attributes_value !== undefined &&
-      object.nft_attributes_value !== null
-    ) {
-      for (const e of object.nft_attributes_value) {
-        message.nft_attributes_value.push(NftAttributeValue.fromPartial(e));
-      }
-    }
     return message;
   },
 };
 
-const baseOnChainDataV072: object = { reveal_required: false };
+const baseOnChainDataV1: object = { reveal_required: false };
 
-export const OnChainDataV072 = {
-  encode(message: OnChainDataV072, writer: Writer = Writer.create()): Writer {
-    if (message.reveal_required === true) {
-      writer.uint32(8).bool(message.reveal_required);
-    }
-    if (message.reveal_secret.length !== 0) {
-      writer.uint32(18).bytes(message.reveal_secret);
-    }
-    for (const v of message.nft_attributes) {
-      AttributeDefinitionV072.encode(v!, writer.uint32(26).fork()).ldelim();
-    }
-    for (const v of message.token_attributes) {
-      AttributeDefinitionV072.encode(v!, writer.uint32(34).fork()).ldelim();
-    }
-    for (const v of message.actions) {
-      Action.encode(v!, writer.uint32(42).fork()).ldelim();
-    }
-    for (const v of message.status) {
-      FlagStatus.encode(v!, writer.uint32(50).fork()).ldelim();
-    }
-    for (const v of message.nft_attributes_value) {
-      NftAttributeValue.encode(v!, writer.uint32(66).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): OnChainDataV072 {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseOnChainDataV072 } as OnChainDataV072;
-    message.nft_attributes = [];
-    message.token_attributes = [];
-    message.actions = [];
-    message.status = [];
-    message.nft_attributes_value = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.reveal_required = reader.bool();
-          break;
-        case 2:
-          message.reveal_secret = reader.bytes();
-          break;
-        case 3:
-          message.nft_attributes.push(
-            AttributeDefinitionV072.decode(reader, reader.uint32())
-          );
-          break;
-        case 4:
-          message.token_attributes.push(
-            AttributeDefinitionV072.decode(reader, reader.uint32())
-          );
-          break;
-        case 5:
-          message.actions.push(Action.decode(reader, reader.uint32()));
-          break;
-        case 6:
-          message.status.push(FlagStatus.decode(reader, reader.uint32()));
-          break;
-        case 8:
-          message.nft_attributes_value.push(
-            NftAttributeValue.decode(reader, reader.uint32())
-          );
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): OnChainDataV072 {
-    const message = { ...baseOnChainDataV072 } as OnChainDataV072;
-    message.nft_attributes = [];
-    message.token_attributes = [];
-    message.actions = [];
-    message.status = [];
-    message.nft_attributes_value = [];
-    if (
-      object.reveal_required !== undefined &&
-      object.reveal_required !== null
-    ) {
-      message.reveal_required = Boolean(object.reveal_required);
-    } else {
-      message.reveal_required = false;
-    }
-    if (object.reveal_secret !== undefined && object.reveal_secret !== null) {
-      message.reveal_secret = bytesFromBase64(object.reveal_secret);
-    }
-    if (object.nft_attributes !== undefined && object.nft_attributes !== null) {
-      for (const e of object.nft_attributes) {
-        message.nft_attributes.push(AttributeDefinitionV072.fromJSON(e));
-      }
-    }
-    if (
-      object.token_attributes !== undefined &&
-      object.token_attributes !== null
-    ) {
-      for (const e of object.token_attributes) {
-        message.token_attributes.push(AttributeDefinitionV072.fromJSON(e));
-      }
-    }
-    if (object.actions !== undefined && object.actions !== null) {
-      for (const e of object.actions) {
-        message.actions.push(Action.fromJSON(e));
-      }
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(FlagStatus.fromJSON(e));
-      }
-    }
-    if (
-      object.nft_attributes_value !== undefined &&
-      object.nft_attributes_value !== null
-    ) {
-      for (const e of object.nft_attributes_value) {
-        message.nft_attributes_value.push(NftAttributeValue.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: OnChainDataV072): unknown {
-    const obj: any = {};
-    message.reveal_required !== undefined &&
-      (obj.reveal_required = message.reveal_required);
-    message.reveal_secret !== undefined &&
-      (obj.reveal_secret = base64FromBytes(
-        message.reveal_secret !== undefined
-          ? message.reveal_secret
-          : new Uint8Array()
-      ));
-    if (message.nft_attributes) {
-      obj.nft_attributes = message.nft_attributes.map((e) =>
-        e ? AttributeDefinitionV072.toJSON(e) : undefined
-      );
-    } else {
-      obj.nft_attributes = [];
-    }
-    if (message.token_attributes) {
-      obj.token_attributes = message.token_attributes.map((e) =>
-        e ? AttributeDefinitionV072.toJSON(e) : undefined
-      );
-    } else {
-      obj.token_attributes = [];
-    }
-    if (message.actions) {
-      obj.actions = message.actions.map((e) =>
-        e ? Action.toJSON(e) : undefined
-      );
-    } else {
-      obj.actions = [];
-    }
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? FlagStatus.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    if (message.nft_attributes_value) {
-      obj.nft_attributes_value = message.nft_attributes_value.map((e) =>
-        e ? NftAttributeValue.toJSON(e) : undefined
-      );
-    } else {
-      obj.nft_attributes_value = [];
-    }
-    return obj;
-  },
-
-  fromPartial(object: DeepPartial<OnChainDataV072>): OnChainDataV072 {
-    const message = { ...baseOnChainDataV072 } as OnChainDataV072;
-    message.nft_attributes = [];
-    message.token_attributes = [];
-    message.actions = [];
-    message.status = [];
-    message.nft_attributes_value = [];
-    if (
-      object.reveal_required !== undefined &&
-      object.reveal_required !== null
-    ) {
-      message.reveal_required = object.reveal_required;
-    } else {
-      message.reveal_required = false;
-    }
-    if (object.reveal_secret !== undefined && object.reveal_secret !== null) {
-      message.reveal_secret = object.reveal_secret;
-    } else {
-      message.reveal_secret = new Uint8Array();
-    }
-    if (object.nft_attributes !== undefined && object.nft_attributes !== null) {
-      for (const e of object.nft_attributes) {
-        message.nft_attributes.push(AttributeDefinitionV072.fromPartial(e));
-      }
-    }
-    if (
-      object.token_attributes !== undefined &&
-      object.token_attributes !== null
-    ) {
-      for (const e of object.token_attributes) {
-        message.token_attributes.push(AttributeDefinitionV072.fromPartial(e));
-      }
-    }
-    if (object.actions !== undefined && object.actions !== null) {
-      for (const e of object.actions) {
-        message.actions.push(Action.fromPartial(e));
-      }
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(FlagStatus.fromPartial(e));
-      }
-    }
-    if (
-      object.nft_attributes_value !== undefined &&
-      object.nft_attributes_value !== null
-    ) {
-      for (const e of object.nft_attributes_value) {
-        message.nft_attributes_value.push(NftAttributeValue.fromPartial(e));
-      }
-    }
-    return message;
-  },
-};
-
-const baseOnChainDataV063: object = { reveal_required: false };
-
-export const OnChainDataV063 = {
-  encode(message: OnChainDataV063, writer: Writer = Writer.create()): Writer {
+export const OnChainDataV1 = {
+  encode(message: OnChainDataV1, writer: Writer = Writer.create()): Writer {
     if (message.reveal_required === true) {
       writer.uint32(8).bool(message.reveal_required);
     }
@@ -596,21 +453,21 @@ export const OnChainDataV063 = {
       AttributeDefinition.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     for (const v of message.actions) {
-      ActionV063.encode(v!, writer.uint32(42).fork()).ldelim();
+      Action.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     for (const v of message.status) {
       FlagStatus.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     for (const v of message.nft_attributes_value) {
-      NftAttributeValue.encode(v!, writer.uint32(66).fork()).ldelim();
+      NftAttributeValue.encode(v!, writer.uint32(58).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): OnChainDataV063 {
+  decode(input: Reader | Uint8Array, length?: number): OnChainDataV1 {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseOnChainDataV063 } as OnChainDataV063;
+    const message = { ...baseOnChainDataV1 } as OnChainDataV1;
     message.nft_attributes = [];
     message.token_attributes = [];
     message.actions = [];
@@ -636,12 +493,12 @@ export const OnChainDataV063 = {
           );
           break;
         case 5:
-          message.actions.push(ActionV063.decode(reader, reader.uint32()));
+          message.actions.push(Action.decode(reader, reader.uint32()));
           break;
         case 6:
           message.status.push(FlagStatus.decode(reader, reader.uint32()));
           break;
-        case 8:
+        case 7:
           message.nft_attributes_value.push(
             NftAttributeValue.decode(reader, reader.uint32())
           );
@@ -654,8 +511,8 @@ export const OnChainDataV063 = {
     return message;
   },
 
-  fromJSON(object: any): OnChainDataV063 {
-    const message = { ...baseOnChainDataV063 } as OnChainDataV063;
+  fromJSON(object: any): OnChainDataV1 {
+    const message = { ...baseOnChainDataV1 } as OnChainDataV1;
     message.nft_attributes = [];
     message.token_attributes = [];
     message.actions = [];
@@ -687,7 +544,7 @@ export const OnChainDataV063 = {
     }
     if (object.actions !== undefined && object.actions !== null) {
       for (const e of object.actions) {
-        message.actions.push(ActionV063.fromJSON(e));
+        message.actions.push(Action.fromJSON(e));
       }
     }
     if (object.status !== undefined && object.status !== null) {
@@ -706,7 +563,7 @@ export const OnChainDataV063 = {
     return message;
   },
 
-  toJSON(message: OnChainDataV063): unknown {
+  toJSON(message: OnChainDataV1): unknown {
     const obj: any = {};
     message.reveal_required !== undefined &&
       (obj.reveal_required = message.reveal_required);
@@ -732,7 +589,7 @@ export const OnChainDataV063 = {
     }
     if (message.actions) {
       obj.actions = message.actions.map((e) =>
-        e ? ActionV063.toJSON(e) : undefined
+        e ? Action.toJSON(e) : undefined
       );
     } else {
       obj.actions = [];
@@ -754,8 +611,8 @@ export const OnChainDataV063 = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<OnChainDataV063>): OnChainDataV063 {
-    const message = { ...baseOnChainDataV063 } as OnChainDataV063;
+  fromPartial(object: DeepPartial<OnChainDataV1>): OnChainDataV1 {
+    const message = { ...baseOnChainDataV1 } as OnChainDataV1;
     message.nft_attributes = [];
     message.token_attributes = [];
     message.actions = [];
@@ -789,7 +646,7 @@ export const OnChainDataV063 = {
     }
     if (object.actions !== undefined && object.actions !== null) {
       for (const e of object.actions) {
-        message.actions.push(ActionV063.fromPartial(e));
+        message.actions.push(Action.fromPartial(e));
       }
     }
     if (object.status !== undefined && object.status !== null) {

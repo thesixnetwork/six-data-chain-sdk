@@ -2,8 +2,8 @@
 import { OriginData } from "../nftmngr/origin_data";
 import {
   OnChainData,
-  OnChainDataV072,
-  OnChainDataV063,
+  OnChainDataInput,
+  OnChainDataV1,
 } from "../nftmngr/on_chain_data";
 import { Writer, Reader } from "protobufjs/minimal";
 
@@ -13,32 +13,32 @@ export interface NFTSchema {
   code: string;
   name: string;
   owner: string;
-  system_actioners: string[];
+  description: string;
   origin_data: OriginData | undefined;
   onchain_data: OnChainData | undefined;
   isVerified: boolean;
   mint_authorization: string;
 }
 
-export interface NFTSchemaV072 {
+export interface NFTSchemaINPUT {
   code: string;
   name: string;
   owner: string;
+  description: string;
   system_actioners: string[];
   origin_data: OriginData | undefined;
-  onchain_data: OnChainDataV072 | undefined;
+  onchain_data: OnChainDataInput | undefined;
   isVerified: boolean;
   mint_authorization: string;
 }
 
-/** will be deprecated next version (074) */
-export interface NFTSchemaV063 {
+export interface NFTSchemaV1 {
   code: string;
   name: string;
   owner: string;
   system_actioners: string[];
   origin_data: OriginData | undefined;
-  onchain_data: OnChainDataV063 | undefined;
+  onchain_data: OnChainDataV1 | undefined;
   isVerified: boolean;
   mint_authorization: string;
 }
@@ -47,7 +47,7 @@ const baseNFTSchema: object = {
   code: "",
   name: "",
   owner: "",
-  system_actioners: "",
+  description: "",
   isVerified: false,
   mint_authorization: "",
 };
@@ -63,8 +63,8 @@ export const NFTSchema = {
     if (message.owner !== "") {
       writer.uint32(26).string(message.owner);
     }
-    for (const v of message.system_actioners) {
-      writer.uint32(34).string(v!);
+    if (message.description !== "") {
+      writer.uint32(34).string(message.description);
     }
     if (message.origin_data !== undefined) {
       OriginData.encode(message.origin_data, writer.uint32(42).fork()).ldelim();
@@ -88,7 +88,6 @@ export const NFTSchema = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseNFTSchema } as NFTSchema;
-    message.system_actioners = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -102,7 +101,7 @@ export const NFTSchema = {
           message.owner = reader.string();
           break;
         case 4:
-          message.system_actioners.push(reader.string());
+          message.description = reader.string();
           break;
         case 5:
           message.origin_data = OriginData.decode(reader, reader.uint32());
@@ -126,7 +125,6 @@ export const NFTSchema = {
 
   fromJSON(object: any): NFTSchema {
     const message = { ...baseNFTSchema } as NFTSchema;
-    message.system_actioners = [];
     if (object.code !== undefined && object.code !== null) {
       message.code = String(object.code);
     } else {
@@ -142,13 +140,10 @@ export const NFTSchema = {
     } else {
       message.owner = "";
     }
-    if (
-      object.system_actioners !== undefined &&
-      object.system_actioners !== null
-    ) {
-      for (const e of object.system_actioners) {
-        message.system_actioners.push(String(e));
-      }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = String(object.description);
+    } else {
+      message.description = "";
     }
     if (object.origin_data !== undefined && object.origin_data !== null) {
       message.origin_data = OriginData.fromJSON(object.origin_data);
@@ -181,11 +176,8 @@ export const NFTSchema = {
     message.code !== undefined && (obj.code = message.code);
     message.name !== undefined && (obj.name = message.name);
     message.owner !== undefined && (obj.owner = message.owner);
-    if (message.system_actioners) {
-      obj.system_actioners = message.system_actioners.map((e) => e);
-    } else {
-      obj.system_actioners = [];
-    }
+    message.description !== undefined &&
+      (obj.description = message.description);
     message.origin_data !== undefined &&
       (obj.origin_data = message.origin_data
         ? OriginData.toJSON(message.origin_data)
@@ -202,7 +194,6 @@ export const NFTSchema = {
 
   fromPartial(object: DeepPartial<NFTSchema>): NFTSchema {
     const message = { ...baseNFTSchema } as NFTSchema;
-    message.system_actioners = [];
     if (object.code !== undefined && object.code !== null) {
       message.code = object.code;
     } else {
@@ -218,13 +209,10 @@ export const NFTSchema = {
     } else {
       message.owner = "";
     }
-    if (
-      object.system_actioners !== undefined &&
-      object.system_actioners !== null
-    ) {
-      for (const e of object.system_actioners) {
-        message.system_actioners.push(e);
-      }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = object.description;
+    } else {
+      message.description = "";
     }
     if (object.origin_data !== undefined && object.origin_data !== null) {
       message.origin_data = OriginData.fromPartial(object.origin_data);
@@ -253,17 +241,18 @@ export const NFTSchema = {
   },
 };
 
-const baseNFTSchemaV072: object = {
+const baseNFTSchemaINPUT: object = {
   code: "",
   name: "",
   owner: "",
+  description: "",
   system_actioners: "",
   isVerified: false,
   mint_authorization: "",
 };
 
-export const NFTSchemaV072 = {
-  encode(message: NFTSchemaV072, writer: Writer = Writer.create()): Writer {
+export const NFTSchemaINPUT = {
+  encode(message: NFTSchemaINPUT, writer: Writer = Writer.create()): Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -273,31 +262,34 @@ export const NFTSchemaV072 = {
     if (message.owner !== "") {
       writer.uint32(26).string(message.owner);
     }
+    if (message.description !== "") {
+      writer.uint32(34).string(message.description);
+    }
     for (const v of message.system_actioners) {
-      writer.uint32(34).string(v!);
+      writer.uint32(42).string(v!);
     }
     if (message.origin_data !== undefined) {
-      OriginData.encode(message.origin_data, writer.uint32(42).fork()).ldelim();
+      OriginData.encode(message.origin_data, writer.uint32(50).fork()).ldelim();
     }
     if (message.onchain_data !== undefined) {
-      OnChainDataV072.encode(
+      OnChainDataInput.encode(
         message.onchain_data,
-        writer.uint32(50).fork()
+        writer.uint32(58).fork()
       ).ldelim();
     }
     if (message.isVerified === true) {
-      writer.uint32(56).bool(message.isVerified);
+      writer.uint32(64).bool(message.isVerified);
     }
     if (message.mint_authorization !== "") {
-      writer.uint32(66).string(message.mint_authorization);
+      writer.uint32(74).string(message.mint_authorization);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): NFTSchemaV072 {
+  decode(input: Reader | Uint8Array, length?: number): NFTSchemaINPUT {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseNFTSchemaV072 } as NFTSchemaV072;
+    const message = { ...baseNFTSchemaINPUT } as NFTSchemaINPUT;
     message.system_actioners = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -312,21 +304,24 @@ export const NFTSchemaV072 = {
           message.owner = reader.string();
           break;
         case 4:
-          message.system_actioners.push(reader.string());
+          message.description = reader.string();
           break;
         case 5:
-          message.origin_data = OriginData.decode(reader, reader.uint32());
+          message.system_actioners.push(reader.string());
           break;
         case 6:
-          message.onchain_data = OnChainDataV072.decode(
+          message.origin_data = OriginData.decode(reader, reader.uint32());
+          break;
+        case 7:
+          message.onchain_data = OnChainDataInput.decode(
             reader,
             reader.uint32()
           );
           break;
-        case 7:
+        case 8:
           message.isVerified = reader.bool();
           break;
-        case 8:
+        case 9:
           message.mint_authorization = reader.string();
           break;
         default:
@@ -337,8 +332,8 @@ export const NFTSchemaV072 = {
     return message;
   },
 
-  fromJSON(object: any): NFTSchemaV072 {
-    const message = { ...baseNFTSchemaV072 } as NFTSchemaV072;
+  fromJSON(object: any): NFTSchemaINPUT {
+    const message = { ...baseNFTSchemaINPUT } as NFTSchemaINPUT;
     message.system_actioners = [];
     if (object.code !== undefined && object.code !== null) {
       message.code = String(object.code);
@@ -355,6 +350,11 @@ export const NFTSchemaV072 = {
     } else {
       message.owner = "";
     }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = String(object.description);
+    } else {
+      message.description = "";
+    }
     if (
       object.system_actioners !== undefined &&
       object.system_actioners !== null
@@ -369,7 +369,7 @@ export const NFTSchemaV072 = {
       message.origin_data = undefined;
     }
     if (object.onchain_data !== undefined && object.onchain_data !== null) {
-      message.onchain_data = OnChainDataV072.fromJSON(object.onchain_data);
+      message.onchain_data = OnChainDataInput.fromJSON(object.onchain_data);
     } else {
       message.onchain_data = undefined;
     }
@@ -389,11 +389,13 @@ export const NFTSchemaV072 = {
     return message;
   },
 
-  toJSON(message: NFTSchemaV072): unknown {
+  toJSON(message: NFTSchemaINPUT): unknown {
     const obj: any = {};
     message.code !== undefined && (obj.code = message.code);
     message.name !== undefined && (obj.name = message.name);
     message.owner !== undefined && (obj.owner = message.owner);
+    message.description !== undefined &&
+      (obj.description = message.description);
     if (message.system_actioners) {
       obj.system_actioners = message.system_actioners.map((e) => e);
     } else {
@@ -405,7 +407,7 @@ export const NFTSchemaV072 = {
         : undefined);
     message.onchain_data !== undefined &&
       (obj.onchain_data = message.onchain_data
-        ? OnChainDataV072.toJSON(message.onchain_data)
+        ? OnChainDataInput.toJSON(message.onchain_data)
         : undefined);
     message.isVerified !== undefined && (obj.isVerified = message.isVerified);
     message.mint_authorization !== undefined &&
@@ -413,8 +415,8 @@ export const NFTSchemaV072 = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<NFTSchemaV072>): NFTSchemaV072 {
-    const message = { ...baseNFTSchemaV072 } as NFTSchemaV072;
+  fromPartial(object: DeepPartial<NFTSchemaINPUT>): NFTSchemaINPUT {
+    const message = { ...baseNFTSchemaINPUT } as NFTSchemaINPUT;
     message.system_actioners = [];
     if (object.code !== undefined && object.code !== null) {
       message.code = object.code;
@@ -431,6 +433,11 @@ export const NFTSchemaV072 = {
     } else {
       message.owner = "";
     }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = object.description;
+    } else {
+      message.description = "";
+    }
     if (
       object.system_actioners !== undefined &&
       object.system_actioners !== null
@@ -445,7 +452,7 @@ export const NFTSchemaV072 = {
       message.origin_data = undefined;
     }
     if (object.onchain_data !== undefined && object.onchain_data !== null) {
-      message.onchain_data = OnChainDataV072.fromPartial(object.onchain_data);
+      message.onchain_data = OnChainDataInput.fromPartial(object.onchain_data);
     } else {
       message.onchain_data = undefined;
     }
@@ -466,7 +473,7 @@ export const NFTSchemaV072 = {
   },
 };
 
-const baseNFTSchemaV063: object = {
+const baseNFTSchemaV1: object = {
   code: "",
   name: "",
   owner: "",
@@ -475,8 +482,8 @@ const baseNFTSchemaV063: object = {
   mint_authorization: "",
 };
 
-export const NFTSchemaV063 = {
-  encode(message: NFTSchemaV063, writer: Writer = Writer.create()): Writer {
+export const NFTSchemaV1 = {
+  encode(message: NFTSchemaV1, writer: Writer = Writer.create()): Writer {
     if (message.code !== "") {
       writer.uint32(10).string(message.code);
     }
@@ -493,7 +500,7 @@ export const NFTSchemaV063 = {
       OriginData.encode(message.origin_data, writer.uint32(42).fork()).ldelim();
     }
     if (message.onchain_data !== undefined) {
-      OnChainDataV063.encode(
+      OnChainDataV1.encode(
         message.onchain_data,
         writer.uint32(50).fork()
       ).ldelim();
@@ -507,10 +514,10 @@ export const NFTSchemaV063 = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): NFTSchemaV063 {
+  decode(input: Reader | Uint8Array, length?: number): NFTSchemaV1 {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseNFTSchemaV063 } as NFTSchemaV063;
+    const message = { ...baseNFTSchemaV1 } as NFTSchemaV1;
     message.system_actioners = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -531,10 +538,7 @@ export const NFTSchemaV063 = {
           message.origin_data = OriginData.decode(reader, reader.uint32());
           break;
         case 6:
-          message.onchain_data = OnChainDataV063.decode(
-            reader,
-            reader.uint32()
-          );
+          message.onchain_data = OnChainDataV1.decode(reader, reader.uint32());
           break;
         case 7:
           message.isVerified = reader.bool();
@@ -550,8 +554,8 @@ export const NFTSchemaV063 = {
     return message;
   },
 
-  fromJSON(object: any): NFTSchemaV063 {
-    const message = { ...baseNFTSchemaV063 } as NFTSchemaV063;
+  fromJSON(object: any): NFTSchemaV1 {
+    const message = { ...baseNFTSchemaV1 } as NFTSchemaV1;
     message.system_actioners = [];
     if (object.code !== undefined && object.code !== null) {
       message.code = String(object.code);
@@ -582,7 +586,7 @@ export const NFTSchemaV063 = {
       message.origin_data = undefined;
     }
     if (object.onchain_data !== undefined && object.onchain_data !== null) {
-      message.onchain_data = OnChainDataV063.fromJSON(object.onchain_data);
+      message.onchain_data = OnChainDataV1.fromJSON(object.onchain_data);
     } else {
       message.onchain_data = undefined;
     }
@@ -602,7 +606,7 @@ export const NFTSchemaV063 = {
     return message;
   },
 
-  toJSON(message: NFTSchemaV063): unknown {
+  toJSON(message: NFTSchemaV1): unknown {
     const obj: any = {};
     message.code !== undefined && (obj.code = message.code);
     message.name !== undefined && (obj.name = message.name);
@@ -618,7 +622,7 @@ export const NFTSchemaV063 = {
         : undefined);
     message.onchain_data !== undefined &&
       (obj.onchain_data = message.onchain_data
-        ? OnChainDataV063.toJSON(message.onchain_data)
+        ? OnChainDataV1.toJSON(message.onchain_data)
         : undefined);
     message.isVerified !== undefined && (obj.isVerified = message.isVerified);
     message.mint_authorization !== undefined &&
@@ -626,8 +630,8 @@ export const NFTSchemaV063 = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<NFTSchemaV063>): NFTSchemaV063 {
-    const message = { ...baseNFTSchemaV063 } as NFTSchemaV063;
+  fromPartial(object: DeepPartial<NFTSchemaV1>): NFTSchemaV1 {
+    const message = { ...baseNFTSchemaV1 } as NFTSchemaV1;
     message.system_actioners = [];
     if (object.code !== undefined && object.code !== null) {
       message.code = object.code;
@@ -658,7 +662,7 @@ export const NFTSchemaV063 = {
       message.origin_data = undefined;
     }
     if (object.onchain_data !== undefined && object.onchain_data !== null) {
-      message.onchain_data = OnChainDataV063.fromPartial(object.onchain_data);
+      message.onchain_data = OnChainDataV1.fromPartial(object.onchain_data);
     } else {
       message.onchain_data = undefined;
     }

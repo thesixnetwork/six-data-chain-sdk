@@ -1,7 +1,7 @@
 /* eslint-disable */
-import { Params } from "./params";
-import { Group } from "./group";
-import { Admin } from "./admin";
+import { Params } from "../protocoladmin/params";
+import { Group } from "../protocoladmin/group";
+import { Admin } from "../protocoladmin/admin";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "thesixnetwork.sixprotocol.protocoladmin";

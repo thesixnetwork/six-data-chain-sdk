@@ -1,12 +1,12 @@
 /* eslint-disable */
 import { Reader, Writer } from "protobufjs/minimal";
-import { Params } from "./params";
-import { Group } from "./group";
+import { Params } from "../protocoladmin/params";
+import { Group } from "../protocoladmin/group";
 import {
   PageRequest,
   PageResponse,
 } from "../cosmos/base/query/v1beta1/pagination";
-import { Admin } from "./admin";
+import { Admin } from "../protocoladmin/admin";
 
 export const protobufPackage = "thesixnetwork.sixprotocol.protocoladmin";
 

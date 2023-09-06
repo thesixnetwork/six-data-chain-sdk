@@ -44,35 +44,6 @@ export interface NftoracleActionParameter {
   value?: string;
 }
 
-export interface NftoracleActionRequestV063 {
-  /** @format uint64 */
-  id?: string;
-  nft_schema_code?: string;
-  token_id?: string;
-  action?: string;
-  caller?: string;
-  ref_id?: string;
-
-  /** @format uint64 */
-  required_confirm?: string;
-  status?: NftoracleRequestStatus;
-
-  /** @format uint64 */
-  current_confirm?: string;
-  confirmers?: string[];
-
-  /** @format date-time */
-  created_at?: string;
-
-  /** @format date-time */
-  valid_until?: string;
-  data_hashes?: NftoracleDataHash[];
-
-  /** @format int64 */
-  expired_height?: string;
-  execution_error_message?: string;
-}
-
 export interface NftoracleActionSigner {
   actor_address?: string;
   owner_address?: string;
@@ -323,21 +294,6 @@ export interface NftoracleQueryAllActionRequestResponse {
   pagination?: V1Beta1PageResponse;
 }
 
-export interface NftoracleQueryAllActionRequestResponseV063 {
-  ActionRequestV063?: NftoracleActionRequestV063[];
-
-  /**
-   * PageResponse is to be embedded in gRPC response messages where the
-   * corresponding request message has used PageRequest.
-   *
-   *  message SomeResponse {
-   *          repeated Bar results = 1;
-   *          PageResponse page = 2;
-   *  }
-   */
-  pagination?: V1Beta1PageResponse;
-}
-
 export interface NftoracleQueryAllActionSignerConfigResponse {
   actionSignerConfig?: NftoracleActionSignerConfig[];
 
@@ -415,10 +371,6 @@ export interface NftoracleQueryAllSyncActionSignerResponse {
 
 export interface NftoracleQueryGetActionRequestResponse {
   ActionOracleRequest?: NftoracleActionOracleRequest;
-}
-
-export interface NftoracleQueryGetActionRequestResponseV063 {
-  ActionRequestV063?: NftoracleActionRequestV063;
 }
 
 export interface NftoracleQueryGetActionSignerConfigResponse {
@@ -807,47 +759,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryActionOracleRequest = (id: string, params: RequestParams = {}) =>
     this.request<NftoracleQueryGetActionRequestResponse, RpcStatus>({
       path: `/thesixnetwork/sixnft/nftoracle/action_request/${id}`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryActionRequestAllV063
-   * @summary Queries a list of ActionRequest items.
-   * @request GET:/thesixnetwork/sixnft/nftoracle/action_request_063
-   */
-  queryActionRequestAllV063 = (
-    query?: {
-      "pagination.key"?: string;
-      "pagination.offset"?: string;
-      "pagination.limit"?: string;
-      "pagination.count_total"?: boolean;
-    },
-    params: RequestParams = {},
-  ) =>
-    this.request<NftoracleQueryAllActionRequestResponseV063, RpcStatus>({
-      path: `/thesixnetwork/sixnft/nftoracle/action_request_063`,
-      method: "GET",
-      query: query,
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryActionOracleRequestV063
-   * @summary Queries a ActionRequest by id.
-   * @request GET:/thesixnetwork/sixnft/nftoracle/action_request_063/{id}
-   */
-  queryActionOracleRequestV063 = (id: string, params: RequestParams = {}) =>
-    this.request<NftoracleQueryGetActionRequestResponseV063, RpcStatus>({
-      path: `/thesixnetwork/sixnft/nftoracle/action_request_063/${id}`,
       method: "GET",
       format: "json",
       ...params,

@@ -7,10 +7,7 @@ import {
   PageRequest,
   PageResponse,
 } from "../cosmos/base/query/v1beta1/pagination";
-import {
-  ActionOracleRequest,
-  ActionRequestV063,
-} from "../nftoracle/action_request";
+import { ActionOracleRequest } from "../nftoracle/action_request";
 import { CollectionOwnerRequest } from "../nftoracle/collection_owner_request";
 import { OracleConfig } from "../nftoracle/oracle_config";
 import { ActionSigner } from "../nftoracle/action_signer";
@@ -54,21 +51,12 @@ export interface QueryGetActionRequestResponse {
   ActionOracleRequest: ActionOracleRequest | undefined;
 }
 
-export interface QueryGetActionRequestResponseV063 {
-  ActionRequestV063: ActionRequestV063 | undefined;
-}
-
 export interface QueryAllActionRequestRequest {
   pagination: PageRequest | undefined;
 }
 
 export interface QueryAllActionRequestResponse {
   ActionOracleRequest: ActionOracleRequest[];
-  pagination: PageResponse | undefined;
-}
-
-export interface QueryAllActionRequestResponseV063 {
-  ActionRequestV063: ActionRequestV063[];
   pagination: PageResponse | undefined;
 }
 
@@ -726,94 +714,6 @@ export const QueryGetActionRequestResponse = {
   },
 };
 
-const baseQueryGetActionRequestResponseV063: object = {};
-
-export const QueryGetActionRequestResponseV063 = {
-  encode(
-    message: QueryGetActionRequestResponseV063,
-    writer: Writer = Writer.create()
-  ): Writer {
-    if (message.ActionRequestV063 !== undefined) {
-      ActionRequestV063.encode(
-        message.ActionRequestV063,
-        writer.uint32(10).fork()
-      ).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): QueryGetActionRequestResponseV063 {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryGetActionRequestResponseV063,
-    } as QueryGetActionRequestResponseV063;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.ActionRequestV063 = ActionRequestV063.decode(
-            reader,
-            reader.uint32()
-          );
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): QueryGetActionRequestResponseV063 {
-    const message = {
-      ...baseQueryGetActionRequestResponseV063,
-    } as QueryGetActionRequestResponseV063;
-    if (
-      object.ActionRequestV063 !== undefined &&
-      object.ActionRequestV063 !== null
-    ) {
-      message.ActionRequestV063 = ActionRequestV063.fromJSON(
-        object.ActionRequestV063
-      );
-    } else {
-      message.ActionRequestV063 = undefined;
-    }
-    return message;
-  },
-
-  toJSON(message: QueryGetActionRequestResponseV063): unknown {
-    const obj: any = {};
-    message.ActionRequestV063 !== undefined &&
-      (obj.ActionRequestV063 = message.ActionRequestV063
-        ? ActionRequestV063.toJSON(message.ActionRequestV063)
-        : undefined);
-    return obj;
-  },
-
-  fromPartial(
-    object: DeepPartial<QueryGetActionRequestResponseV063>
-  ): QueryGetActionRequestResponseV063 {
-    const message = {
-      ...baseQueryGetActionRequestResponseV063,
-    } as QueryGetActionRequestResponseV063;
-    if (
-      object.ActionRequestV063 !== undefined &&
-      object.ActionRequestV063 !== null
-    ) {
-      message.ActionRequestV063 = ActionRequestV063.fromPartial(
-        object.ActionRequestV063
-      );
-    } else {
-      message.ActionRequestV063 = undefined;
-    }
-    return message;
-  },
-};
-
 const baseQueryAllActionRequestRequest: object = {};
 
 export const QueryAllActionRequestRequest = {
@@ -984,115 +884,6 @@ export const QueryAllActionRequestResponse = {
     ) {
       for (const e of object.ActionOracleRequest) {
         message.ActionOracleRequest.push(ActionOracleRequest.fromPartial(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
-  },
-};
-
-const baseQueryAllActionRequestResponseV063: object = {};
-
-export const QueryAllActionRequestResponseV063 = {
-  encode(
-    message: QueryAllActionRequestResponseV063,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.ActionRequestV063) {
-      ActionRequestV063.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.pagination !== undefined) {
-      PageResponse.encode(
-        message.pagination,
-        writer.uint32(18).fork()
-      ).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): QueryAllActionRequestResponseV063 {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryAllActionRequestResponseV063,
-    } as QueryAllActionRequestResponseV063;
-    message.ActionRequestV063 = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.ActionRequestV063.push(
-            ActionRequestV063.decode(reader, reader.uint32())
-          );
-          break;
-        case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): QueryAllActionRequestResponseV063 {
-    const message = {
-      ...baseQueryAllActionRequestResponseV063,
-    } as QueryAllActionRequestResponseV063;
-    message.ActionRequestV063 = [];
-    if (
-      object.ActionRequestV063 !== undefined &&
-      object.ActionRequestV063 !== null
-    ) {
-      for (const e of object.ActionRequestV063) {
-        message.ActionRequestV063.push(ActionRequestV063.fromJSON(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
-  },
-
-  toJSON(message: QueryAllActionRequestResponseV063): unknown {
-    const obj: any = {};
-    if (message.ActionRequestV063) {
-      obj.ActionRequestV063 = message.ActionRequestV063.map((e) =>
-        e ? ActionRequestV063.toJSON(e) : undefined
-      );
-    } else {
-      obj.ActionRequestV063 = [];
-    }
-    message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
-    return obj;
-  },
-
-  fromPartial(
-    object: DeepPartial<QueryAllActionRequestResponseV063>
-  ): QueryAllActionRequestResponseV063 {
-    const message = {
-      ...baseQueryAllActionRequestResponseV063,
-    } as QueryAllActionRequestResponseV063;
-    message.ActionRequestV063 = [];
-    if (
-      object.ActionRequestV063 !== undefined &&
-      object.ActionRequestV063 !== null
-    ) {
-      for (const e of object.ActionRequestV063) {
-        message.ActionRequestV063.push(ActionRequestV063.fromPartial(e));
       }
     }
     if (object.pagination !== undefined && object.pagination !== null) {
@@ -2749,18 +2540,10 @@ export interface Query {
   ActionOracleRequest(
     request: QueryGetActionRequestRequest
   ): Promise<QueryGetActionRequestResponse>;
-  /** Queries a ActionRequest by id. */
-  ActionOracleRequestV063(
-    request: QueryGetActionRequestRequest
-  ): Promise<QueryGetActionRequestResponseV063>;
   /** Queries a list of ActionRequest items. */
   ActionRequestAll(
     request: QueryAllActionRequestRequest
   ): Promise<QueryAllActionRequestResponse>;
-  /** Queries a list of ActionRequest items. */
-  ActionRequestAllV063(
-    request: QueryAllActionRequestRequest
-  ): Promise<QueryAllActionRequestResponseV063>;
   /** Queries a CollectionOwnerRequest by id. */
   CollectionOwnerRequest(
     request: QueryGetCollectionOwnerRequestRequest
@@ -2860,20 +2643,6 @@ export class QueryClientImpl implements Query {
     );
   }
 
-  ActionOracleRequestV063(
-    request: QueryGetActionRequestRequest
-  ): Promise<QueryGetActionRequestResponseV063> {
-    const data = QueryGetActionRequestRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "thesixnetwork.sixnft.nftoracle.Query",
-      "ActionOracleRequestV063",
-      data
-    );
-    return promise.then((data) =>
-      QueryGetActionRequestResponseV063.decode(new Reader(data))
-    );
-  }
-
   ActionRequestAll(
     request: QueryAllActionRequestRequest
   ): Promise<QueryAllActionRequestResponse> {
@@ -2885,20 +2654,6 @@ export class QueryClientImpl implements Query {
     );
     return promise.then((data) =>
       QueryAllActionRequestResponse.decode(new Reader(data))
-    );
-  }
-
-  ActionRequestAllV063(
-    request: QueryAllActionRequestRequest
-  ): Promise<QueryAllActionRequestResponseV063> {
-    const data = QueryAllActionRequestRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "thesixnetwork.sixnft.nftoracle.Query",
-      "ActionRequestAllV063",
-      data
-    );
-    return promise.then((data) =>
-      QueryAllActionRequestResponseV063.decode(new Reader(data))
     );
   }
 

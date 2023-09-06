@@ -1,15 +1,15 @@
 /* eslint-disable */
 import { Reader, Writer } from "protobufjs/minimal";
-import { Params } from "./params";
-import { Token } from "./token";
+import { Params } from "../tokenmngr/params";
+import { Token } from "../tokenmngr/token";
 import {
   PageRequest,
   PageResponse,
 } from "../cosmos/base/query/v1beta1/pagination";
-import { Mintperm } from "./mintperm";
-import { Options } from "./options";
-import { Burn } from "./burn";
-import { TokenBurn } from "./token_burn";
+import { Mintperm } from "../tokenmngr/mintperm";
+import { Options } from "../tokenmngr/options";
+import { Burn } from "../tokenmngr/burn";
+import { TokenBurn } from "../tokenmngr/token_burn";
 
 export const protobufPackage = "thesixnetwork.sixprotocol.tokenmngr";
 
