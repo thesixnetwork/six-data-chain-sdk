@@ -46,7 +46,6 @@ Replace
 import { SigningStargateClient, SigningStargateClientOptions} from "@cosmjs/stargate";
 ```
 
-
 - 6 add SigningStargateClientOptions to txClient
 
 Find
