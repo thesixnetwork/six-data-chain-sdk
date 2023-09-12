@@ -14,6 +14,14 @@ export interface SchemaAttribute {
   nftSchemaCode: string;
   name: string;
   data_type: string;
+  current_value: SchemaAttributeValue | undefined;
+  creator: string;
+}
+
+export interface SchemaAttributeV1 {
+  nftSchemaCode: string;
+  name: string;
+  data_type: string;
   required: boolean;
   display_value_field: string;
   display_option: DisplayOption | undefined;
@@ -35,6 +43,148 @@ const baseSchemaAttribute: object = {
   nftSchemaCode: "",
   name: "",
   data_type: "",
+  creator: "",
+};
+
+export const SchemaAttribute = {
+  encode(message: SchemaAttribute, writer: Writer = Writer.create()): Writer {
+    if (message.nftSchemaCode !== "") {
+      writer.uint32(10).string(message.nftSchemaCode);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.data_type !== "") {
+      writer.uint32(26).string(message.data_type);
+    }
+    if (message.current_value !== undefined) {
+      SchemaAttributeValue.encode(
+        message.current_value,
+        writer.uint32(34).fork()
+      ).ldelim();
+    }
+    if (message.creator !== "") {
+      writer.uint32(42).string(message.creator);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): SchemaAttribute {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseSchemaAttribute } as SchemaAttribute;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.nftSchemaCode = reader.string();
+          break;
+        case 2:
+          message.name = reader.string();
+          break;
+        case 3:
+          message.data_type = reader.string();
+          break;
+        case 4:
+          message.current_value = SchemaAttributeValue.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        case 5:
+          message.creator = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SchemaAttribute {
+    const message = { ...baseSchemaAttribute } as SchemaAttribute;
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = String(object.nftSchemaCode);
+    } else {
+      message.nftSchemaCode = "";
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    if (object.data_type !== undefined && object.data_type !== null) {
+      message.data_type = String(object.data_type);
+    } else {
+      message.data_type = "";
+    }
+    if (object.current_value !== undefined && object.current_value !== null) {
+      message.current_value = SchemaAttributeValue.fromJSON(
+        object.current_value
+      );
+    } else {
+      message.current_value = undefined;
+    }
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    return message;
+  },
+
+  toJSON(message: SchemaAttribute): unknown {
+    const obj: any = {};
+    message.nftSchemaCode !== undefined &&
+      (obj.nftSchemaCode = message.nftSchemaCode);
+    message.name !== undefined && (obj.name = message.name);
+    message.data_type !== undefined && (obj.data_type = message.data_type);
+    message.current_value !== undefined &&
+      (obj.current_value = message.current_value
+        ? SchemaAttributeValue.toJSON(message.current_value)
+        : undefined);
+    message.creator !== undefined && (obj.creator = message.creator);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<SchemaAttribute>): SchemaAttribute {
+    const message = { ...baseSchemaAttribute } as SchemaAttribute;
+    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
+      message.nftSchemaCode = object.nftSchemaCode;
+    } else {
+      message.nftSchemaCode = "";
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    } else {
+      message.name = "";
+    }
+    if (object.data_type !== undefined && object.data_type !== null) {
+      message.data_type = object.data_type;
+    } else {
+      message.data_type = "";
+    }
+    if (object.current_value !== undefined && object.current_value !== null) {
+      message.current_value = SchemaAttributeValue.fromPartial(
+        object.current_value
+      );
+    } else {
+      message.current_value = undefined;
+    }
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    return message;
+  },
+};
+
+const baseSchemaAttributeV1: object = {
+  nftSchemaCode: "",
+  name: "",
+  data_type: "",
   required: false,
   display_value_field: "",
   hidden_overide: false,
@@ -42,8 +192,8 @@ const baseSchemaAttribute: object = {
   creator: "",
 };
 
-export const SchemaAttribute = {
-  encode(message: SchemaAttribute, writer: Writer = Writer.create()): Writer {
+export const SchemaAttributeV1 = {
+  encode(message: SchemaAttributeV1, writer: Writer = Writer.create()): Writer {
     if (message.nftSchemaCode !== "") {
       writer.uint32(10).string(message.nftSchemaCode);
     }
@@ -83,10 +233,10 @@ export const SchemaAttribute = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): SchemaAttribute {
+  decode(input: Reader | Uint8Array, length?: number): SchemaAttributeV1 {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseSchemaAttribute } as SchemaAttribute;
+    const message = { ...baseSchemaAttributeV1 } as SchemaAttributeV1;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -134,8 +284,8 @@ export const SchemaAttribute = {
     return message;
   },
 
-  fromJSON(object: any): SchemaAttribute {
-    const message = { ...baseSchemaAttribute } as SchemaAttribute;
+  fromJSON(object: any): SchemaAttributeV1 {
+    const message = { ...baseSchemaAttributeV1 } as SchemaAttributeV1;
     if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
       message.nftSchemaCode = String(object.nftSchemaCode);
     } else {
@@ -197,7 +347,7 @@ export const SchemaAttribute = {
     return message;
   },
 
-  toJSON(message: SchemaAttribute): unknown {
+  toJSON(message: SchemaAttributeV1): unknown {
     const obj: any = {};
     message.nftSchemaCode !== undefined &&
       (obj.nftSchemaCode = message.nftSchemaCode);
@@ -222,8 +372,8 @@ export const SchemaAttribute = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<SchemaAttribute>): SchemaAttribute {
-    const message = { ...baseSchemaAttribute } as SchemaAttribute;
+  fromPartial(object: DeepPartial<SchemaAttributeV1>): SchemaAttributeV1 {
+    const message = { ...baseSchemaAttributeV1 } as SchemaAttributeV1;
     if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
       message.nftSchemaCode = object.nftSchemaCode;
     } else {

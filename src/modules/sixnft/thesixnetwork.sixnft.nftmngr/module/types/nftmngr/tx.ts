@@ -6,56 +6,20 @@ import { SchemaAttribute } from "../nftmngr/schema_attribute";
 
 export const protobufPackage = "thesixnetwork.sixnft.nftmngr";
 
-export enum AttributeLocationV1 {
+export enum AttributeLocation {
   NFT_ATTRIBUTE = 0,
   TOKEN_ATTRIBUTE = 1,
-  UNRECOGNIZED = -1,
-}
-
-export function attributeLocationV1FromJSON(object: any): AttributeLocationV1 {
-  switch (object) {
-    case 0:
-    case "NFT_ATTRIBUTE":
-      return AttributeLocationV1.NFT_ATTRIBUTE;
-    case 1:
-    case "TOKEN_ATTRIBUTE":
-      return AttributeLocationV1.TOKEN_ATTRIBUTE;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return AttributeLocationV1.UNRECOGNIZED;
-  }
-}
-
-export function attributeLocationV1ToJSON(object: AttributeLocationV1): string {
-  switch (object) {
-    case AttributeLocationV1.NFT_ATTRIBUTE:
-      return "NFT_ATTRIBUTE";
-    case AttributeLocationV1.TOKEN_ATTRIBUTE:
-      return "TOKEN_ATTRIBUTE";
-    default:
-      return "UNKNOWN";
-  }
-}
-
-/**
- * cannot use TOKEN_ATTRIBUTE because it is already used in AttributeLocationV1
- * that is why we use ATTRIBUTE_OF_TOKEN
- */
-export enum AttributeLocation {
-  ATTRIBUTE_OF_SCHEMA = 0,
-  ATTRIBUTE_OF_TOKEN = 1,
   UNRECOGNIZED = -1,
 }
 
 export function attributeLocationFromJSON(object: any): AttributeLocation {
   switch (object) {
     case 0:
-    case "ATTRIBUTE_OF_SCHEMA":
-      return AttributeLocation.ATTRIBUTE_OF_SCHEMA;
+    case "NFT_ATTRIBUTE":
+      return AttributeLocation.NFT_ATTRIBUTE;
     case 1:
-    case "ATTRIBUTE_OF_TOKEN":
-      return AttributeLocation.ATTRIBUTE_OF_TOKEN;
+    case "TOKEN_ATTRIBUTE":
+      return AttributeLocation.TOKEN_ATTRIBUTE;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -65,10 +29,10 @@ export function attributeLocationFromJSON(object: any): AttributeLocation {
 
 export function attributeLocationToJSON(object: AttributeLocation): string {
   switch (object) {
-    case AttributeLocation.ATTRIBUTE_OF_SCHEMA:
-      return "ATTRIBUTE_OF_SCHEMA";
-    case AttributeLocation.ATTRIBUTE_OF_TOKEN:
-      return "ATTRIBUTE_OF_TOKEN";
+    case AttributeLocation.NFT_ATTRIBUTE:
+      return "NFT_ATTRIBUTE";
+    case AttributeLocation.TOKEN_ATTRIBUTE:
+      return "TOKEN_ATTRIBUTE";
     default:
       return "UNKNOWN";
   }

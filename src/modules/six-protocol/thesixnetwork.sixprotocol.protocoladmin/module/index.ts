@@ -4,19 +4,19 @@ import { StdFee } from "@cosmjs/launchpad";
 import { SigningStargateClient, SigningStargateClientOptions} from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
-import { MsgAddAdminToGroup } from "./types/protocoladmin/tx";
 import { MsgDeleteGroup } from "./types/protocoladmin/tx";
+import { MsgAddAdminToGroup } from "./types/protocoladmin/tx";
 import { MsgCreateGroup } from "./types/protocoladmin/tx";
-import { MsgUpdateGroup } from "./types/protocoladmin/tx";
 import { MsgRemoveAdminFromGroup } from "./types/protocoladmin/tx";
+import { MsgUpdateGroup } from "./types/protocoladmin/tx";
 
 
 const types = [
-  ["/thesixnetwork.sixprotocol.protocoladmin.MsgAddAdminToGroup", MsgAddAdminToGroup],
   ["/thesixnetwork.sixprotocol.protocoladmin.MsgDeleteGroup", MsgDeleteGroup],
+  ["/thesixnetwork.sixprotocol.protocoladmin.MsgAddAdminToGroup", MsgAddAdminToGroup],
   ["/thesixnetwork.sixprotocol.protocoladmin.MsgCreateGroup", MsgCreateGroup],
-  ["/thesixnetwork.sixprotocol.protocoladmin.MsgUpdateGroup", MsgUpdateGroup],
   ["/thesixnetwork.sixprotocol.protocoladmin.MsgRemoveAdminFromGroup", MsgRemoveAdminFromGroup],
+  ["/thesixnetwork.sixprotocol.protocoladmin.MsgUpdateGroup", MsgUpdateGroup],
   
 ];
 export const MissingWalletError = new Error("wallet is required");
@@ -49,11 +49,11 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
 
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
-    msgAddAdminToGroup: (data: MsgAddAdminToGroup): EncodeObject => ({ typeUrl: "/thesixnetwork.sixprotocol.protocoladmin.MsgAddAdminToGroup", value: MsgAddAdminToGroup.fromPartial( data ) }),
     msgDeleteGroup: (data: MsgDeleteGroup): EncodeObject => ({ typeUrl: "/thesixnetwork.sixprotocol.protocoladmin.MsgDeleteGroup", value: MsgDeleteGroup.fromPartial( data ) }),
+    msgAddAdminToGroup: (data: MsgAddAdminToGroup): EncodeObject => ({ typeUrl: "/thesixnetwork.sixprotocol.protocoladmin.MsgAddAdminToGroup", value: MsgAddAdminToGroup.fromPartial( data ) }),
     msgCreateGroup: (data: MsgCreateGroup): EncodeObject => ({ typeUrl: "/thesixnetwork.sixprotocol.protocoladmin.MsgCreateGroup", value: MsgCreateGroup.fromPartial( data ) }),
-    msgUpdateGroup: (data: MsgUpdateGroup): EncodeObject => ({ typeUrl: "/thesixnetwork.sixprotocol.protocoladmin.MsgUpdateGroup", value: MsgUpdateGroup.fromPartial( data ) }),
     msgRemoveAdminFromGroup: (data: MsgRemoveAdminFromGroup): EncodeObject => ({ typeUrl: "/thesixnetwork.sixprotocol.protocoladmin.MsgRemoveAdminFromGroup", value: MsgRemoveAdminFromGroup.fromPartial( data ) }),
+    msgUpdateGroup: (data: MsgUpdateGroup): EncodeObject => ({ typeUrl: "/thesixnetwork.sixprotocol.protocoladmin.MsgUpdateGroup", value: MsgUpdateGroup.fromPartial( data ) }),
     
   };
 };

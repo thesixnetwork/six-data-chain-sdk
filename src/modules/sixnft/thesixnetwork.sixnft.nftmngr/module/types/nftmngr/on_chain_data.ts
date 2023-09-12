@@ -12,15 +12,13 @@ export interface FlagStatus {
 }
 
 export interface OnChainData {
+  nft_attributes: AttributeDefinition[];
   token_attributes: AttributeDefinition[];
   actions: Action[];
   status: FlagStatus[];
 }
 
-export interface OnChainDataInput {
-  reveal_required: boolean;
-  reveal_secret: Uint8Array;
-  schema_attributes: AttributeDefinition[];
+export interface OnChainDataV2 {
   token_attributes: AttributeDefinition[];
   actions: Action[];
   status: FlagStatus[];
@@ -114,14 +112,17 @@ const baseOnChainData: object = {};
 
 export const OnChainData = {
   encode(message: OnChainData, writer: Writer = Writer.create()): Writer {
-    for (const v of message.token_attributes) {
+    for (const v of message.nft_attributes) {
       AttributeDefinition.encode(v!, writer.uint32(10).fork()).ldelim();
     }
+    for (const v of message.token_attributes) {
+      AttributeDefinition.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
     for (const v of message.actions) {
-      Action.encode(v!, writer.uint32(18).fork()).ldelim();
+      Action.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     for (const v of message.status) {
-      FlagStatus.encode(v!, writer.uint32(26).fork()).ldelim();
+      FlagStatus.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -130,6 +131,7 @@ export const OnChainData = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseOnChainData } as OnChainData;
+    message.nft_attributes = [];
     message.token_attributes = [];
     message.actions = [];
     message.status = [];
@@ -137,14 +139,19 @@ export const OnChainData = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.token_attributes.push(
+          message.nft_attributes.push(
             AttributeDefinition.decode(reader, reader.uint32())
           );
           break;
         case 2:
-          message.actions.push(Action.decode(reader, reader.uint32()));
+          message.token_attributes.push(
+            AttributeDefinition.decode(reader, reader.uint32())
+          );
           break;
         case 3:
+          message.actions.push(Action.decode(reader, reader.uint32()));
+          break;
+        case 4:
           message.status.push(FlagStatus.decode(reader, reader.uint32()));
           break;
         default:
@@ -157,9 +164,15 @@ export const OnChainData = {
 
   fromJSON(object: any): OnChainData {
     const message = { ...baseOnChainData } as OnChainData;
+    message.nft_attributes = [];
     message.token_attributes = [];
     message.actions = [];
     message.status = [];
+    if (object.nft_attributes !== undefined && object.nft_attributes !== null) {
+      for (const e of object.nft_attributes) {
+        message.nft_attributes.push(AttributeDefinition.fromJSON(e));
+      }
+    }
     if (
       object.token_attributes !== undefined &&
       object.token_attributes !== null
@@ -183,6 +196,13 @@ export const OnChainData = {
 
   toJSON(message: OnChainData): unknown {
     const obj: any = {};
+    if (message.nft_attributes) {
+      obj.nft_attributes = message.nft_attributes.map((e) =>
+        e ? AttributeDefinition.toJSON(e) : undefined
+      );
+    } else {
+      obj.nft_attributes = [];
+    }
     if (message.token_attributes) {
       obj.token_attributes = message.token_attributes.map((e) =>
         e ? AttributeDefinition.toJSON(e) : undefined
@@ -209,9 +229,15 @@ export const OnChainData = {
 
   fromPartial(object: DeepPartial<OnChainData>): OnChainData {
     const message = { ...baseOnChainData } as OnChainData;
+    message.nft_attributes = [];
     message.token_attributes = [];
     message.actions = [];
     message.status = [];
+    if (object.nft_attributes !== undefined && object.nft_attributes !== null) {
+      for (const e of object.nft_attributes) {
+        message.nft_attributes.push(AttributeDefinition.fromPartial(e));
+      }
+    }
     if (
       object.token_attributes !== undefined &&
       object.token_attributes !== null
@@ -234,36 +260,26 @@ export const OnChainData = {
   },
 };
 
-const baseOnChainDataInput: object = { reveal_required: false };
+const baseOnChainDataV2: object = {};
 
-export const OnChainDataInput = {
-  encode(message: OnChainDataInput, writer: Writer = Writer.create()): Writer {
-    if (message.reveal_required === true) {
-      writer.uint32(8).bool(message.reveal_required);
-    }
-    if (message.reveal_secret.length !== 0) {
-      writer.uint32(18).bytes(message.reveal_secret);
-    }
-    for (const v of message.schema_attributes) {
-      AttributeDefinition.encode(v!, writer.uint32(26).fork()).ldelim();
-    }
+export const OnChainDataV2 = {
+  encode(message: OnChainDataV2, writer: Writer = Writer.create()): Writer {
     for (const v of message.token_attributes) {
-      AttributeDefinition.encode(v!, writer.uint32(34).fork()).ldelim();
+      AttributeDefinition.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     for (const v of message.actions) {
-      Action.encode(v!, writer.uint32(42).fork()).ldelim();
+      Action.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     for (const v of message.status) {
-      FlagStatus.encode(v!, writer.uint32(50).fork()).ldelim();
+      FlagStatus.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): OnChainDataInput {
+  decode(input: Reader | Uint8Array, length?: number): OnChainDataV2 {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseOnChainDataInput } as OnChainDataInput;
-    message.schema_attributes = [];
+    const message = { ...baseOnChainDataV2 } as OnChainDataV2;
     message.token_attributes = [];
     message.actions = [];
     message.status = [];
@@ -271,25 +287,14 @@ export const OnChainDataInput = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.reveal_required = reader.bool();
-          break;
-        case 2:
-          message.reveal_secret = reader.bytes();
-          break;
-        case 3:
-          message.schema_attributes.push(
-            AttributeDefinition.decode(reader, reader.uint32())
-          );
-          break;
-        case 4:
           message.token_attributes.push(
             AttributeDefinition.decode(reader, reader.uint32())
           );
           break;
-        case 5:
+        case 2:
           message.actions.push(Action.decode(reader, reader.uint32()));
           break;
-        case 6:
+        case 3:
           message.status.push(FlagStatus.decode(reader, reader.uint32()));
           break;
         default:
@@ -300,31 +305,11 @@ export const OnChainDataInput = {
     return message;
   },
 
-  fromJSON(object: any): OnChainDataInput {
-    const message = { ...baseOnChainDataInput } as OnChainDataInput;
-    message.schema_attributes = [];
+  fromJSON(object: any): OnChainDataV2 {
+    const message = { ...baseOnChainDataV2 } as OnChainDataV2;
     message.token_attributes = [];
     message.actions = [];
     message.status = [];
-    if (
-      object.reveal_required !== undefined &&
-      object.reveal_required !== null
-    ) {
-      message.reveal_required = Boolean(object.reveal_required);
-    } else {
-      message.reveal_required = false;
-    }
-    if (object.reveal_secret !== undefined && object.reveal_secret !== null) {
-      message.reveal_secret = bytesFromBase64(object.reveal_secret);
-    }
-    if (
-      object.schema_attributes !== undefined &&
-      object.schema_attributes !== null
-    ) {
-      for (const e of object.schema_attributes) {
-        message.schema_attributes.push(AttributeDefinition.fromJSON(e));
-      }
-    }
     if (
       object.token_attributes !== undefined &&
       object.token_attributes !== null
@@ -346,23 +331,8 @@ export const OnChainDataInput = {
     return message;
   },
 
-  toJSON(message: OnChainDataInput): unknown {
+  toJSON(message: OnChainDataV2): unknown {
     const obj: any = {};
-    message.reveal_required !== undefined &&
-      (obj.reveal_required = message.reveal_required);
-    message.reveal_secret !== undefined &&
-      (obj.reveal_secret = base64FromBytes(
-        message.reveal_secret !== undefined
-          ? message.reveal_secret
-          : new Uint8Array()
-      ));
-    if (message.schema_attributes) {
-      obj.schema_attributes = message.schema_attributes.map((e) =>
-        e ? AttributeDefinition.toJSON(e) : undefined
-      );
-    } else {
-      obj.schema_attributes = [];
-    }
     if (message.token_attributes) {
       obj.token_attributes = message.token_attributes.map((e) =>
         e ? AttributeDefinition.toJSON(e) : undefined
@@ -387,33 +357,11 @@ export const OnChainDataInput = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<OnChainDataInput>): OnChainDataInput {
-    const message = { ...baseOnChainDataInput } as OnChainDataInput;
-    message.schema_attributes = [];
+  fromPartial(object: DeepPartial<OnChainDataV2>): OnChainDataV2 {
+    const message = { ...baseOnChainDataV2 } as OnChainDataV2;
     message.token_attributes = [];
     message.actions = [];
     message.status = [];
-    if (
-      object.reveal_required !== undefined &&
-      object.reveal_required !== null
-    ) {
-      message.reveal_required = object.reveal_required;
-    } else {
-      message.reveal_required = false;
-    }
-    if (object.reveal_secret !== undefined && object.reveal_secret !== null) {
-      message.reveal_secret = object.reveal_secret;
-    } else {
-      message.reveal_secret = new Uint8Array();
-    }
-    if (
-      object.schema_attributes !== undefined &&
-      object.schema_attributes !== null
-    ) {
-      for (const e of object.schema_attributes) {
-        message.schema_attributes.push(AttributeDefinition.fromPartial(e));
-      }
-    }
     if (
       object.token_attributes !== undefined &&
       object.token_attributes !== null

@@ -13,7 +13,6 @@ import { ActionExecutor } from "../nftmngr/action_executor";
 import { SchemaAttribute } from "../nftmngr/schema_attribute";
 import { ActionOfSchema } from "../nftmngr/action_of_schema";
 import { ExecutorOfSchema } from "../nftmngr/executor_of_schema";
-import { AttributeOfSchema } from "../nftmngr/attribute_of_schema";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "thesixnetwork.sixnft.nftmngr";
@@ -33,9 +32,8 @@ export interface GenesisState {
   actionExecutorList: ActionExecutor[];
   schemaAttributeList: SchemaAttribute[];
   actionOfSchemaList: ActionOfSchema[];
-  executorOfSchemaList: ExecutorOfSchema[];
   /** this line is used by starport scaffolding # genesis/proto/state */
-  attributeOfSchemaList: AttributeOfSchema[];
+  executorOfSchemaList: ExecutorOfSchema[];
 }
 
 const baseGenesisState: object = {};
@@ -90,9 +88,6 @@ export const GenesisState = {
     for (const v of message.executorOfSchemaList) {
       ExecutorOfSchema.encode(v!, writer.uint32(122).fork()).ldelim();
     }
-    for (const v of message.attributeOfSchemaList) {
-      AttributeOfSchema.encode(v!, writer.uint32(130).fork()).ldelim();
-    }
     return writer;
   },
 
@@ -111,7 +106,6 @@ export const GenesisState = {
     message.schemaAttributeList = [];
     message.actionOfSchemaList = [];
     message.executorOfSchemaList = [];
-    message.attributeOfSchemaList = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -175,11 +169,6 @@ export const GenesisState = {
             ExecutorOfSchema.decode(reader, reader.uint32())
           );
           break;
-        case 16:
-          message.attributeOfSchemaList.push(
-            AttributeOfSchema.decode(reader, reader.uint32())
-          );
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -201,7 +190,6 @@ export const GenesisState = {
     message.schemaAttributeList = [];
     message.actionOfSchemaList = [];
     message.executorOfSchemaList = [];
-    message.attributeOfSchemaList = [];
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromJSON(object.params);
     } else {
@@ -299,14 +287,6 @@ export const GenesisState = {
         message.executorOfSchemaList.push(ExecutorOfSchema.fromJSON(e));
       }
     }
-    if (
-      object.attributeOfSchemaList !== undefined &&
-      object.attributeOfSchemaList !== null
-    ) {
-      for (const e of object.attributeOfSchemaList) {
-        message.attributeOfSchemaList.push(AttributeOfSchema.fromJSON(e));
-      }
-    }
     return message;
   },
 
@@ -399,13 +379,6 @@ export const GenesisState = {
     } else {
       obj.executorOfSchemaList = [];
     }
-    if (message.attributeOfSchemaList) {
-      obj.attributeOfSchemaList = message.attributeOfSchemaList.map((e) =>
-        e ? AttributeOfSchema.toJSON(e) : undefined
-      );
-    } else {
-      obj.attributeOfSchemaList = [];
-    }
     return obj;
   },
 
@@ -422,7 +395,6 @@ export const GenesisState = {
     message.schemaAttributeList = [];
     message.actionOfSchemaList = [];
     message.executorOfSchemaList = [];
-    message.attributeOfSchemaList = [];
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromPartial(object.params);
     } else {
@@ -520,14 +492,6 @@ export const GenesisState = {
     ) {
       for (const e of object.executorOfSchemaList) {
         message.executorOfSchemaList.push(ExecutorOfSchema.fromPartial(e));
-      }
-    }
-    if (
-      object.attributeOfSchemaList !== undefined &&
-      object.attributeOfSchemaList !== null
-    ) {
-      for (const e of object.attributeOfSchemaList) {
-        message.attributeOfSchemaList.push(AttributeOfSchema.fromPartial(e));
       }
     }
     return message;

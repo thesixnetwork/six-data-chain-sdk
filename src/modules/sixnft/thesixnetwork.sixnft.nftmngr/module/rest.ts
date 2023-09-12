@@ -67,8 +67,8 @@ export interface NftmngrAttributeDefinition {
 }
 
 export enum NftmngrAttributeLocation {
-  ATTRIBUTE_OF_SCHEMA = "ATTRIBUTE_OF_SCHEMA",
-  ATTRIBUTE_OF_TOKEN = "ATTRIBUTE_OF_TOKEN",
+  NFT_ATTRIBUTE = "NFT_ATTRIBUTE",
+  TOKEN_ATTRIBUTE = "TOKEN_ATTRIBUTE",
 }
 
 export enum NftmngrAttributeOverriding {
@@ -325,6 +325,7 @@ export interface NftmngrNumberAttributeValue {
 }
 
 export interface NftmngrOnChainData {
+  nft_attributes?: NftmngrAttributeDefinition[];
   token_attributes?: NftmngrAttributeDefinition[];
   actions?: NftmngrAction[];
   status?: NftmngrFlagStatus[];
@@ -525,11 +526,6 @@ export interface NftmngrQueryGetActionOfSchemaResponse {
   actionOfSchema?: NftmngrActionOfSchema;
 }
 
-export interface NftmngrQueryGetAttributeOfSchemaResponse {
-  nftSchemaCode?: string;
-  schemaAttribute?: NftmngrSchemaAttribute[];
-}
-
 export interface NftmngrQueryGetExecutorOfSchemaResponse {
   executorOfSchema?: NftmngrExecutorOfSchema;
 }
@@ -597,12 +593,7 @@ export interface NftmngrSchemaAttribute {
   nftSchemaCode?: string;
   name?: string;
   data_type?: string;
-  required?: boolean;
-  display_value_field?: string;
-  display_option?: NftmngrDisplayOption;
   current_value?: NftmngrSchemaAttributeValue;
-  hidden_overide?: boolean;
-  hidden_to_marketplace?: boolean;
   creator?: string;
 }
 
@@ -1124,22 +1115,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryActionOfSchema = (nftSchemaCode: string, name: string, params: RequestParams = {}) =>
     this.request<NftmngrQueryGetActionOfSchemaResponse, RpcStatus>({
       path: `/thesixnetwork/sixnft/nftmngr/action_of_schema/${nftSchemaCode}/${name}`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryAttributeOfSchema
-   * @summary Queries a AttributeOfSchema by index.
-   * @request GET:/thesixnetwork/sixnft/nftmngr/attribute_of_schema/{nftSchemaCode}
-   */
-  queryAttributeOfSchema = (nftSchemaCode: string, params: RequestParams = {}) =>
-    this.request<NftmngrQueryGetAttributeOfSchemaResponse, RpcStatus>({
-      path: `/thesixnetwork/sixnft/nftmngr/attribute_of_schema/${nftSchemaCode}`,
       method: "GET",
       format: "json",
       ...params,

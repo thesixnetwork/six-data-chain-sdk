@@ -235,15 +235,6 @@ export interface QueryAllExecutorOfSchemaResponse {
   pagination: PageResponse | undefined;
 }
 
-export interface QueryGetAttributeOfSchemaRequest {
-  nftSchemaCode: string;
-}
-
-export interface QueryGetAttributeOfSchemaResponse {
-  nftSchemaCode: string;
-  schemaAttribute: SchemaAttribute[];
-}
-
 const baseQueryParamsRequest: object = {};
 
 export const QueryParamsRequest = {
@@ -4321,180 +4312,6 @@ export const QueryAllExecutorOfSchemaResponse = {
   },
 };
 
-const baseQueryGetAttributeOfSchemaRequest: object = { nftSchemaCode: "" };
-
-export const QueryGetAttributeOfSchemaRequest = {
-  encode(
-    message: QueryGetAttributeOfSchemaRequest,
-    writer: Writer = Writer.create()
-  ): Writer {
-    if (message.nftSchemaCode !== "") {
-      writer.uint32(10).string(message.nftSchemaCode);
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): QueryGetAttributeOfSchemaRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryGetAttributeOfSchemaRequest,
-    } as QueryGetAttributeOfSchemaRequest;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.nftSchemaCode = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): QueryGetAttributeOfSchemaRequest {
-    const message = {
-      ...baseQueryGetAttributeOfSchemaRequest,
-    } as QueryGetAttributeOfSchemaRequest;
-    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
-      message.nftSchemaCode = String(object.nftSchemaCode);
-    } else {
-      message.nftSchemaCode = "";
-    }
-    return message;
-  },
-
-  toJSON(message: QueryGetAttributeOfSchemaRequest): unknown {
-    const obj: any = {};
-    message.nftSchemaCode !== undefined &&
-      (obj.nftSchemaCode = message.nftSchemaCode);
-    return obj;
-  },
-
-  fromPartial(
-    object: DeepPartial<QueryGetAttributeOfSchemaRequest>
-  ): QueryGetAttributeOfSchemaRequest {
-    const message = {
-      ...baseQueryGetAttributeOfSchemaRequest,
-    } as QueryGetAttributeOfSchemaRequest;
-    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
-      message.nftSchemaCode = object.nftSchemaCode;
-    } else {
-      message.nftSchemaCode = "";
-    }
-    return message;
-  },
-};
-
-const baseQueryGetAttributeOfSchemaResponse: object = { nftSchemaCode: "" };
-
-export const QueryGetAttributeOfSchemaResponse = {
-  encode(
-    message: QueryGetAttributeOfSchemaResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    if (message.nftSchemaCode !== "") {
-      writer.uint32(10).string(message.nftSchemaCode);
-    }
-    for (const v of message.schemaAttribute) {
-      SchemaAttribute.encode(v!, writer.uint32(18).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): QueryGetAttributeOfSchemaResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryGetAttributeOfSchemaResponse,
-    } as QueryGetAttributeOfSchemaResponse;
-    message.schemaAttribute = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.nftSchemaCode = reader.string();
-          break;
-        case 2:
-          message.schemaAttribute.push(
-            SchemaAttribute.decode(reader, reader.uint32())
-          );
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): QueryGetAttributeOfSchemaResponse {
-    const message = {
-      ...baseQueryGetAttributeOfSchemaResponse,
-    } as QueryGetAttributeOfSchemaResponse;
-    message.schemaAttribute = [];
-    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
-      message.nftSchemaCode = String(object.nftSchemaCode);
-    } else {
-      message.nftSchemaCode = "";
-    }
-    if (
-      object.schemaAttribute !== undefined &&
-      object.schemaAttribute !== null
-    ) {
-      for (const e of object.schemaAttribute) {
-        message.schemaAttribute.push(SchemaAttribute.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: QueryGetAttributeOfSchemaResponse): unknown {
-    const obj: any = {};
-    message.nftSchemaCode !== undefined &&
-      (obj.nftSchemaCode = message.nftSchemaCode);
-    if (message.schemaAttribute) {
-      obj.schemaAttribute = message.schemaAttribute.map((e) =>
-        e ? SchemaAttribute.toJSON(e) : undefined
-      );
-    } else {
-      obj.schemaAttribute = [];
-    }
-    return obj;
-  },
-
-  fromPartial(
-    object: DeepPartial<QueryGetAttributeOfSchemaResponse>
-  ): QueryGetAttributeOfSchemaResponse {
-    const message = {
-      ...baseQueryGetAttributeOfSchemaResponse,
-    } as QueryGetAttributeOfSchemaResponse;
-    message.schemaAttribute = [];
-    if (object.nftSchemaCode !== undefined && object.nftSchemaCode !== null) {
-      message.nftSchemaCode = object.nftSchemaCode;
-    } else {
-      message.nftSchemaCode = "";
-    }
-    if (
-      object.schemaAttribute !== undefined &&
-      object.schemaAttribute !== null
-    ) {
-      for (const e of object.schemaAttribute) {
-        message.schemaAttribute.push(SchemaAttribute.fromPartial(e));
-      }
-    }
-    return message;
-  },
-};
-
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -4591,10 +4408,6 @@ export interface Query {
   ExecutorOfSchemaAll(
     request: QueryAllExecutorOfSchemaRequest
   ): Promise<QueryAllExecutorOfSchemaResponse>;
-  /** Queries a AttributeOfSchema by index. */
-  AttributeOfSchema(
-    request: QueryGetAttributeOfSchemaRequest
-  ): Promise<QueryGetAttributeOfSchemaResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -4943,20 +4756,6 @@ export class QueryClientImpl implements Query {
     );
     return promise.then((data) =>
       QueryAllExecutorOfSchemaResponse.decode(new Reader(data))
-    );
-  }
-
-  AttributeOfSchema(
-    request: QueryGetAttributeOfSchemaRequest
-  ): Promise<QueryGetAttributeOfSchemaResponse> {
-    const data = QueryGetAttributeOfSchemaRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "thesixnetwork.sixnft.nftmngr.Query",
-      "AttributeOfSchema",
-      data
-    );
-    return promise.then((data) =>
-      QueryGetAttributeOfSchemaResponse.decode(new Reader(data))
     );
   }
 }
