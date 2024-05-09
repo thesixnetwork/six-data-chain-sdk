@@ -15,6 +15,7 @@ export * as fee from "@cosmjs/stargate/build/fee"
 // ################### TX ##################
 export * as typesTxCosmosAuth from "./modules/cosmos/cosmos-sdk/cosmos.auth.v1beta1/module/types/cosmos/auth/v1beta1/auth"
 export * as typesTxCosmosAuthz from "./modules/cosmos/cosmos-sdk/cosmos.authz.v1beta1/module/types/cosmos/authz/v1beta1/tx"
+export * as typesTxBank from "./modules/cosmos/cosmos-sdk/cosmos.bank.v1beta1/module/types/cosmos/bank/v1beta1/tx"
 export * as typesTxCosmosBank from "./modules/cosmos/cosmos-sdk/cosmos.bank.v1beta1/module/types/cosmos/bank/v1beta1/tx"
 export * as typesTxCosmosCrisis from "./modules/cosmos/cosmos-sdk/cosmos.crisis.v1beta1/module/types/cosmos/crisis/v1beta1/tx"
 export * as typesTxCosmosDistribution from "./modules/cosmos/cosmos-sdk/cosmos.distribution.v1beta1/module/types/cosmos/distribution/v1beta1/tx"
