@@ -4,12 +4,45 @@ import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "thesixnetwork.sixnft.nftoracle";
 
+export enum CreationFlow {
+  ORACLE = 0,
+  INTERNAL_OWNER = 1,
+  UNRECOGNIZED = -1,
+}
+
+export function creationFlowFromJSON(object: any): CreationFlow {
+  switch (object) {
+    case 0:
+    case "ORACLE":
+      return CreationFlow.ORACLE;
+    case 1:
+    case "INTERNAL_OWNER":
+      return CreationFlow.INTERNAL_OWNER;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return CreationFlow.UNRECOGNIZED;
+  }
+}
+
+export function creationFlowToJSON(object: CreationFlow): string {
+  switch (object) {
+    case CreationFlow.ORACLE:
+      return "ORACLE";
+    case CreationFlow.INTERNAL_OWNER:
+      return "INTERNAL_OWNER";
+    default:
+      return "UNKNOWN";
+  }
+}
+
 export interface ActionSigner {
   actor_address: string;
   owner_address: string;
   created_at: Date | undefined;
   expired_at: Date | undefined;
   creator: string;
+  creation_flow: CreationFlow;
 }
 
 export interface SetSignerSignature {
@@ -27,6 +60,7 @@ const baseActionSigner: object = {
   actor_address: "",
   owner_address: "",
   creator: "",
+  creation_flow: 0,
 };
 
 export const ActionSigner = {
@@ -51,6 +85,9 @@ export const ActionSigner = {
     }
     if (message.creator !== "") {
       writer.uint32(42).string(message.creator);
+    }
+    if (message.creation_flow !== 0) {
+      writer.uint32(48).int32(message.creation_flow);
     }
     return writer;
   },
@@ -80,6 +117,9 @@ export const ActionSigner = {
           break;
         case 5:
           message.creator = reader.string();
+          break;
+        case 6:
+          message.creation_flow = reader.int32() as any;
           break;
         default:
           reader.skipType(tag & 7);
@@ -116,6 +156,11 @@ export const ActionSigner = {
     } else {
       message.creator = "";
     }
+    if (object.creation_flow !== undefined && object.creation_flow !== null) {
+      message.creation_flow = creationFlowFromJSON(object.creation_flow);
+    } else {
+      message.creation_flow = 0;
+    }
     return message;
   },
 
@@ -136,6 +181,8 @@ export const ActionSigner = {
           ? message.expired_at.toISOString()
           : null);
     message.creator !== undefined && (obj.creator = message.creator);
+    message.creation_flow !== undefined &&
+      (obj.creation_flow = creationFlowToJSON(message.creation_flow));
     return obj;
   },
 
@@ -165,6 +212,11 @@ export const ActionSigner = {
       message.creator = object.creator;
     } else {
       message.creator = "";
+    }
+    if (object.creation_flow !== undefined && object.creation_flow !== null) {
+      message.creation_flow = object.creation_flow;
+    } else {
+      message.creation_flow = 0;
     }
     return message;
   },

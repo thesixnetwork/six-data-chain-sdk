@@ -25,6 +25,8 @@ export interface AttributeDefinition {
   display_value_field: string;
   display_option: DisplayOption | undefined;
   default_mint_value: DefaultMintValue | undefined;
+  /** flag that allows action to override hidden */
+  hidden_overide: boolean;
   hidden_to_marketplace: boolean;
   index: number;
 }
@@ -216,6 +218,7 @@ const baseAttributeDefinition: object = {
   data_type: "",
   required: false,
   display_value_field: "",
+  hidden_overide: false,
   hidden_to_marketplace: false,
   index: 0,
 };
@@ -249,11 +252,14 @@ export const AttributeDefinition = {
         writer.uint32(50).fork()
       ).ldelim();
     }
+    if (message.hidden_overide === true) {
+      writer.uint32(56).bool(message.hidden_overide);
+    }
     if (message.hidden_to_marketplace === true) {
-      writer.uint32(56).bool(message.hidden_to_marketplace);
+      writer.uint32(64).bool(message.hidden_to_marketplace);
     }
     if (message.index !== 0) {
-      writer.uint32(64).uint64(message.index);
+      writer.uint32(72).uint64(message.index);
     }
     return writer;
   },
@@ -290,9 +296,12 @@ export const AttributeDefinition = {
           );
           break;
         case 7:
-          message.hidden_to_marketplace = reader.bool();
+          message.hidden_overide = reader.bool();
           break;
         case 8:
+          message.hidden_to_marketplace = reader.bool();
+          break;
+        case 9:
           message.index = longToNumber(reader.uint64() as Long);
           break;
         default:
@@ -343,6 +352,11 @@ export const AttributeDefinition = {
     } else {
       message.default_mint_value = undefined;
     }
+    if (object.hidden_overide !== undefined && object.hidden_overide !== null) {
+      message.hidden_overide = Boolean(object.hidden_overide);
+    } else {
+      message.hidden_overide = false;
+    }
     if (
       object.hidden_to_marketplace !== undefined &&
       object.hidden_to_marketplace !== null
@@ -374,6 +388,8 @@ export const AttributeDefinition = {
       (obj.default_mint_value = message.default_mint_value
         ? DefaultMintValue.toJSON(message.default_mint_value)
         : undefined);
+    message.hidden_overide !== undefined &&
+      (obj.hidden_overide = message.hidden_overide);
     message.hidden_to_marketplace !== undefined &&
       (obj.hidden_to_marketplace = message.hidden_to_marketplace);
     message.index !== undefined && (obj.index = message.index);
@@ -419,6 +435,11 @@ export const AttributeDefinition = {
       );
     } else {
       message.default_mint_value = undefined;
+    }
+    if (object.hidden_overide !== undefined && object.hidden_overide !== null) {
+      message.hidden_overide = object.hidden_overide;
+    } else {
+      message.hidden_overide = false;
     }
     if (
       object.hidden_to_marketplace !== undefined &&

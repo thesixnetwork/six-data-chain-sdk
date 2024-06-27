@@ -1,9 +1,9 @@
 {
   "private": false,
   "name": "@sixnetwork/six-data-chain-sdk",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "This project is Six Data Chain Client it use for send transactions and query data from chain",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "NODE_OPTIONS='--experimental-vm-modules --experimental-specifier-resolution=node' jest",
     "build": "tsc"
