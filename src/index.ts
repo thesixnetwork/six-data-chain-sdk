@@ -25,7 +25,8 @@ export * as typesTxCosmosGov from "./modules/cosmos/cosmos-sdk/cosmos.gov.v1beta
 // DISABLE THIS FEATURE FOR PUBLIC export * as typesTxCosmosMint from "./modules/cosmos/cosmos-sdk/cosmos.mint.v1beta1/module/types/cosmos/mint/v1beta1/mint"
 export * as typesTxParams from "./modules/cosmos/cosmos-sdk/cosmos.params.v1beta1/module/types/cosmos/params/v1beta1/params"
 export * as typesTxCosmosSlashing from "./modules/cosmos/cosmos-sdk/cosmos.slashing.v1beta1/module/types/cosmos/slashing/v1beta1/tx"
-export * as typesTxCosmosStaking from "./modules/cosmos/cosmos-sdk/cosmos.staking.v1beta1/module/types/cosmos/staking/v1beta1/tx"
+export * as typesTxCosmosStakingLegacy from "./modules/cosmos/cosmos-sdk/cosmos.staking.v1beta1/module/types/cosmos/staking/v1beta1/tx"
+export * as typesTxCosmosStaking from "./modules/cosmos/cosmos-sdk/cosmos.staking.v2beta1/module/types/cosmos/staking/v2beta1/tx"
 export * as typesTxCosmosUpgrade from "./modules/cosmos/cosmos-sdk/cosmos.upgrade.v1beta1/module/types/cosmos/upgrade/v1beta1/upgrade"
 export * as typesTxCosmosVesting from "./modules/cosmos/cosmos-sdk/cosmos.vesting.v1beta1/module/types/cosmos/vesting/v1beta1/tx"
 
