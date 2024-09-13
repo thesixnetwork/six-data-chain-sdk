@@ -9,7 +9,8 @@ import * as nftadminModuleGenerate from "../modules/sixnft/thesixnetwork.sixnft.
 import * as tokenmngrModuleGenerate from "../modules/six-protocol/thesixnetwork.sixprotocol.tokenmngr/module/index"
 import * as protocoladminModuleGenerate from "../modules/six-protocol/thesixnetwork.sixprotocol.protocoladmin/module/index"
 import * as cosmosbankModuleGenerate from "../modules/cosmos/cosmos-sdk/cosmos.bank.v1beta1/module/index"
-import * as cosmosstakingModuleGenerate from "../modules/cosmos/cosmos-sdk/cosmos.staking.v1beta1/module/index"
+import * as cosmosstakingLegacyModuleGenerate from "../modules/cosmos/cosmos-sdk/cosmos.staking.v1beta1/module/index"
+import * as cosmosstakingModuleGenerate from "../modules/cosmos/cosmos-sdk/cosmos.staking.v2beta1/module/index"
 import * as cosmosTx from "../modules/cosmos/cosmos-sdk/cosmos.tx.v1beta1/module/index"
 import * as distributionModuleGenerate from "../modules/cosmos/cosmos-sdk/cosmos.distribution.v1beta1/module/index"
 
@@ -51,6 +52,7 @@ export class SixDataChainConnector {
             protocolAdminModule,
             cosmosBankModule,
             cosmosStakingModule,
+            cosmosStakingModuleLegacy,
             cosmosTxModule,
             distributionModule
         ] = await Promise.all([
@@ -61,6 +63,7 @@ export class SixDataChainConnector {
             protocoladminModuleGenerate.queryClient({ addr: this.apiUrl }),
             cosmosbankModuleGenerate.queryClient({ addr: this.apiUrl }),
             cosmosstakingModuleGenerate.queryClient({ addr: this.apiUrl }),
+            cosmosstakingLegacyModuleGenerate.queryClient({ addr: this.apiUrl }),
             cosmosTx.queryClient({ addr: this.apiUrl }),
             distributionModuleGenerate.queryClient({ addr: this.apiUrl })
         ])
@@ -72,6 +75,7 @@ export class SixDataChainConnector {
             protocolAdminModule,
             cosmosBankModule,
             cosmosStakingModule,
+            cosmosStakingModuleLegacy,
             cosmosTxModule,
             distributionModule
         }
@@ -87,12 +91,13 @@ export class SixDataChainConnector {
     connectRPCClient = async (accountSigner: OfflineSigner,options?:SigningStargateClientOptions) => {
         const [
             nftmngrModule,
-            nftadminModule,
             nftoracleModule,
+            nftAdminModule,
             tokenmngrModule,
             protocolAdminModule,
             cosmosBankModule,
             cosmosStakingModule,
+            cosmosStakingModuleLegacy,
             cosmosTxModule,
             distributionModule
         ] = await Promise.all([
@@ -103,17 +108,19 @@ export class SixDataChainConnector {
             protocoladminModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options),
             cosmosbankModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options),
             cosmosstakingModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options),
+            cosmosstakingLegacyModuleGenerate.txClient(accountSigner, { addr: this.rpcUrl },options),
             cosmosTx.txClient(accountSigner,{ addr: this.rpcUrl },options),
             distributionModuleGenerate.txClient(accountSigner,{ addr: this.rpcUrl },options)
         ])
         return {
             nftmngrModule,
-            nftadminModule,
             nftoracleModule,
+            nftAdminModule,
             tokenmngrModule,
             protocolAdminModule,
             cosmosBankModule,
             cosmosStakingModule,
+            cosmosStakingModuleLegacy,
             cosmosTxModule,
             distributionModule
         }
