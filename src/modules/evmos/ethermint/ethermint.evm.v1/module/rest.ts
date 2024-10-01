@@ -9,6 +9,29 @@
  * ---------------------------------------------------------------
  */
 
+export interface Evmv1Params {
+  /**
+   * evm denom represents the token denomination used to run the EVM state
+   * transitions.
+   */
+  evm_denom?: string;
+  enable_create?: boolean;
+  enable_call?: boolean;
+  extra_eips?: string[];
+
+  /**
+   * ChainConfig defines the Ethereum ChainConfig parameters using *sdk.Int values
+   * instead of *big.Int.
+   */
+  chain_config?: V1ChainConfig;
+
+  /**
+   * Allow unprotected transactions defines if replay-protected (i.e non EIP155
+   * signed) transactions can be executed on the state machine.
+   */
+  allow_unprotected_txs?: boolean;
+}
+
 /**
 * `Any` contains an arbitrary serialized protocol buffer message along with a
 URL that describes the type of the serialized message.
@@ -133,6 +156,21 @@ export interface RpcStatus {
   details?: ProtobufAny[];
 }
 
+export interface V1BlockOverrides {
+  number?: string;
+  defficulty?: string;
+
+  /** @format uint64 */
+  time?: string;
+
+  /** @format uint64 */
+  gas_limit?: string;
+  coinbase?: string;
+  random?: string;
+  base_fee?: string;
+  blob_base_fee?: string;
+}
+
 /**
 * ChainConfig defines the Ethereum ChainConfig parameters using *sdk.Int values
 instead of *big.Int.
@@ -154,14 +192,6 @@ export interface V1ChainConfig {
   london_block?: string;
   arrow_glacier_block?: string;
   merge_fork_block?: string;
-}
-
-export interface V1ConverterParams {
-  converter_contract?: string;
-  event_name?: string;
-  event_tuple?: string;
-  event_abi?: string;
-  enable?: boolean;
 }
 
 export interface V1EstimateGasResponse {
@@ -237,28 +267,15 @@ export interface V1MsgEthereumTxResponse {
   gas_used?: string;
 }
 
-export interface V1Params {
-  /**
-   * evm denom represents the token denomination used to run the EVM state
-   * transitions.
-   */
-  evm_denom?: string;
-  enable_create?: boolean;
-  enable_call?: boolean;
-  extra_eips?: string[];
+export interface V1OverrideAccount {
+  /** @format uint64 */
+  nonce?: string;
 
-  /**
-   * ChainConfig defines the Ethereum ChainConfig parameters using *sdk.Int values
-   * instead of *big.Int.
-   */
-  chain_config?: V1ChainConfig;
-
-  /**
-   * Allow unprotected transactions defines if replay-protected (i.e non EIP155
-   * signed) transactions can be executed on the state machine.
-   */
-  allow_unprotected_txs?: boolean;
-  converter_params?: V1ConverterParams;
+  /** @format byte */
+  code?: string;
+  balance?: string;
+  state?: Record<string, string>;
+  state_diff?: Record<string, string>;
 }
 
 /**
@@ -328,7 +345,7 @@ export interface V1QueryCosmosAccountResponse {
  */
 export interface V1QueryParamsResponse {
   /** params define the evm module parameters. */
-  params?: V1Params;
+  params?: Evmv1Params;
 }
 
 /**
@@ -366,6 +383,22 @@ export interface V1QueryValidatorAccountResponse {
 
   /** @format uint64 */
   account_number?: string;
+}
+
+/**
+ * StateOverride is a map of addresses to OverrideAccount.
+ */
+export interface V1StateOverride {
+  "accounts[string][string][string]"?: Record<string, V1OverrideAccount>;
+}
+
+export interface V1TraceCallConfig {
+  /** TraceConfig holds extra parameters to trace functions. */
+  trace_config?: V1TraceConfig;
+
+  /** StateOverride is a map of addresses to OverrideAccount. */
+  state_overrides?: V1StateOverride;
+  block_overrieds?: V1BlockOverrides;
 }
 
 /**
@@ -692,6 +725,25 @@ it's similar to feemarket module's method, but also checks london hardfork statu
    * No description
    *
    * @tags Query
+   * @name QueryEstimateGasWithOverride
+   * @request GET:/ethermint/evm/v1/estimate_gas_overides
+   */
+  queryEstimateGasWithOverride = (
+    query?: { args?: string; gas_cap?: string; "overrides.accounts[string][string]"?: any },
+    params: RequestParams = {},
+  ) =>
+    this.request<V1EstimateGasResponse, RpcStatus>({
+      path: `/ethermint/evm/v1/estimate_gas_overides`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
    * @name QueryEthCall
    * @summary EthCall implements the `eth_call` rpc api
    * @request GET:/ethermint/evm/v1/eth_call
@@ -699,6 +751,26 @@ it's similar to feemarket module's method, but also checks london hardfork statu
   queryEthCall = (query?: { args?: string; gas_cap?: string }, params: RequestParams = {}) =>
     this.request<V1MsgEthereumTxResponse, RpcStatus>({
       path: `/ethermint/evm/v1/eth_call`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryEthCallWithOverride
+   * @summary EthCall implements the `eth_call` rpc api
+   * @request GET:/ethermint/evm/v1/eth_call_overides
+   */
+  queryEthCallWithOverride = (
+    query?: { args?: string; gas_cap?: string; "overrides.accounts[string]"?: any },
+    params: RequestParams = {},
+  ) =>
+    this.request<V1MsgEthereumTxResponse, RpcStatus>({
+      path: `/ethermint/evm/v1/eth_call_overides`,
       method: "GET",
       query: query,
       format: "json",
@@ -800,6 +872,63 @@ it's similar to feemarket module's method, but also checks london hardfork statu
   ) =>
     this.request<V1QueryTraceBlockResponse, RpcStatus>({
       path: `/ethermint/evm/v1/trace_block`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryTraceCall
+   * @summary TraceTx implements the `debug_traceTransaction` rpc api
+   * @request GET:/ethermint/evm/v1/trace_call
+   */
+  queryTraceCall = (
+    query?: {
+      args?: string;
+      gas_cap?: string;
+      "config.trace_config.tracer"?: string;
+      "config.trace_config.timeout"?: string;
+      "config.trace_config.reexec"?: string;
+      "config.trace_config.disable_stack"?: boolean;
+      "config.trace_config.disable_storage"?: boolean;
+      "config.trace_config.debug"?: boolean;
+      "config.trace_config.limit"?: number;
+      "config.trace_config.overrides.homestead_block"?: string;
+      "config.trace_config.overrides.dao_fork_block"?: string;
+      "config.trace_config.overrides.dao_fork_support"?: boolean;
+      "config.trace_config.overrides.eip150_block"?: string;
+      "config.trace_config.overrides.eip150_hash"?: string;
+      "config.trace_config.overrides.eip155_block"?: string;
+      "config.trace_config.overrides.eip158_block"?: string;
+      "config.trace_config.overrides.byzantium_block"?: string;
+      "config.trace_config.overrides.constantinople_block"?: string;
+      "config.trace_config.overrides.petersburg_block"?: string;
+      "config.trace_config.overrides.istanbul_block"?: string;
+      "config.trace_config.overrides.muir_glacier_block"?: string;
+      "config.trace_config.overrides.berlin_block"?: string;
+      "config.trace_config.overrides.london_block"?: string;
+      "config.trace_config.overrides.arrow_glacier_block"?: string;
+      "config.trace_config.overrides.merge_fork_block"?: string;
+      "config.trace_config.enable_memory"?: boolean;
+      "config.trace_config.enable_return_data"?: boolean;
+      "config.state_overrides.accounts[string][string][string]"?: any;
+      "config.block_overrieds.number"?: string;
+      "config.block_overrieds.defficulty"?: string;
+      "config.block_overrieds.time"?: string;
+      "config.block_overrieds.gas_limit"?: string;
+      "config.block_overrieds.coinbase"?: string;
+      "config.block_overrieds.random"?: string;
+      "config.block_overrieds.base_fee"?: string;
+      "config.block_overrieds.blob_base_fee"?: string;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<V1QueryTraceTxResponse, RpcStatus>({
+      path: `/ethermint/evm/v1/trace_call`,
       method: "GET",
       query: query,
       format: "json",

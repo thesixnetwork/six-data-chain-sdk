@@ -16,34 +16,20 @@ export interface NftmngrAction {
   when?: string;
   then?: string[];
   allowed_actioner?: NftmngrAllowedActioner;
-  params?: NftmngractionParams[];
-}
-
-export interface NftmngrActionByRefId {
-  refId?: string;
-  creator?: string;
-  nftSchemaCode?: string;
-  tokenId?: string;
-  action?: string;
-}
-
-export interface NftmngrActionExecutor {
-  nftSchemaCode?: string;
-  executorAddress?: string;
-  creator?: string;
-}
-
-export interface NftmngrActionOfSchema {
-  nftSchemaCode?: string;
-  name?: string;
-
-  /** @format uint64 */
-  index?: string;
+  params?: NftmngrActionParams[];
 }
 
 export interface NftmngrActionParameter {
   name?: string;
   value?: string;
+}
+
+export interface NftmngrActionParams {
+  name?: string;
+  desc?: string;
+  data_type?: string;
+  required?: boolean;
+  default_value?: string;
 }
 
 export enum NftmngrAllowedActioner {
@@ -98,11 +84,6 @@ export interface NftmngrDisplayOption {
   opensea?: NftmngrOpenseaDisplayOption;
 }
 
-export interface NftmngrExecutorOfSchema {
-  nftSchemaCode?: string;
-  executorAddress?: string[];
-}
-
 export interface NftmngrFeeConfig {
   fee_amount?: string;
   fee_distributions?: NftmngrFeeDistribution[];
@@ -140,21 +121,14 @@ export interface NftmngrMapTokenToMinter {
   minter?: string;
 }
 
-export interface NftmngrMetadataCreator {
-  nftSchemaCode?: string;
-  metadataMintedBy?: NftmngrMapTokenToMinter[];
-}
-
 export interface NftmngrMsgAddActionResponse {
   code?: string;
   name?: string;
-  onchainData?: NftmngrOnChainData;
 }
 
 export interface NftmngrMsgAddAttributeResponse {
   code?: string;
   name?: string;
-  onchainData?: NftmngrOnChainData;
 }
 
 export interface NftmngrMsgChangeOrgOwnerResponse {
@@ -192,11 +166,6 @@ export interface NftmngrMsgDeleteActionExecutorResponse {
   executorAddress?: string;
 }
 
-export interface NftmngrMsgDeleteSchemaAttributeResponse {
-  nftSchemaCode?: string;
-  name?: string;
-}
-
 export interface NftmngrMsgPerformActionByAdminResponse {
   nft_schema_code?: string;
   token_id?: string;
@@ -210,6 +179,7 @@ export interface NftmngrMsgPerformMultiTokenActionResponse {
 
 export interface NftmngrMsgResyncAttributesResponse {
   nftSchemaCode?: string;
+  tokenId?: string;
 }
 
 export interface NftmngrMsgSetAttributeOveridingResponse {
@@ -255,12 +225,7 @@ export interface NftmngrMsgShowAttributesResponse {
 export interface NftmngrMsgToggleActionResponse {
   code?: string;
   name?: string;
-  onchainDataAction?: NftmngrOnChainData;
-}
-
-export interface NftmngrMsgUpdateActionExecutorResponse {
-  nftSchemaCode?: string;
-  executorAddress?: string;
+  status?: boolean;
 }
 
 export interface NftmngrMsgUpdateActionResponse {
@@ -271,31 +236,6 @@ export interface NftmngrMsgUpdateActionResponse {
 export interface NftmngrMsgUpdateSchemaAttributeResponse {
   nftSchemaCode?: string;
   name?: string;
-  new_attribute?: NftmngrSchemaAttribute;
-}
-
-export interface NftmngrNFTFeeBalance {
-  fee_balances?: string[];
-}
-
-export interface NftmngrNFTFeeConfig {
-  schema_fee?: NftmngrFeeConfig;
-}
-
-export interface NftmngrNFTSchema {
-  code?: string;
-  name?: string;
-  owner?: string;
-  description?: string;
-  origin_data?: NftmngrOriginData;
-  onchain_data?: NftmngrOnChainData;
-  isVerified?: boolean;
-  mint_authorization?: string;
-}
-
-export interface NftmngrNFTSchemaByContract {
-  originContractAddress?: string;
-  schemaCodes?: string[];
 }
 
 export interface NftmngrNftAttributeValue {
@@ -305,18 +245,6 @@ export interface NftmngrNftAttributeValue {
   boolean_attribute_value?: NftmngrBooleanAttributeValue;
   float_attribute_value?: NftmngrFloatAttributeValue;
   hidden_to_marketplace?: boolean;
-}
-
-export interface NftmngrNftData {
-  nft_schema_code?: string;
-  token_id?: string;
-  token_owner?: string;
-  owner_address_type?: NftmngrOwnerAddressType;
-  origin_image?: string;
-  onchain_image?: string;
-  token_uri?: string;
-  origin_attributes?: NftmngrNftAttributeValue[];
-  onchain_attributes?: NftmngrNftAttributeValue[];
 }
 
 export interface NftmngrNumberAttributeValue {
@@ -339,11 +267,6 @@ export interface NftmngrOpenseaDisplayOption {
   max_value?: string;
 }
 
-export interface NftmngrOrganization {
-  name?: string;
-  owner?: string;
-}
-
 export interface NftmngrOriginData {
   origin_chain?: string;
   origin_contract_address?: string;
@@ -359,13 +282,8 @@ export enum NftmngrOwnerAddressType {
   INTERNAL_ADDRESS = "INTERNAL_ADDRESS",
 }
 
-/**
- * Params defines the parameters for the module.
- */
-export type NftmngrParams = object;
-
 export interface NftmngrQueryAllActionByRefIdResponse {
-  actionByRefId?: NftmngrActionByRefId[];
+  actionByRefId?: SixnftnftmngrActionByRefId[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -380,7 +298,7 @@ export interface NftmngrQueryAllActionByRefIdResponse {
 }
 
 export interface NftmngrQueryAllActionExecutorResponse {
-  actionExecutor?: NftmngrActionExecutor[];
+  actionExecutor?: SixnftnftmngrActionExecutor[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -395,7 +313,7 @@ export interface NftmngrQueryAllActionExecutorResponse {
 }
 
 export interface NftmngrQueryAllActionOfSchemaResponse {
-  actionOfSchema?: NftmngrActionOfSchema[];
+  actionOfSchema?: SixnftnftmngrActionOfSchema[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -410,7 +328,7 @@ export interface NftmngrQueryAllActionOfSchemaResponse {
 }
 
 export interface NftmngrQueryAllExecutorOfSchemaResponse {
-  executorOfSchema?: NftmngrExecutorOfSchema[];
+  executorOfSchema?: SixnftnftmngrExecutorOfSchema[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -425,7 +343,7 @@ export interface NftmngrQueryAllExecutorOfSchemaResponse {
 }
 
 export interface NftmngrQueryAllMetadataCreatorResponse {
-  metadataCreator?: NftmngrMetadataCreator[];
+  metadataCreator?: SixnftnftmngrMetadataCreator[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -440,7 +358,7 @@ export interface NftmngrQueryAllMetadataCreatorResponse {
 }
 
 export interface NftmngrQueryAllNFTSchemaByContractResponse {
-  nFTSchemaByContract?: NftmngrNFTSchemaByContract[];
+  nFTSchemaByContract?: SixnftnftmngrNFTSchemaByContract[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -455,7 +373,7 @@ export interface NftmngrQueryAllNFTSchemaByContractResponse {
 }
 
 export interface NftmngrQueryAllNFTSchemaResponse {
-  nFTSchema?: NftmngrNFTSchema[];
+  nFTSchema?: SixnftnftmngrNFTSchema[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -470,7 +388,7 @@ export interface NftmngrQueryAllNFTSchemaResponse {
 }
 
 export interface NftmngrQueryAllNftDataResponse {
-  nftData?: NftmngrNftData[];
+  nftData?: SixnftnftmngrNftData[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -485,7 +403,7 @@ export interface NftmngrQueryAllNftDataResponse {
 }
 
 export interface NftmngrQueryAllOrganizationResponse {
-  organization?: NftmngrOrganization[];
+  organization?: SixnftnftmngrOrganization[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -500,7 +418,7 @@ export interface NftmngrQueryAllOrganizationResponse {
 }
 
 export interface NftmngrQueryAllSchemaAttributeResponse {
-  schemaAttribute?: NftmngrSchemaAttribute[];
+  schemaAttribute?: SixnftnftmngrSchemaAttribute[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -515,43 +433,43 @@ export interface NftmngrQueryAllSchemaAttributeResponse {
 }
 
 export interface NftmngrQueryGetActionByRefIdResponse {
-  actionByRefId?: NftmngrActionByRefId;
+  actionByRefId?: SixnftnftmngrActionByRefId;
 }
 
 export interface NftmngrQueryGetActionExecutorResponse {
-  actionExecutor?: NftmngrActionExecutor;
+  actionExecutor?: SixnftnftmngrActionExecutor;
 }
 
 export interface NftmngrQueryGetActionOfSchemaResponse {
-  actionOfSchema?: NftmngrActionOfSchema;
+  actionOfSchema?: SixnftnftmngrActionOfSchema;
 }
 
 export interface NftmngrQueryGetExecutorOfSchemaResponse {
-  executorOfSchema?: NftmngrExecutorOfSchema;
+  executorOfSchema?: SixnftnftmngrExecutorOfSchema;
 }
 
 export interface NftmngrQueryGetMetadataCreatorResponse {
-  metadataCreator?: NftmngrMetadataCreator;
+  metadataCreator?: SixnftnftmngrMetadataCreator;
 }
 
 export interface NftmngrQueryGetNFTFeeBalanceResponse {
-  NFTFeeBalance?: NftmngrNFTFeeBalance;
+  NFTFeeBalance?: SixnftnftmngrNFTFeeBalance;
 }
 
 export interface NftmngrQueryGetNFTFeeConfigResponse {
-  NFTFeeConfig?: NftmngrNFTFeeConfig;
+  NFTFeeConfig?: SixnftnftmngrNFTFeeConfig;
 }
 
 export interface NftmngrQueryGetNFTSchemaByContractResponse {
-  nFTSchemaByContract?: NftmngrNFTSchemaByContract;
+  nFTSchemaByContract?: SixnftnftmngrNFTSchemaByContract;
 }
 
 export interface NftmngrQueryGetNFTSchemaResponse {
-  nFTSchema?: NftmngrNFTSchema;
+  nFTSchema?: SixnftnftmngrNFTSchema;
 }
 
 export interface NftmngrQueryGetNftCollectionResponse {
-  nftCollection?: NftmngrNftData[];
+  nftCollection?: SixnftnftmngrNftData[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -566,19 +484,19 @@ export interface NftmngrQueryGetNftCollectionResponse {
 }
 
 export interface NftmngrQueryGetNftDataResponse {
-  nftData?: NftmngrNftData;
+  nftData?: SixnftnftmngrNftData;
 }
 
 export interface NftmngrQueryGetOrganizationResponse {
-  organization?: NftmngrOrganization;
+  organization?: SixnftnftmngrOrganization;
 }
 
 export interface NftmngrQueryGetSchemaAttributeResponse {
-  schemaAttribute?: NftmngrSchemaAttribute;
+  schemaAttribute?: SixnftnftmngrSchemaAttribute;
 }
 
 export interface NftmngrQueryListAttributeBySchemaResponse {
-  schemaAttribute?: NftmngrSchemaAttribute[];
+  schemaAttribute?: SixnftnftmngrSchemaAttribute[];
 }
 
 /**
@@ -586,15 +504,7 @@ export interface NftmngrQueryListAttributeBySchemaResponse {
  */
 export interface NftmngrQueryParamsResponse {
   /** params holds all the parameters of this module. */
-  params?: NftmngrParams;
-}
-
-export interface NftmngrSchemaAttribute {
-  nftSchemaCode?: string;
-  name?: string;
-  data_type?: string;
-  current_value?: NftmngrSchemaAttributeValue;
-  creator?: string;
+  params?: SixnftnftmngrParams;
 }
 
 export interface NftmngrSchemaAttributeValue {
@@ -611,14 +521,6 @@ export interface NftmngrStringAttributeValue {
 export enum NftmngrURIRetrievalMethod {
   BASE = "BASE",
   TOKEN = "TOKEN",
-}
-
-export interface NftmngractionParams {
-  name?: string;
-  desc?: string;
-  data_type?: string;
-  required?: boolean;
-  default_value?: string;
 }
 
 /**
@@ -745,6 +647,92 @@ export interface RpcStatus {
   details?: ProtobufAny[];
 }
 
+export interface SixnftnftmngrActionByRefId {
+  refId?: string;
+  creator?: string;
+  nftSchemaCode?: string;
+  tokenId?: string;
+  action?: string;
+}
+
+export interface SixnftnftmngrActionExecutor {
+  nftSchemaCode?: string;
+  executorAddress?: string;
+  creator?: string;
+}
+
+export interface SixnftnftmngrActionOfSchema {
+  nftSchemaCode?: string;
+  name?: string;
+
+  /** @format uint64 */
+  index?: string;
+}
+
+export interface SixnftnftmngrExecutorOfSchema {
+  nftSchemaCode?: string;
+  executorAddress?: string[];
+}
+
+export interface SixnftnftmngrMetadataCreator {
+  nftSchemaCode?: string;
+  metadataMintedBy?: NftmngrMapTokenToMinter[];
+}
+
+export interface SixnftnftmngrNFTFeeBalance {
+  fee_balances?: string[];
+}
+
+export interface SixnftnftmngrNFTFeeConfig {
+  schema_fee?: NftmngrFeeConfig;
+}
+
+export interface SixnftnftmngrNFTSchema {
+  code?: string;
+  name?: string;
+  owner?: string;
+  description?: string;
+  origin_data?: NftmngrOriginData;
+  onchain_data?: NftmngrOnChainData;
+  isVerified?: boolean;
+  mint_authorization?: string;
+}
+
+export interface SixnftnftmngrNFTSchemaByContract {
+  originContractAddress?: string;
+  schemaCodes?: string[];
+}
+
+export interface SixnftnftmngrNftData {
+  nft_schema_code?: string;
+  token_id?: string;
+  token_owner?: string;
+  owner_address_type?: NftmngrOwnerAddressType;
+  origin_image?: string;
+  onchain_image?: string;
+  token_uri?: string;
+  origin_attributes?: NftmngrNftAttributeValue[];
+  onchain_attributes?: NftmngrNftAttributeValue[];
+}
+
+export interface SixnftnftmngrOrganization {
+  name?: string;
+  owner?: string;
+}
+
+/**
+ * Params defines the parameters for the module.
+ */
+export type SixnftnftmngrParams = object;
+
+export interface SixnftnftmngrSchemaAttribute {
+  nftSchemaCode?: string;
+  name?: string;
+  data_type?: string;
+  current_value?: NftmngrSchemaAttributeValue;
+  creator?: string;
+}
+
 /**
 * message SomeRequest {
          Foo some_parameter = 1;
@@ -782,6 +770,13 @@ export interface V1Beta1PageRequest {
    * is set.
    */
   count_total?: boolean;
+
+  /**
+   * reverse is set to true if results are to be returned in the descending order.
+   *
+   * Since: cosmos-sdk 0.43
+   */
+  reverse?: boolean;
 }
 
 /**
@@ -993,7 +988,7 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title nftmngr/action.proto
+ * @title nftmngr/latest/action.proto
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
@@ -1011,6 +1006,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>
@@ -1052,6 +1048,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>
@@ -1093,6 +1090,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>
@@ -1134,6 +1132,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>
@@ -1191,6 +1190,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>
@@ -1233,6 +1233,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>
@@ -1259,6 +1260,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>
@@ -1338,6 +1340,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>
@@ -1379,6 +1382,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>
@@ -1420,6 +1424,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>
@@ -1477,6 +1482,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>

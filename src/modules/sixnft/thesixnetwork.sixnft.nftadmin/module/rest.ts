@@ -13,11 +13,6 @@ export interface NftadminAddressList {
   addresses?: string[];
 }
 
-export interface NftadminAuthorization {
-  root_admin?: string;
-  permissions?: NftadminPermissions;
-}
-
 export interface NftadminMsgGrantPermissionResponse {
   grantee?: string;
 }
@@ -25,11 +20,6 @@ export interface NftadminMsgGrantPermissionResponse {
 export interface NftadminMsgRevokePermissionResponse {
   revokee?: string;
 }
-
-/**
- * Params defines the parameters for the module.
- */
-export type NftadminParams = object;
 
 export interface NftadminPermission {
   name?: string;
@@ -41,7 +31,7 @@ export interface NftadminPermissions {
 }
 
 export interface NftadminQueryGetAuthorizationResponse {
-  Authorization?: NftadminAuthorization;
+  Authorization?: SixnftnftadminAuthorization;
 }
 
 /**
@@ -49,7 +39,7 @@ export interface NftadminQueryGetAuthorizationResponse {
  */
 export interface NftadminQueryParamsResponse {
   /** params holds all the parameters of this module. */
-  params?: NftadminParams;
+  params?: SixnftnftadminParams;
 }
 
 export interface ProtobufAny {
@@ -62,6 +52,16 @@ export interface RpcStatus {
   message?: string;
   details?: ProtobufAny[];
 }
+
+export interface SixnftnftadminAuthorization {
+  root_admin?: string;
+  permissions?: NftadminPermissions;
+}
+
+/**
+ * Params defines the parameters for the module.
+ */
+export type SixnftnftadminParams = object;
 
 export type QueryParamsType = Record<string | number, any>;
 export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
