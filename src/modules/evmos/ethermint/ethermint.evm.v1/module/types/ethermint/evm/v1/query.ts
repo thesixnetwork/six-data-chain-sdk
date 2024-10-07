@@ -151,6 +151,14 @@ export interface EthCallRequest {
   gas_cap: number;
 }
 
+export interface EthCallWithOverrideRequest {
+  /** same json format as the json rpc api. */
+  args: Uint8Array;
+  /** the default gas cap to be used */
+  gas_cap: number;
+  overrides: StateOverride | undefined;
+}
+
 /** EstimateGasResponse defines EstimateGas response */
 export interface EstimateGasResponse {
   /** the estimated gas */
@@ -174,6 +182,15 @@ export interface QueryTraceTxRequest {
   block_hash: string;
   /** block time of requested transaction */
   block_time: Date | undefined;
+}
+
+export interface QueryTraceCallRequest {
+  /** same json format as the json rpc api. */
+  args: Uint8Array;
+  /** the default gas cap to be used */
+  gas_cap: number;
+  /** TraceConfig holds extra parameters to trace functions. */
+  config: TraceCallConfig | undefined;
 }
 
 /** QueryTraceTxResponse defines TraceTx response */
@@ -210,6 +227,57 @@ export interface QueryBaseFeeRequest {}
 /** BaseFeeResponse returns the EIP1559 base fee. */
 export interface QueryBaseFeeResponse {
   base_fee: string;
+}
+
+export interface OverrideAccount {
+  /** Nonce of the account */
+  nonce: number;
+  /** Smart contract code of the account */
+  code: Uint8Array;
+  /** Balance of the account, as a string for compatibility with big numbers */
+  balance: string;
+  /** State of the account (key-value pairs of hashes) */
+  state: { [key: string]: string };
+  /** State diff of the account (key-value pairs of hashes) */
+  state_diff: { [key: string]: string };
+}
+
+export interface OverrideAccount_StateEntry {
+  key: string;
+  value: string;
+}
+
+export interface OverrideAccount_StateDiffEntry {
+  key: string;
+  value: string;
+}
+
+/** StateOverride is a map of addresses to OverrideAccount. */
+export interface StateOverride {
+  /** Mapping of addresses to OverrideAccount */
+  accounts: { [key: string]: OverrideAccount };
+}
+
+export interface StateOverride_AccountsEntry {
+  key: string;
+  value: OverrideAccount | undefined;
+}
+
+export interface BlockOverrides {
+  number: string;
+  defficulty: string;
+  time: number;
+  gas_limit: number;
+  coinbase: string;
+  random: string;
+  base_fee: string;
+  blob_base_fee: string;
+}
+
+export interface TraceCallConfig {
+  trace_config: TraceConfig | undefined;
+  state_overrides: StateOverride | undefined;
+  block_overrieds: BlockOverrides | undefined;
 }
 
 const baseQueryAccountRequest: object = { address: "" };
@@ -1425,6 +1493,116 @@ export const EthCallRequest = {
   },
 };
 
+const baseEthCallWithOverrideRequest: object = { gas_cap: 0 };
+
+export const EthCallWithOverrideRequest = {
+  encode(
+    message: EthCallWithOverrideRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.args.length !== 0) {
+      writer.uint32(10).bytes(message.args);
+    }
+    if (message.gas_cap !== 0) {
+      writer.uint32(16).uint64(message.gas_cap);
+    }
+    if (message.overrides !== undefined) {
+      StateOverride.encode(
+        message.overrides,
+        writer.uint32(26).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): EthCallWithOverrideRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseEthCallWithOverrideRequest,
+    } as EthCallWithOverrideRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.args = reader.bytes();
+          break;
+        case 2:
+          message.gas_cap = longToNumber(reader.uint64() as Long);
+          break;
+        case 3:
+          message.overrides = StateOverride.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): EthCallWithOverrideRequest {
+    const message = {
+      ...baseEthCallWithOverrideRequest,
+    } as EthCallWithOverrideRequest;
+    if (object.args !== undefined && object.args !== null) {
+      message.args = bytesFromBase64(object.args);
+    }
+    if (object.gas_cap !== undefined && object.gas_cap !== null) {
+      message.gas_cap = Number(object.gas_cap);
+    } else {
+      message.gas_cap = 0;
+    }
+    if (object.overrides !== undefined && object.overrides !== null) {
+      message.overrides = StateOverride.fromJSON(object.overrides);
+    } else {
+      message.overrides = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: EthCallWithOverrideRequest): unknown {
+    const obj: any = {};
+    message.args !== undefined &&
+      (obj.args = base64FromBytes(
+        message.args !== undefined ? message.args : new Uint8Array()
+      ));
+    message.gas_cap !== undefined && (obj.gas_cap = message.gas_cap);
+    message.overrides !== undefined &&
+      (obj.overrides = message.overrides
+        ? StateOverride.toJSON(message.overrides)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<EthCallWithOverrideRequest>
+  ): EthCallWithOverrideRequest {
+    const message = {
+      ...baseEthCallWithOverrideRequest,
+    } as EthCallWithOverrideRequest;
+    if (object.args !== undefined && object.args !== null) {
+      message.args = object.args;
+    } else {
+      message.args = new Uint8Array();
+    }
+    if (object.gas_cap !== undefined && object.gas_cap !== null) {
+      message.gas_cap = object.gas_cap;
+    } else {
+      message.gas_cap = 0;
+    }
+    if (object.overrides !== undefined && object.overrides !== null) {
+      message.overrides = StateOverride.fromPartial(object.overrides);
+    } else {
+      message.overrides = undefined;
+    }
+    return message;
+  },
+};
+
 const baseEstimateGasResponse: object = { gas: 0 };
 
 export const EstimateGasResponse = {
@@ -1649,6 +1827,104 @@ export const QueryTraceTxRequest = {
       message.block_time = object.block_time;
     } else {
       message.block_time = undefined;
+    }
+    return message;
+  },
+};
+
+const baseQueryTraceCallRequest: object = { gas_cap: 0 };
+
+export const QueryTraceCallRequest = {
+  encode(
+    message: QueryTraceCallRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.args.length !== 0) {
+      writer.uint32(10).bytes(message.args);
+    }
+    if (message.gas_cap !== 0) {
+      writer.uint32(16).uint64(message.gas_cap);
+    }
+    if (message.config !== undefined) {
+      TraceCallConfig.encode(message.config, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryTraceCallRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryTraceCallRequest } as QueryTraceCallRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.args = reader.bytes();
+          break;
+        case 2:
+          message.gas_cap = longToNumber(reader.uint64() as Long);
+          break;
+        case 3:
+          message.config = TraceCallConfig.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryTraceCallRequest {
+    const message = { ...baseQueryTraceCallRequest } as QueryTraceCallRequest;
+    if (object.args !== undefined && object.args !== null) {
+      message.args = bytesFromBase64(object.args);
+    }
+    if (object.gas_cap !== undefined && object.gas_cap !== null) {
+      message.gas_cap = Number(object.gas_cap);
+    } else {
+      message.gas_cap = 0;
+    }
+    if (object.config !== undefined && object.config !== null) {
+      message.config = TraceCallConfig.fromJSON(object.config);
+    } else {
+      message.config = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: QueryTraceCallRequest): unknown {
+    const obj: any = {};
+    message.args !== undefined &&
+      (obj.args = base64FromBytes(
+        message.args !== undefined ? message.args : new Uint8Array()
+      ));
+    message.gas_cap !== undefined && (obj.gas_cap = message.gas_cap);
+    message.config !== undefined &&
+      (obj.config = message.config
+        ? TraceCallConfig.toJSON(message.config)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryTraceCallRequest>
+  ): QueryTraceCallRequest {
+    const message = { ...baseQueryTraceCallRequest } as QueryTraceCallRequest;
+    if (object.args !== undefined && object.args !== null) {
+      message.args = object.args;
+    } else {
+      message.args = new Uint8Array();
+    }
+    if (object.gas_cap !== undefined && object.gas_cap !== null) {
+      message.gas_cap = object.gas_cap;
+    } else {
+      message.gas_cap = 0;
+    }
+    if (object.config !== undefined && object.config !== null) {
+      message.config = TraceCallConfig.fromPartial(object.config);
+    } else {
+      message.config = undefined;
     }
     return message;
   },
@@ -2029,6 +2305,816 @@ export const QueryBaseFeeResponse = {
   },
 };
 
+const baseOverrideAccount: object = { nonce: 0, balance: "" };
+
+export const OverrideAccount = {
+  encode(message: OverrideAccount, writer: Writer = Writer.create()): Writer {
+    if (message.nonce !== 0) {
+      writer.uint32(8).uint64(message.nonce);
+    }
+    if (message.code.length !== 0) {
+      writer.uint32(18).bytes(message.code);
+    }
+    if (message.balance !== "") {
+      writer.uint32(26).string(message.balance);
+    }
+    Object.entries(message.state).forEach(([key, value]) => {
+      OverrideAccount_StateEntry.encode(
+        { key: key as any, value },
+        writer.uint32(34).fork()
+      ).ldelim();
+    });
+    Object.entries(message.state_diff).forEach(([key, value]) => {
+      OverrideAccount_StateDiffEntry.encode(
+        { key: key as any, value },
+        writer.uint32(42).fork()
+      ).ldelim();
+    });
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): OverrideAccount {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseOverrideAccount } as OverrideAccount;
+    message.state = {};
+    message.state_diff = {};
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.nonce = longToNumber(reader.uint64() as Long);
+          break;
+        case 2:
+          message.code = reader.bytes();
+          break;
+        case 3:
+          message.balance = reader.string();
+          break;
+        case 4:
+          const entry4 = OverrideAccount_StateEntry.decode(
+            reader,
+            reader.uint32()
+          );
+          if (entry4.value !== undefined) {
+            message.state[entry4.key] = entry4.value;
+          }
+          break;
+        case 5:
+          const entry5 = OverrideAccount_StateDiffEntry.decode(
+            reader,
+            reader.uint32()
+          );
+          if (entry5.value !== undefined) {
+            message.state_diff[entry5.key] = entry5.value;
+          }
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): OverrideAccount {
+    const message = { ...baseOverrideAccount } as OverrideAccount;
+    message.state = {};
+    message.state_diff = {};
+    if (object.nonce !== undefined && object.nonce !== null) {
+      message.nonce = Number(object.nonce);
+    } else {
+      message.nonce = 0;
+    }
+    if (object.code !== undefined && object.code !== null) {
+      message.code = bytesFromBase64(object.code);
+    }
+    if (object.balance !== undefined && object.balance !== null) {
+      message.balance = String(object.balance);
+    } else {
+      message.balance = "";
+    }
+    if (object.state !== undefined && object.state !== null) {
+      Object.entries(object.state).forEach(([key, value]) => {
+        message.state[key] = String(value);
+      });
+    }
+    if (object.state_diff !== undefined && object.state_diff !== null) {
+      Object.entries(object.state_diff).forEach(([key, value]) => {
+        message.state_diff[key] = String(value);
+      });
+    }
+    return message;
+  },
+
+  toJSON(message: OverrideAccount): unknown {
+    const obj: any = {};
+    message.nonce !== undefined && (obj.nonce = message.nonce);
+    message.code !== undefined &&
+      (obj.code = base64FromBytes(
+        message.code !== undefined ? message.code : new Uint8Array()
+      ));
+    message.balance !== undefined && (obj.balance = message.balance);
+    obj.state = {};
+    if (message.state) {
+      Object.entries(message.state).forEach(([k, v]) => {
+        obj.state[k] = v;
+      });
+    }
+    obj.state_diff = {};
+    if (message.state_diff) {
+      Object.entries(message.state_diff).forEach(([k, v]) => {
+        obj.state_diff[k] = v;
+      });
+    }
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<OverrideAccount>): OverrideAccount {
+    const message = { ...baseOverrideAccount } as OverrideAccount;
+    message.state = {};
+    message.state_diff = {};
+    if (object.nonce !== undefined && object.nonce !== null) {
+      message.nonce = object.nonce;
+    } else {
+      message.nonce = 0;
+    }
+    if (object.code !== undefined && object.code !== null) {
+      message.code = object.code;
+    } else {
+      message.code = new Uint8Array();
+    }
+    if (object.balance !== undefined && object.balance !== null) {
+      message.balance = object.balance;
+    } else {
+      message.balance = "";
+    }
+    if (object.state !== undefined && object.state !== null) {
+      Object.entries(object.state).forEach(([key, value]) => {
+        if (value !== undefined) {
+          message.state[key] = String(value);
+        }
+      });
+    }
+    if (object.state_diff !== undefined && object.state_diff !== null) {
+      Object.entries(object.state_diff).forEach(([key, value]) => {
+        if (value !== undefined) {
+          message.state_diff[key] = String(value);
+        }
+      });
+    }
+    return message;
+  },
+};
+
+const baseOverrideAccount_StateEntry: object = { key: "", value: "" };
+
+export const OverrideAccount_StateEntry = {
+  encode(
+    message: OverrideAccount_StateEntry,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== "") {
+      writer.uint32(18).string(message.value);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): OverrideAccount_StateEntry {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseOverrideAccount_StateEntry,
+    } as OverrideAccount_StateEntry;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.key = reader.string();
+          break;
+        case 2:
+          message.value = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): OverrideAccount_StateEntry {
+    const message = {
+      ...baseOverrideAccount_StateEntry,
+    } as OverrideAccount_StateEntry;
+    if (object.key !== undefined && object.key !== null) {
+      message.key = String(object.key);
+    } else {
+      message.key = "";
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = String(object.value);
+    } else {
+      message.value = "";
+    }
+    return message;
+  },
+
+  toJSON(message: OverrideAccount_StateEntry): unknown {
+    const obj: any = {};
+    message.key !== undefined && (obj.key = message.key);
+    message.value !== undefined && (obj.value = message.value);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<OverrideAccount_StateEntry>
+  ): OverrideAccount_StateEntry {
+    const message = {
+      ...baseOverrideAccount_StateEntry,
+    } as OverrideAccount_StateEntry;
+    if (object.key !== undefined && object.key !== null) {
+      message.key = object.key;
+    } else {
+      message.key = "";
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = object.value;
+    } else {
+      message.value = "";
+    }
+    return message;
+  },
+};
+
+const baseOverrideAccount_StateDiffEntry: object = { key: "", value: "" };
+
+export const OverrideAccount_StateDiffEntry = {
+  encode(
+    message: OverrideAccount_StateDiffEntry,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== "") {
+      writer.uint32(18).string(message.value);
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): OverrideAccount_StateDiffEntry {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseOverrideAccount_StateDiffEntry,
+    } as OverrideAccount_StateDiffEntry;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.key = reader.string();
+          break;
+        case 2:
+          message.value = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): OverrideAccount_StateDiffEntry {
+    const message = {
+      ...baseOverrideAccount_StateDiffEntry,
+    } as OverrideAccount_StateDiffEntry;
+    if (object.key !== undefined && object.key !== null) {
+      message.key = String(object.key);
+    } else {
+      message.key = "";
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = String(object.value);
+    } else {
+      message.value = "";
+    }
+    return message;
+  },
+
+  toJSON(message: OverrideAccount_StateDiffEntry): unknown {
+    const obj: any = {};
+    message.key !== undefined && (obj.key = message.key);
+    message.value !== undefined && (obj.value = message.value);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<OverrideAccount_StateDiffEntry>
+  ): OverrideAccount_StateDiffEntry {
+    const message = {
+      ...baseOverrideAccount_StateDiffEntry,
+    } as OverrideAccount_StateDiffEntry;
+    if (object.key !== undefined && object.key !== null) {
+      message.key = object.key;
+    } else {
+      message.key = "";
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = object.value;
+    } else {
+      message.value = "";
+    }
+    return message;
+  },
+};
+
+const baseStateOverride: object = {};
+
+export const StateOverride = {
+  encode(message: StateOverride, writer: Writer = Writer.create()): Writer {
+    Object.entries(message.accounts).forEach(([key, value]) => {
+      StateOverride_AccountsEntry.encode(
+        { key: key as any, value },
+        writer.uint32(10).fork()
+      ).ldelim();
+    });
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): StateOverride {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseStateOverride } as StateOverride;
+    message.accounts = {};
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          const entry1 = StateOverride_AccountsEntry.decode(
+            reader,
+            reader.uint32()
+          );
+          if (entry1.value !== undefined) {
+            message.accounts[entry1.key] = entry1.value;
+          }
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): StateOverride {
+    const message = { ...baseStateOverride } as StateOverride;
+    message.accounts = {};
+    if (object.accounts !== undefined && object.accounts !== null) {
+      Object.entries(object.accounts).forEach(([key, value]) => {
+        message.accounts[key] = OverrideAccount.fromJSON(value);
+      });
+    }
+    return message;
+  },
+
+  toJSON(message: StateOverride): unknown {
+    const obj: any = {};
+    obj.accounts = {};
+    if (message.accounts) {
+      Object.entries(message.accounts).forEach(([k, v]) => {
+        obj.accounts[k] = OverrideAccount.toJSON(v);
+      });
+    }
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<StateOverride>): StateOverride {
+    const message = { ...baseStateOverride } as StateOverride;
+    message.accounts = {};
+    if (object.accounts !== undefined && object.accounts !== null) {
+      Object.entries(object.accounts).forEach(([key, value]) => {
+        if (value !== undefined) {
+          message.accounts[key] = OverrideAccount.fromPartial(value);
+        }
+      });
+    }
+    return message;
+  },
+};
+
+const baseStateOverride_AccountsEntry: object = { key: "" };
+
+export const StateOverride_AccountsEntry = {
+  encode(
+    message: StateOverride_AccountsEntry,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== undefined) {
+      OverrideAccount.encode(message.value, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): StateOverride_AccountsEntry {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseStateOverride_AccountsEntry,
+    } as StateOverride_AccountsEntry;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.key = reader.string();
+          break;
+        case 2:
+          message.value = OverrideAccount.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): StateOverride_AccountsEntry {
+    const message = {
+      ...baseStateOverride_AccountsEntry,
+    } as StateOverride_AccountsEntry;
+    if (object.key !== undefined && object.key !== null) {
+      message.key = String(object.key);
+    } else {
+      message.key = "";
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = OverrideAccount.fromJSON(object.value);
+    } else {
+      message.value = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: StateOverride_AccountsEntry): unknown {
+    const obj: any = {};
+    message.key !== undefined && (obj.key = message.key);
+    message.value !== undefined &&
+      (obj.value = message.value
+        ? OverrideAccount.toJSON(message.value)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<StateOverride_AccountsEntry>
+  ): StateOverride_AccountsEntry {
+    const message = {
+      ...baseStateOverride_AccountsEntry,
+    } as StateOverride_AccountsEntry;
+    if (object.key !== undefined && object.key !== null) {
+      message.key = object.key;
+    } else {
+      message.key = "";
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = OverrideAccount.fromPartial(object.value);
+    } else {
+      message.value = undefined;
+    }
+    return message;
+  },
+};
+
+const baseBlockOverrides: object = {
+  number: "",
+  defficulty: "",
+  time: 0,
+  gas_limit: 0,
+  coinbase: "",
+  random: "",
+  base_fee: "",
+  blob_base_fee: "",
+};
+
+export const BlockOverrides = {
+  encode(message: BlockOverrides, writer: Writer = Writer.create()): Writer {
+    if (message.number !== "") {
+      writer.uint32(10).string(message.number);
+    }
+    if (message.defficulty !== "") {
+      writer.uint32(18).string(message.defficulty);
+    }
+    if (message.time !== 0) {
+      writer.uint32(24).uint64(message.time);
+    }
+    if (message.gas_limit !== 0) {
+      writer.uint32(32).uint64(message.gas_limit);
+    }
+    if (message.coinbase !== "") {
+      writer.uint32(42).string(message.coinbase);
+    }
+    if (message.random !== "") {
+      writer.uint32(50).string(message.random);
+    }
+    if (message.base_fee !== "") {
+      writer.uint32(58).string(message.base_fee);
+    }
+    if (message.blob_base_fee !== "") {
+      writer.uint32(66).string(message.blob_base_fee);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): BlockOverrides {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseBlockOverrides } as BlockOverrides;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.number = reader.string();
+          break;
+        case 2:
+          message.defficulty = reader.string();
+          break;
+        case 3:
+          message.time = longToNumber(reader.uint64() as Long);
+          break;
+        case 4:
+          message.gas_limit = longToNumber(reader.uint64() as Long);
+          break;
+        case 5:
+          message.coinbase = reader.string();
+          break;
+        case 6:
+          message.random = reader.string();
+          break;
+        case 7:
+          message.base_fee = reader.string();
+          break;
+        case 8:
+          message.blob_base_fee = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): BlockOverrides {
+    const message = { ...baseBlockOverrides } as BlockOverrides;
+    if (object.number !== undefined && object.number !== null) {
+      message.number = String(object.number);
+    } else {
+      message.number = "";
+    }
+    if (object.defficulty !== undefined && object.defficulty !== null) {
+      message.defficulty = String(object.defficulty);
+    } else {
+      message.defficulty = "";
+    }
+    if (object.time !== undefined && object.time !== null) {
+      message.time = Number(object.time);
+    } else {
+      message.time = 0;
+    }
+    if (object.gas_limit !== undefined && object.gas_limit !== null) {
+      message.gas_limit = Number(object.gas_limit);
+    } else {
+      message.gas_limit = 0;
+    }
+    if (object.coinbase !== undefined && object.coinbase !== null) {
+      message.coinbase = String(object.coinbase);
+    } else {
+      message.coinbase = "";
+    }
+    if (object.random !== undefined && object.random !== null) {
+      message.random = String(object.random);
+    } else {
+      message.random = "";
+    }
+    if (object.base_fee !== undefined && object.base_fee !== null) {
+      message.base_fee = String(object.base_fee);
+    } else {
+      message.base_fee = "";
+    }
+    if (object.blob_base_fee !== undefined && object.blob_base_fee !== null) {
+      message.blob_base_fee = String(object.blob_base_fee);
+    } else {
+      message.blob_base_fee = "";
+    }
+    return message;
+  },
+
+  toJSON(message: BlockOverrides): unknown {
+    const obj: any = {};
+    message.number !== undefined && (obj.number = message.number);
+    message.defficulty !== undefined && (obj.defficulty = message.defficulty);
+    message.time !== undefined && (obj.time = message.time);
+    message.gas_limit !== undefined && (obj.gas_limit = message.gas_limit);
+    message.coinbase !== undefined && (obj.coinbase = message.coinbase);
+    message.random !== undefined && (obj.random = message.random);
+    message.base_fee !== undefined && (obj.base_fee = message.base_fee);
+    message.blob_base_fee !== undefined &&
+      (obj.blob_base_fee = message.blob_base_fee);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<BlockOverrides>): BlockOverrides {
+    const message = { ...baseBlockOverrides } as BlockOverrides;
+    if (object.number !== undefined && object.number !== null) {
+      message.number = object.number;
+    } else {
+      message.number = "";
+    }
+    if (object.defficulty !== undefined && object.defficulty !== null) {
+      message.defficulty = object.defficulty;
+    } else {
+      message.defficulty = "";
+    }
+    if (object.time !== undefined && object.time !== null) {
+      message.time = object.time;
+    } else {
+      message.time = 0;
+    }
+    if (object.gas_limit !== undefined && object.gas_limit !== null) {
+      message.gas_limit = object.gas_limit;
+    } else {
+      message.gas_limit = 0;
+    }
+    if (object.coinbase !== undefined && object.coinbase !== null) {
+      message.coinbase = object.coinbase;
+    } else {
+      message.coinbase = "";
+    }
+    if (object.random !== undefined && object.random !== null) {
+      message.random = object.random;
+    } else {
+      message.random = "";
+    }
+    if (object.base_fee !== undefined && object.base_fee !== null) {
+      message.base_fee = object.base_fee;
+    } else {
+      message.base_fee = "";
+    }
+    if (object.blob_base_fee !== undefined && object.blob_base_fee !== null) {
+      message.blob_base_fee = object.blob_base_fee;
+    } else {
+      message.blob_base_fee = "";
+    }
+    return message;
+  },
+};
+
+const baseTraceCallConfig: object = {};
+
+export const TraceCallConfig = {
+  encode(message: TraceCallConfig, writer: Writer = Writer.create()): Writer {
+    if (message.trace_config !== undefined) {
+      TraceConfig.encode(
+        message.trace_config,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    if (message.state_overrides !== undefined) {
+      StateOverride.encode(
+        message.state_overrides,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    if (message.block_overrieds !== undefined) {
+      BlockOverrides.encode(
+        message.block_overrieds,
+        writer.uint32(26).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): TraceCallConfig {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseTraceCallConfig } as TraceCallConfig;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.trace_config = TraceConfig.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.state_overrides = StateOverride.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        case 3:
+          message.block_overrieds = BlockOverrides.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): TraceCallConfig {
+    const message = { ...baseTraceCallConfig } as TraceCallConfig;
+    if (object.trace_config !== undefined && object.trace_config !== null) {
+      message.trace_config = TraceConfig.fromJSON(object.trace_config);
+    } else {
+      message.trace_config = undefined;
+    }
+    if (
+      object.state_overrides !== undefined &&
+      object.state_overrides !== null
+    ) {
+      message.state_overrides = StateOverride.fromJSON(object.state_overrides);
+    } else {
+      message.state_overrides = undefined;
+    }
+    if (
+      object.block_overrieds !== undefined &&
+      object.block_overrieds !== null
+    ) {
+      message.block_overrieds = BlockOverrides.fromJSON(object.block_overrieds);
+    } else {
+      message.block_overrieds = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: TraceCallConfig): unknown {
+    const obj: any = {};
+    message.trace_config !== undefined &&
+      (obj.trace_config = message.trace_config
+        ? TraceConfig.toJSON(message.trace_config)
+        : undefined);
+    message.state_overrides !== undefined &&
+      (obj.state_overrides = message.state_overrides
+        ? StateOverride.toJSON(message.state_overrides)
+        : undefined);
+    message.block_overrieds !== undefined &&
+      (obj.block_overrieds = message.block_overrieds
+        ? BlockOverrides.toJSON(message.block_overrieds)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<TraceCallConfig>): TraceCallConfig {
+    const message = { ...baseTraceCallConfig } as TraceCallConfig;
+    if (object.trace_config !== undefined && object.trace_config !== null) {
+      message.trace_config = TraceConfig.fromPartial(object.trace_config);
+    } else {
+      message.trace_config = undefined;
+    }
+    if (
+      object.state_overrides !== undefined &&
+      object.state_overrides !== null
+    ) {
+      message.state_overrides = StateOverride.fromPartial(
+        object.state_overrides
+      );
+    } else {
+      message.state_overrides = undefined;
+    }
+    if (
+      object.block_overrieds !== undefined &&
+      object.block_overrieds !== null
+    ) {
+      message.block_overrieds = BlockOverrides.fromPartial(
+        object.block_overrieds
+      );
+    } else {
+      message.block_overrieds = undefined;
+    }
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Account queries an Ethereum account. */
@@ -2068,6 +3154,15 @@ export interface Query {
    * it's similar to feemarket module's method, but also checks london hardfork status.
    */
   BaseFee(request: QueryBaseFeeRequest): Promise<QueryBaseFeeResponse>;
+  /** EthCall implements the `eth_call` rpc api */
+  EthCallWithOverride(
+    request: EthCallWithOverrideRequest
+  ): Promise<MsgEthereumTxResponse>;
+  EstimateGasWithOverride(
+    request: EthCallWithOverrideRequest
+  ): Promise<EstimateGasResponse>;
+  /** TraceTx implements the `debug_traceTransaction` rpc api */
+  TraceCall(request: QueryTraceCallRequest): Promise<QueryTraceTxResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -2184,6 +3279,44 @@ export class QueryClientImpl implements Query {
     const promise = this.rpc.request("ethermint.evm.v1.Query", "BaseFee", data);
     return promise.then((data) =>
       QueryBaseFeeResponse.decode(new Reader(data))
+    );
+  }
+
+  EthCallWithOverride(
+    request: EthCallWithOverrideRequest
+  ): Promise<MsgEthereumTxResponse> {
+    const data = EthCallWithOverrideRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "ethermint.evm.v1.Query",
+      "EthCallWithOverride",
+      data
+    );
+    return promise.then((data) =>
+      MsgEthereumTxResponse.decode(new Reader(data))
+    );
+  }
+
+  EstimateGasWithOverride(
+    request: EthCallWithOverrideRequest
+  ): Promise<EstimateGasResponse> {
+    const data = EthCallWithOverrideRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "ethermint.evm.v1.Query",
+      "EstimateGasWithOverride",
+      data
+    );
+    return promise.then((data) => EstimateGasResponse.decode(new Reader(data)));
+  }
+
+  TraceCall(request: QueryTraceCallRequest): Promise<QueryTraceTxResponse> {
+    const data = QueryTraceCallRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "ethermint.evm.v1.Query",
+      "TraceCall",
+      data
+    );
+    return promise.then((data) =>
+      QueryTraceTxResponse.decode(new Reader(data))
     );
   }
 }

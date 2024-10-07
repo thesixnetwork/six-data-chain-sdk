@@ -9,91 +9,9 @@
  * ---------------------------------------------------------------
  */
 
-export interface NftoracleActionOracleRequest {
-  /** @format uint64 */
-  id?: string;
-  nft_schema_code?: string;
-  token_id?: string;
-  action?: string;
-  params?: NftoracleActionParameter[];
-  caller?: string;
-  ref_id?: string;
-
-  /** @format uint64 */
-  required_confirm?: string;
-  status?: NftoracleRequestStatus;
-
-  /** @format uint64 */
-  current_confirm?: string;
-  confirmers?: string[];
-
-  /** @format date-time */
-  created_at?: string;
-
-  /** @format date-time */
-  valid_until?: string;
-  data_hashes?: NftoracleDataHash[];
-
-  /** @format int64 */
-  expired_height?: string;
-  execution_error_message?: string;
-}
-
 export interface NftoracleActionParameter {
   name?: string;
   value?: string;
-}
-
-export interface NftoracleActionSigner {
-  actor_address?: string;
-  owner_address?: string;
-
-  /** @format date-time */
-  created_at?: string;
-
-  /** @format date-time */
-  expired_at?: string;
-  creator?: string;
-  creation_flow?: NftoracleCreationFlow;
-}
-
-export interface NftoracleActionSignerConfig {
-  chain?: string;
-  contractAddress?: string;
-  creator?: string;
-}
-
-export interface NftoracleBindedSigner {
-  ownerAddress?: string;
-  signers?: NftoracleSetSignerParams[];
-
-  /** @format uint64 */
-  actorCount?: string;
-}
-
-export interface NftoracleCollectionOwnerRequest {
-  /** @format uint64 */
-  id?: string;
-  nftSchemaCode?: string;
-  signer?: string;
-
-  /** @format uint64 */
-  required_confirm?: string;
-  status?: NftoracleRequestStatus;
-
-  /** @format uint64 */
-  current_confirm?: string;
-  confirmers?: string[];
-
-  /** @format date-time */
-  created_at?: string;
-
-  /** @format date-time */
-  valid_until?: string;
-  contract_info?: NftoracleOriginContractInfo[];
-
-  /** @format int64 */
-  expired_height?: string;
 }
 
 export interface NftoracleContractInfoHash {
@@ -115,31 +33,6 @@ export interface NftoracleDataHash {
   /** @format byte */
   hash?: string;
   confirmers?: string[];
-}
-
-export interface NftoracleMintRequest {
-  /** @format uint64 */
-  id?: string;
-  nft_schema_code?: string;
-  token_id?: string;
-
-  /** @format uint64 */
-  required_confirm?: string;
-  status?: NftoracleRequestStatus;
-
-  /** @format uint64 */
-  current_confirm?: string;
-  confirmers?: string[];
-
-  /** @format date-time */
-  created_at?: string;
-
-  /** @format date-time */
-  valid_until?: string;
-  data_hashes?: NftoracleDataHash[];
-
-  /** @format int64 */
-  expired_height?: string;
 }
 
 export interface NftoracleMsgCreateActionRequestResponse {
@@ -239,11 +132,6 @@ export interface NftoracleNftOriginData {
   traits?: NftoracleTrait[];
 }
 
-export interface NftoracleOracleConfig {
-  /** @format int32 */
-  minimum_confirmation?: number;
-}
-
 export interface NftoracleOriginContractInfo {
   contractOriginDataInfo?: NftoracleOriginContractParam;
 
@@ -268,19 +156,8 @@ export interface NftoracleParameterSyncSignerByOracle {
   expire_epoch?: string;
 }
 
-/**
- * Params defines the parameters for the module.
- */
-export interface NftoracleParams {
-  mint_request_active_duration?: string;
-  action_request_active_duration?: string;
-  verify_request_active_duration?: string;
-  action_signer_active_duration?: string;
-  sync_action_signer_active_duration?: string;
-}
-
 export interface NftoracleQueryAllActionRequestResponse {
-  ActionOracleRequest?: NftoracleActionOracleRequest[];
+  ActionOracleRequest?: SixnftnftoracleActionOracleRequest[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -295,7 +172,7 @@ export interface NftoracleQueryAllActionRequestResponse {
 }
 
 export interface NftoracleQueryAllActionSignerConfigResponse {
-  actionSignerConfig?: NftoracleActionSignerConfig[];
+  actionSignerConfig?: SixnftnftoracleActionSignerConfig[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -310,7 +187,7 @@ export interface NftoracleQueryAllActionSignerConfigResponse {
 }
 
 export interface NftoracleQueryAllActionSignerResponse {
-  actionSigner?: NftoracleActionSigner[];
+  actionSigner?: SixnftnftoracleActionSigner[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -325,7 +202,7 @@ export interface NftoracleQueryAllActionSignerResponse {
 }
 
 export interface NftoracleQueryAllCollectionOwnerRequestResponse {
-  CollectionOwnerRequest?: NftoracleCollectionOwnerRequest[];
+  CollectionOwnerRequest?: SixnftnftoracleCollectionOwnerRequest[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -340,7 +217,7 @@ export interface NftoracleQueryAllCollectionOwnerRequestResponse {
 }
 
 export interface NftoracleQueryAllMintRequestResponse {
-  MintRequest?: NftoracleMintRequest[];
+  MintRequest?: SixnftnftoracleMintRequest[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -355,7 +232,7 @@ export interface NftoracleQueryAllMintRequestResponse {
 }
 
 export interface NftoracleQueryAllSyncActionSignerResponse {
-  SyncActionSigner?: NftoracleSyncActionSigner[];
+  SyncActionSigner?: SixnftnftoracleSyncActionSigner[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -370,35 +247,35 @@ export interface NftoracleQueryAllSyncActionSignerResponse {
 }
 
 export interface NftoracleQueryGetActionRequestResponse {
-  ActionOracleRequest?: NftoracleActionOracleRequest;
+  ActionOracleRequest?: SixnftnftoracleActionOracleRequest;
 }
 
 export interface NftoracleQueryGetActionSignerConfigResponse {
-  actionSignerConfig?: NftoracleActionSignerConfig;
+  actionSignerConfig?: SixnftnftoracleActionSignerConfig;
 }
 
 export interface NftoracleQueryGetActionSignerResponse {
-  actionSigner?: NftoracleActionSigner;
+  actionSigner?: SixnftnftoracleActionSigner;
 }
 
 export interface NftoracleQueryGetBindedSignerResponse {
-  bindedSigner?: NftoracleBindedSigner;
+  bindedSigner?: SixnftnftoracleBindedSigner;
 }
 
 export interface NftoracleQueryGetCollectionOwnerRequestResponse {
-  CollectionOwnerRequest?: NftoracleCollectionOwnerRequest;
+  CollectionOwnerRequest?: SixnftnftoracleCollectionOwnerRequest;
 }
 
 export interface NftoracleQueryGetMintRequestResponse {
-  MintRequest?: NftoracleMintRequest;
+  MintRequest?: SixnftnftoracleMintRequest;
 }
 
 export interface NftoracleQueryGetOracleConfigResponse {
-  OracleConfig?: NftoracleOracleConfig;
+  OracleConfig?: SixnftnftoracleOracleConfig;
 }
 
 export interface NftoracleQueryGetSyncActionSignerResponse {
-  SyncActionSigner?: NftoracleSyncActionSigner;
+  SyncActionSigner?: SixnftnftoracleSyncActionSigner;
 }
 
 /**
@@ -406,7 +283,7 @@ export interface NftoracleQueryGetSyncActionSignerResponse {
  */
 export interface NftoracleQueryParamsResponse {
   /** params holds all the parameters of this module. */
-  params?: NftoracleParams;
+  params?: SixnftnftoracleParams;
 }
 
 export enum NftoracleRequestStatus {
@@ -416,34 +293,6 @@ export enum NftoracleRequestStatus {
   EXPIRED = "EXPIRED",
   FAILED_ON_EXECUTION = "FAILED_ON_EXECUTION",
   FAILED_REJECT_BY_CONSENSUS = "FAILED_REJECT_BY_CONSENSUS",
-}
-
-export interface NftoracleSyncActionSigner {
-  /** @format uint64 */
-  id?: string;
-  chain?: string;
-  actor_address?: string;
-  owner_address?: string;
-  caller?: string;
-
-  /** @format uint64 */
-  required_confirm?: string;
-  status?: NftoracleRequestStatus;
-
-  /** @format uint64 */
-  current_confirm?: string;
-  confirmers?: string[];
-
-  /** @format date-time */
-  created_at?: string;
-
-  /** @format date-time */
-  valid_until?: string;
-  data_hashes?: NftoracleContractInfoHash[];
-
-  /** @format int64 */
-  expired_height?: string;
-  execution_error_message?: string;
 }
 
 export interface NftoracleTrait {
@@ -469,6 +318,157 @@ export interface RpcStatus {
   code?: number;
   message?: string;
   details?: ProtobufAny[];
+}
+
+export interface SixnftnftoracleActionOracleRequest {
+  /** @format uint64 */
+  id?: string;
+  nft_schema_code?: string;
+  token_id?: string;
+  action?: string;
+  params?: NftoracleActionParameter[];
+  caller?: string;
+  ref_id?: string;
+
+  /** @format uint64 */
+  required_confirm?: string;
+  status?: NftoracleRequestStatus;
+
+  /** @format uint64 */
+  current_confirm?: string;
+  confirmers?: string[];
+
+  /** @format date-time */
+  created_at?: string;
+
+  /** @format date-time */
+  valid_until?: string;
+  data_hashes?: NftoracleDataHash[];
+
+  /** @format int64 */
+  expired_height?: string;
+  execution_error_message?: string;
+}
+
+export interface SixnftnftoracleActionSigner {
+  actor_address?: string;
+  owner_address?: string;
+
+  /** @format date-time */
+  created_at?: string;
+
+  /** @format date-time */
+  expired_at?: string;
+  creator?: string;
+  creation_flow?: NftoracleCreationFlow;
+}
+
+export interface SixnftnftoracleActionSignerConfig {
+  chain?: string;
+  contractAddress?: string;
+  creator?: string;
+}
+
+export interface SixnftnftoracleBindedSigner {
+  ownerAddress?: string;
+  signers?: NftoracleSetSignerParams[];
+
+  /** @format uint64 */
+  actorCount?: string;
+}
+
+export interface SixnftnftoracleCollectionOwnerRequest {
+  /** @format uint64 */
+  id?: string;
+  nftSchemaCode?: string;
+  signer?: string;
+
+  /** @format uint64 */
+  required_confirm?: string;
+  status?: NftoracleRequestStatus;
+
+  /** @format uint64 */
+  current_confirm?: string;
+  confirmers?: string[];
+
+  /** @format date-time */
+  created_at?: string;
+
+  /** @format date-time */
+  valid_until?: string;
+  contract_info?: NftoracleOriginContractInfo[];
+
+  /** @format int64 */
+  expired_height?: string;
+}
+
+export interface SixnftnftoracleMintRequest {
+  /** @format uint64 */
+  id?: string;
+  nft_schema_code?: string;
+  token_id?: string;
+
+  /** @format uint64 */
+  required_confirm?: string;
+  status?: NftoracleRequestStatus;
+
+  /** @format uint64 */
+  current_confirm?: string;
+  confirmers?: string[];
+
+  /** @format date-time */
+  created_at?: string;
+
+  /** @format date-time */
+  valid_until?: string;
+  data_hashes?: NftoracleDataHash[];
+
+  /** @format int64 */
+  expired_height?: string;
+}
+
+export interface SixnftnftoracleOracleConfig {
+  /** @format int32 */
+  minimum_confirmation?: number;
+}
+
+/**
+ * Params defines the parameters for the module.
+ */
+export interface SixnftnftoracleParams {
+  mint_request_active_duration?: string;
+  action_request_active_duration?: string;
+  verify_request_active_duration?: string;
+  action_signer_active_duration?: string;
+  sync_action_signer_active_duration?: string;
+}
+
+export interface SixnftnftoracleSyncActionSigner {
+  /** @format uint64 */
+  id?: string;
+  chain?: string;
+  actor_address?: string;
+  owner_address?: string;
+  caller?: string;
+
+  /** @format uint64 */
+  required_confirm?: string;
+  status?: NftoracleRequestStatus;
+
+  /** @format uint64 */
+  current_confirm?: string;
+  confirmers?: string[];
+
+  /** @format date-time */
+  created_at?: string;
+
+  /** @format date-time */
+  valid_until?: string;
+  data_hashes?: NftoracleContractInfoHash[];
+
+  /** @format int64 */
+  expired_height?: string;
+  execution_error_message?: string;
 }
 
 /**

@@ -13,16 +13,6 @@ export interface ProtobufAny {
   "@type"?: string;
 }
 
-export interface ProtocoladminAdmin {
-  group?: string;
-  admin?: string;
-}
-
-export interface ProtocoladminGroup {
-  name?: string;
-  owner?: string;
-}
-
 export type ProtocoladminMsgAddAdminToGroupResponse = object;
 
 export type ProtocoladminMsgCreateGroupResponse = object;
@@ -33,13 +23,8 @@ export type ProtocoladminMsgRemoveAdminFromGroupResponse = object;
 
 export type ProtocoladminMsgUpdateGroupResponse = object;
 
-/**
- * Params defines the parameters for the module.
- */
-export type ProtocoladminParams = object;
-
 export interface ProtocoladminQueryAllAdminResponse {
-  admin?: ProtocoladminAdmin[];
+  admin?: SixprotocolprotocoladminAdmin[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -54,7 +39,7 @@ export interface ProtocoladminQueryAllAdminResponse {
 }
 
 export interface ProtocoladminQueryAllGroupResponse {
-  group?: ProtocoladminGroup[];
+  group?: SixprotocolprotocoladminGroup[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -69,11 +54,11 @@ export interface ProtocoladminQueryAllGroupResponse {
 }
 
 export interface ProtocoladminQueryGetAdminResponse {
-  admin?: ProtocoladminAdmin;
+  admin?: SixprotocolprotocoladminAdmin;
 }
 
 export interface ProtocoladminQueryGetGroupResponse {
-  group?: ProtocoladminGroup;
+  group?: SixprotocolprotocoladminGroup;
 }
 
 export interface ProtocoladminQueryListAdminOfGroupResponse {
@@ -96,7 +81,7 @@ export interface ProtocoladminQueryListAdminOfGroupResponse {
  */
 export interface ProtocoladminQueryParamsResponse {
   /** params holds all the parameters of this module. */
-  params?: ProtocoladminParams;
+  params?: SixprotocolprotocoladminParams;
 }
 
 export interface RpcStatus {
@@ -105,6 +90,21 @@ export interface RpcStatus {
   message?: string;
   details?: ProtobufAny[];
 }
+
+export interface SixprotocolprotocoladminAdmin {
+  group?: string;
+  admin?: string;
+}
+
+export interface SixprotocolprotocoladminGroup {
+  name?: string;
+  owner?: string;
+}
+
+/**
+ * Params defines the parameters for the module.
+ */
+export type SixprotocolprotocoladminParams = object;
 
 /**
 * message SomeRequest {

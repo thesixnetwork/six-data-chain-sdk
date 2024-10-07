@@ -20,24 +20,46 @@ export interface RpcStatus {
   details?: ProtobufAny[];
 }
 
-export interface TokenmngrBurn {
+export interface SixprotocoltokenmngrBurn {
   /** @format uint64 */
   id?: string;
   creator?: string;
+  token?: string;
 
-  /**
-   * Coin defines a token with a denomination and an amount.
-   *
-   * NOTE: The amount field is an Int which implements the custom method
-   * signatures required by gogoproto.
-   */
-  amount?: V1Beta1Coin;
+  /** @format uint64 */
+  amount?: string;
 }
 
-export interface TokenmngrMintperm {
+export interface SixprotocoltokenmngrMintperm {
   token?: string;
   address?: string;
   creator?: string;
+}
+
+export interface SixprotocoltokenmngrOptions {
+  defaultMintee?: string;
+}
+
+/**
+ * Params defines the parameters for the module.
+ */
+export type SixprotocoltokenmngrParams = object;
+
+export interface SixprotocoltokenmngrToken {
+  name?: string;
+  base?: string;
+
+  /** @format uint64 */
+  maxSupply?: string;
+  mintee?: string;
+  creator?: string;
+}
+
+export interface SixprotocoltokenmngrTokenBurn {
+  token?: string;
+
+  /** @format uint64 */
+  amount?: string;
 }
 
 export interface TokenmngrMsgBurnResponse {
@@ -57,32 +79,7 @@ export type TokenmngrMsgDeleteOptionsResponse = object;
 
 export type TokenmngrMsgDeleteTokenResponse = object;
 
-export interface TokenmngrMsgEnableContractConverterResponse {
-  contractAddress?: string;
-  enable?: boolean;
-}
-
 export type TokenmngrMsgMintResponse = object;
-
-export interface TokenmngrMsgSendWrapTokenResponse {
-  receiver?: string;
-  amount?: string;
-}
-
-export interface TokenmngrMsgSetConverterParamsResponse {
-  contractAddress?: string;
-  abi?: string;
-}
-
-export interface TokenmngrMsgUnwrapTokenResponse {
-  /**
-   * Coin defines a token with a denomination and an amount.
-   *
-   * NOTE: The amount field is an Int which implements the custom method
-   * signatures required by gogoproto.
-   */
-  amount?: V1Beta1Coin;
-}
 
 export type TokenmngrMsgUpdateMintpermResponse = object;
 
@@ -90,27 +87,8 @@ export type TokenmngrMsgUpdateOptionsResponse = object;
 
 export type TokenmngrMsgUpdateTokenResponse = object;
 
-export interface TokenmngrMsgWrapTokenResponse {
-  /**
-   * Coin defines a token with a denomination and an amount.
-   *
-   * NOTE: The amount field is an Int which implements the custom method
-   * signatures required by gogoproto.
-   */
-  amount?: V1Beta1Coin;
-}
-
-export interface TokenmngrOptions {
-  defaultMintee?: string;
-}
-
-/**
- * Params defines the parameters for the module.
- */
-export type TokenmngrParams = object;
-
 export interface TokenmngrQueryAllMintpermResponse {
-  mintperm?: TokenmngrMintperm[];
+  mintperm?: SixprotocoltokenmngrMintperm[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -125,7 +103,7 @@ export interface TokenmngrQueryAllMintpermResponse {
 }
 
 export interface TokenmngrQueryAllTokenBurnResponse {
-  tokenBurn?: TokenmngrTokenBurn[];
+  tokenBurn?: SixprotocoltokenmngrTokenBurn[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -140,7 +118,7 @@ export interface TokenmngrQueryAllTokenBurnResponse {
 }
 
 export interface TokenmngrQueryAllTokenResponse {
-  token?: TokenmngrToken[];
+  token?: SixprotocoltokenmngrToken[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -155,7 +133,7 @@ export interface TokenmngrQueryAllTokenResponse {
 }
 
 export interface TokenmngrQueryBurnsResponse {
-  Burn?: TokenmngrBurn[];
+  Burn?: SixprotocoltokenmngrBurn[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -170,19 +148,19 @@ export interface TokenmngrQueryBurnsResponse {
 }
 
 export interface TokenmngrQueryGetMintpermResponse {
-  mintperm?: TokenmngrMintperm;
+  mintperm?: SixprotocoltokenmngrMintperm;
 }
 
 export interface TokenmngrQueryGetOptionsResponse {
-  Options?: TokenmngrOptions;
+  Options?: SixprotocoltokenmngrOptions;
 }
 
 export interface TokenmngrQueryGetTokenBurnResponse {
-  tokenBurn?: TokenmngrTokenBurn;
+  tokenBurn?: SixprotocoltokenmngrTokenBurn;
 }
 
 export interface TokenmngrQueryGetTokenResponse {
-  token?: TokenmngrToken;
+  token?: SixprotocoltokenmngrToken;
 }
 
 /**
@@ -190,43 +168,7 @@ export interface TokenmngrQueryGetTokenResponse {
  */
 export interface TokenmngrQueryParamsResponse {
   /** params holds all the parameters of this module. */
-  params?: TokenmngrParams;
-}
-
-export interface TokenmngrToken {
-  name?: string;
-  base?: string;
-
-  /**
-   * Coin defines a token with a denomination and an amount.
-   *
-   * NOTE: The amount field is an Int which implements the custom method
-   * signatures required by gogoproto.
-   */
-  maxSupply?: V1Beta1Coin;
-  mintee?: string;
-  creator?: string;
-}
-
-export interface TokenmngrTokenBurn {
-  /**
-   * Coin defines a token with a denomination and an amount.
-   *
-   * NOTE: The amount field is an Int which implements the custom method
-   * signatures required by gogoproto.
-   */
-  amount?: V1Beta1Coin;
-}
-
-/**
-* Coin defines a token with a denomination and an amount.
-
-NOTE: The amount field is an Int which implements the custom method
-signatures required by gogoproto.
-*/
-export interface V1Beta1Coin {
-  denom?: string;
-  amount?: string;
+  params?: SixprotocoltokenmngrParams;
 }
 
 /**
@@ -266,6 +208,13 @@ export interface V1Beta1PageRequest {
    * is set.
    */
   count_total?: boolean;
+
+  /**
+   * reverse is set to true if results are to be returned in the descending order.
+   *
+   * Since: cosmos-sdk 0.43
+   */
+  reverse?: boolean;
 }
 
 /**
@@ -477,7 +426,7 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title tokenmngr/burn.proto
+ * @title tokenmngr/v1/burn.proto
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
@@ -485,9 +434,35 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
+   * @name QueryBurns
+   * @summary Queries a list of Burns items.
+   * @request GET:/thesixnetwork/six-protocol/tokenmngr/legacy/burns
+   */
+  queryBurns = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<TokenmngrQueryBurnsResponse, RpcStatus>({
+      path: `/thesixnetwork/six-protocol/tokenmngr/legacy/burns`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
    * @name QueryMintpermAll
    * @summary Queries a list of Mintperm items.
-   * @request GET:/thesixnetwork/six-protocol/tokenmngr/mintperm
+   * @request GET:/thesixnetwork/six-protocol/tokenmngr/legacy/mintperm
    */
   queryMintpermAll = (
     query?: {
@@ -495,11 +470,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>
     this.request<TokenmngrQueryAllMintpermResponse, RpcStatus>({
-      path: `/thesixnetwork/six-protocol/tokenmngr/mintperm`,
+      path: `/thesixnetwork/six-protocol/tokenmngr/legacy/mintperm`,
       method: "GET",
       query: query,
       format: "json",
@@ -512,11 +488,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryMintperm
    * @summary Queries a Mintperm by index.
-   * @request GET:/thesixnetwork/six-protocol/tokenmngr/mintperm/{token}/{address}
+   * @request GET:/thesixnetwork/six-protocol/tokenmngr/legacy/mintperm/{token}/{address}
    */
   queryMintperm = (token: string, address: string, params: RequestParams = {}) =>
     this.request<TokenmngrQueryGetMintpermResponse, RpcStatus>({
-      path: `/thesixnetwork/six-protocol/tokenmngr/mintperm/${token}/${address}`,
+      path: `/thesixnetwork/six-protocol/tokenmngr/legacy/mintperm/${token}/${address}`,
       method: "GET",
       format: "json",
       ...params,
@@ -528,11 +504,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryOptions
    * @summary Queries a Options by index.
-   * @request GET:/thesixnetwork/six-protocol/tokenmngr/options
+   * @request GET:/thesixnetwork/six-protocol/tokenmngr/legacy/options
    */
   queryOptions = (params: RequestParams = {}) =>
     this.request<TokenmngrQueryGetOptionsResponse, RpcStatus>({
-      path: `/thesixnetwork/six-protocol/tokenmngr/options`,
+      path: `/thesixnetwork/six-protocol/tokenmngr/legacy/options`,
       method: "GET",
       format: "json",
       ...params,
@@ -544,11 +520,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryParams
    * @summary Parameters queries the parameters of the module.
-   * @request GET:/thesixnetwork/six-protocol/tokenmngr/params
+   * @request GET:/thesixnetwork/six-protocol/tokenmngr/legacy/params
    */
   queryParams = (params: RequestParams = {}) =>
     this.request<TokenmngrQueryParamsResponse, RpcStatus>({
-      path: `/thesixnetwork/six-protocol/tokenmngr/params`,
+      path: `/thesixnetwork/six-protocol/tokenmngr/legacy/params`,
       method: "GET",
       format: "json",
       ...params,
@@ -560,7 +536,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryTokenAll
    * @summary Queries a list of Token items.
-   * @request GET:/thesixnetwork/six-protocol/tokenmngr/token
+   * @request GET:/thesixnetwork/six-protocol/tokenmngr/legacy/token
    */
   queryTokenAll = (
     query?: {
@@ -568,11 +544,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>
     this.request<TokenmngrQueryAllTokenResponse, RpcStatus>({
-      path: `/thesixnetwork/six-protocol/tokenmngr/token`,
+      path: `/thesixnetwork/six-protocol/tokenmngr/legacy/token`,
       method: "GET",
       query: query,
       format: "json",
@@ -585,37 +562,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryToken
    * @summary Queries a Token by index.
-   * @request GET:/thesixnetwork/six-protocol/tokenmngr/token/{name}
+   * @request GET:/thesixnetwork/six-protocol/tokenmngr/legacy/token/{name}
    */
   queryToken = (name: string, params: RequestParams = {}) =>
     this.request<TokenmngrQueryGetTokenResponse, RpcStatus>({
-      path: `/thesixnetwork/six-protocol/tokenmngr/token/${name}`,
+      path: `/thesixnetwork/six-protocol/tokenmngr/legacy/token/${name}`,
       method: "GET",
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryBurns
-   * @summary Queries a list of Burns items.
-   * @request GET:/thesixnetwork/sixprotocol/tokenmngr/burns
-   */
-  queryBurns = (
-    query?: {
-      "pagination.key"?: string;
-      "pagination.offset"?: string;
-      "pagination.limit"?: string;
-      "pagination.count_total"?: boolean;
-    },
-    params: RequestParams = {},
-  ) =>
-    this.request<TokenmngrQueryBurnsResponse, RpcStatus>({
-      path: `/thesixnetwork/sixprotocol/tokenmngr/burns`,
-      method: "GET",
-      query: query,
       format: "json",
       ...params,
     });
@@ -626,7 +578,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryTokenBurnAll
    * @summary Queries a list of TokenBurn items.
-   * @request GET:/thesixnetwork/sixprotocol/tokenmngr/token_burn
+   * @request GET:/thesixnetwork/six-protocol/tokenmngr/legacy/token_burn
    */
   queryTokenBurnAll = (
     query?: {
@@ -634,11 +586,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.offset"?: string;
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
     },
     params: RequestParams = {},
   ) =>
     this.request<TokenmngrQueryAllTokenBurnResponse, RpcStatus>({
-      path: `/thesixnetwork/sixprotocol/tokenmngr/token_burn`,
+      path: `/thesixnetwork/six-protocol/tokenmngr/legacy/token_burn`,
       method: "GET",
       query: query,
       format: "json",
@@ -651,11 +604,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryTokenBurn
    * @summary Queries a TokenBurn by index.
-   * @request GET:/thesixnetwork/sixprotocol/tokenmngr/token_burn/{token}
+   * @request GET:/thesixnetwork/six-protocol/tokenmngr/legacy/token_burn/{token}
    */
   queryTokenBurn = (token: string, params: RequestParams = {}) =>
     this.request<TokenmngrQueryGetTokenBurnResponse, RpcStatus>({
-      path: `/thesixnetwork/sixprotocol/tokenmngr/token_burn/${token}`,
+      path: `/thesixnetwork/six-protocol/tokenmngr/legacy/token_burn/${token}`,
       method: "GET",
       format: "json",
       ...params,

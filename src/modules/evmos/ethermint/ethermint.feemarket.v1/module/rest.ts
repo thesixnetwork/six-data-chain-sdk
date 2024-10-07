@@ -9,18 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-export interface ProtobufAny {
-  "@type"?: string;
-}
-
-export interface RpcStatus {
-  /** @format int32 */
-  code?: number;
-  message?: string;
-  details?: ProtobufAny[];
-}
-
-export interface V1Params {
+export interface Feemarketv1Params {
   no_base_fee?: boolean;
 
   /**
@@ -49,6 +38,17 @@ export interface V1Params {
   min_gas_multiplier?: string;
 }
 
+export interface ProtobufAny {
+  "@type"?: string;
+}
+
+export interface RpcStatus {
+  /** @format int32 */
+  code?: number;
+  message?: string;
+  details?: ProtobufAny[];
+}
+
 /**
  * BaseFeeResponse returns the EIP1559 base fee.
  */
@@ -69,7 +69,7 @@ export interface V1QueryBlockGasResponse {
  */
 export interface V1QueryParamsResponse {
   /** params define the evm module parameters. */
-  params?: V1Params;
+  params?: Feemarketv1Params;
 }
 
 export type QueryParamsType = Record<string | number, any>;

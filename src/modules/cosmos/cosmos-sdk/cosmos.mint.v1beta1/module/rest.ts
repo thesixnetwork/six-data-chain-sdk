@@ -9,6 +9,20 @@
  * ---------------------------------------------------------------
  */
 
+/**
+ * Params holds parameters for the mint module.
+ */
+export interface Mintv1Beta1Params {
+  mint_denom?: string;
+  inflation_rate_change?: string;
+  inflation_max?: string;
+  inflation_min?: string;
+  goal_bonded?: string;
+
+  /** @format uint64 */
+  blocks_per_year?: string;
+}
+
 export interface ProtobufAny {
   "@type"?: string;
 }
@@ -18,20 +32,6 @@ export interface RpcStatus {
   code?: number;
   message?: string;
   details?: ProtobufAny[];
-}
-
-/**
- * Params holds parameters for the mint module.
- */
-export interface V1Beta1Params {
-  mint_denom?: string;
-  inflation_rate_change?: string;
-  inflation_max?: string;
-  inflation_min?: string;
-  goal_bonded?: string;
-
-  /** @format uint64 */
-  blocks_per_year?: string;
 }
 
 /**
@@ -63,7 +63,7 @@ export interface V1Beta1QueryInflationResponse {
  */
 export interface V1Beta1QueryParamsResponse {
   /** params defines the parameters of the module. */
-  params?: V1Beta1Params;
+  params?: Mintv1Beta1Params;
 }
 
 export type QueryParamsType = Record<string | number, any>;

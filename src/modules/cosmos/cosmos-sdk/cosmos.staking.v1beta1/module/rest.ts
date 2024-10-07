@@ -134,6 +134,91 @@ export interface RpcStatus {
 }
 
 /**
+* Delegation represents the bond with tokens held by an account. It is
+owned by one delegator, and is associated with the voting power of one
+validator.
+*/
+export interface Stakingv1Beta1Delegation {
+  /** delegator_address is the bech32-encoded address of the delegator. */
+  delegator_address?: string;
+
+  /** validator_address is the bech32-encoded address of the validator. */
+  validator_address?: string;
+
+  /** shares define the delegation shares received. */
+  shares?: string;
+}
+
+/**
+* HistoricalInfo contains header and validator information for a given block.
+It is stored as part of staking module's state, which persists the `n` most
+recent HistoricalInfo
+(`n` is set by the staking module's `historical_entries` parameter).
+*/
+export interface Stakingv1Beta1HistoricalInfo {
+  /** Header defines the structure of a Tendermint block header. */
+  header?: TypesHeader;
+  valset?: Stakingv1Beta1Validator[];
+}
+
+/**
+ * Params defines the parameters for the staking module.
+ */
+export interface Stakingv1Beta1Params {
+  /** unbonding_time is the time duration of unbonding. */
+  unbonding_time?: string;
+
+  /**
+   * max_validators is the maximum number of validators.
+   * @format int64
+   */
+  max_validators?: number;
+
+  /**
+   * max_entries is the max entries for either unbonding delegation or redelegation (per pair/trio).
+   * @format int64
+   */
+  max_entries?: number;
+
+  /**
+   * historical_entries is the number of historical entries to persist.
+   * @format int64
+   */
+  historical_entries?: number;
+
+  /** bond_denom defines the bondable coin denomination. */
+  bond_denom?: string;
+}
+
+/**
+* Pool is used for tracking bonded and not-bonded token supply of the bond
+denomination.
+*/
+export interface Stakingv1Beta1Pool {
+  not_bonded_tokens?: string;
+  bonded_tokens?: string;
+}
+
+/**
+* UnbondingDelegation stores all of a single delegator's unbonding bonds
+for a single validator in an time-ordered list.
+*/
+export interface Stakingv1Beta1UnbondingDelegation {
+  /** delegator_address is the bech32-encoded address of the delegator. */
+  delegator_address?: string;
+
+  /** validator_address is the bech32-encoded address of the validator. */
+  validator_address?: string;
+
+  /**
+   * entries are the unbonding delegation entries.
+   *
+   * unbonding delegation entries
+   */
+  entries?: V1Beta1UnbondingDelegationEntry[];
+}
+
+/**
 * Validator defines a validator, together with the total amount of the
 Validator's bond shares and their exchange rate to coins. Slashing results in
 a decrease in the exchange rate, allowing correct calculation of future
@@ -188,6 +273,11 @@ export interface Stakingv1Beta1Validator {
   license_count?: string;
   license_mode?: boolean;
   enable_redelegation?: boolean;
+}
+
+export interface Stakingv1Beta1ValidatorApproval {
+  approver_address?: string;
+  enabled?: boolean;
 }
 
 export interface TypesBlockID {
@@ -316,22 +406,6 @@ export interface V1Beta1CommissionRates {
 }
 
 /**
-* Delegation represents the bond with tokens held by an account. It is
-owned by one delegator, and is associated with the voting power of one
-validator.
-*/
-export interface V1Beta1Delegation {
-  /** delegator_address is the bech32-encoded address of the delegator. */
-  delegator_address?: string;
-
-  /** validator_address is the bech32-encoded address of the validator. */
-  validator_address?: string;
-
-  /** shares define the delegation shares received. */
-  shares?: string;
-}
-
-/**
 * DelegationResponse is equivalent to Delegation except that it contains a
 balance in addition to shares which is more suitable for client responses.
 */
@@ -341,7 +415,7 @@ export interface V1Beta1DelegationResponse {
    * owned by one delegator, and is associated with the voting power of one
    * validator.
    */
-  delegation?: V1Beta1Delegation;
+  delegation?: Stakingv1Beta1Delegation;
 
   /**
    * Coin defines a token with a denomination and an amount.
@@ -370,18 +444,6 @@ export interface V1Beta1Description {
 
   /** details define other optional details. */
   details?: string;
-}
-
-/**
-* HistoricalInfo contains header and validator information for a given block.
-It is stored as part of staking module's state, which persists the `n` most
-recent HistoricalInfo
-(`n` is set by the staking module's `historical_entries` parameter).
-*/
-export interface V1Beta1HistoricalInfo {
-  /** Header defines the structure of a Tendermint block header. */
-  header?: TypesHeader;
-  valset?: Stakingv1Beta1Validator[];
 }
 
 /**
@@ -481,44 +543,6 @@ export interface V1Beta1PageResponse {
 }
 
 /**
- * Params defines the parameters for the staking module.
- */
-export interface V1Beta1Params {
-  /** unbonding_time is the time duration of unbonding. */
-  unbonding_time?: string;
-
-  /**
-   * max_validators is the maximum number of validators.
-   * @format int64
-   */
-  max_validators?: number;
-
-  /**
-   * max_entries is the max entries for either unbonding delegation or redelegation (per pair/trio).
-   * @format int64
-   */
-  max_entries?: number;
-
-  /**
-   * historical_entries is the number of historical entries to persist.
-   * @format int64
-   */
-  historical_entries?: number;
-
-  /** bond_denom defines the bondable coin denomination. */
-  bond_denom?: string;
-}
-
-/**
-* Pool is used for tracking bonded and not-bonded token supply of the bond
-denomination.
-*/
-export interface V1Beta1Pool {
-  not_bonded_tokens?: string;
-  bonded_tokens?: string;
-}
-
-/**
  * QueryDelegationResponse is response type for the Query/Delegation RPC method.
  */
 export interface V1Beta1QueryDelegationResponse {
@@ -543,7 +567,7 @@ export interface V1Beta1QueryDelegatorDelegationsResponse {
 Query/UnbondingDelegatorDelegations RPC method.
 */
 export interface V1Beta1QueryDelegatorUnbondingDelegationsResponse {
-  unbonding_responses?: V1Beta1UnbondingDelegation[];
+  unbonding_responses?: Stakingv1Beta1UnbondingDelegation[];
 
   /** pagination defines the pagination in the response. */
   pagination?: V1Beta1PageResponse;
@@ -576,7 +600,7 @@ method.
 */
 export interface V1Beta1QueryHistoricalInfoResponse {
   /** hist defines the historical info at the given height. */
-  hist?: V1Beta1HistoricalInfo;
+  hist?: Stakingv1Beta1HistoricalInfo;
 }
 
 /**
@@ -584,7 +608,7 @@ export interface V1Beta1QueryHistoricalInfoResponse {
  */
 export interface V1Beta1QueryParamsResponse {
   /** params holds all the parameters of this module. */
-  params?: V1Beta1Params;
+  params?: Stakingv1Beta1Params;
 }
 
 /**
@@ -592,7 +616,7 @@ export interface V1Beta1QueryParamsResponse {
  */
 export interface V1Beta1QueryPoolResponse {
   /** pool defines the pool info. */
-  pool?: V1Beta1Pool;
+  pool?: Stakingv1Beta1Pool;
 }
 
 /**
@@ -612,11 +636,11 @@ RPC method.
 */
 export interface V1Beta1QueryUnbondingDelegationResponse {
   /** unbond defines the unbonding information of a delegation. */
-  unbond?: V1Beta1UnbondingDelegation;
+  unbond?: Stakingv1Beta1UnbondingDelegation;
 }
 
 export interface V1Beta1QueryValidatorApprovalResponse {
-  validator_approval?: V1Beta1ValidatorApproval;
+  validator_approval?: Stakingv1Beta1ValidatorApproval;
 }
 
 export interface V1Beta1QueryValidatorDelegationsResponse {
@@ -636,7 +660,7 @@ export interface V1Beta1QueryValidatorResponse {
 Query/ValidatorUnbondingDelegations RPC method.
 */
 export interface V1Beta1QueryValidatorUnbondingDelegationsResponse {
-  unbonding_responses?: V1Beta1UnbondingDelegation[];
+  unbonding_responses?: Stakingv1Beta1UnbondingDelegation[];
 
   /** pagination defines the pagination in the response. */
   pagination?: V1Beta1PageResponse;
@@ -721,25 +745,6 @@ export interface V1Beta1RedelegationResponse {
 }
 
 /**
-* UnbondingDelegation stores all of a single delegator's unbonding bonds
-for a single validator in an time-ordered list.
-*/
-export interface V1Beta1UnbondingDelegation {
-  /** delegator_address is the bech32-encoded address of the delegator. */
-  delegator_address?: string;
-
-  /** validator_address is the bech32-encoded address of the validator. */
-  validator_address?: string;
-
-  /**
-   * entries are the unbonding delegation entries.
-   *
-   * unbonding delegation entries
-   */
-  entries?: V1Beta1UnbondingDelegationEntry[];
-}
-
-/**
  * UnbondingDelegationEntry defines an unbonding object with relevant metadata.
  */
 export interface V1Beta1UnbondingDelegationEntry {
@@ -760,11 +765,6 @@ export interface V1Beta1UnbondingDelegationEntry {
 
   /** balance defines the tokens to receive at completion. */
   balance?: string;
-}
-
-export interface V1Beta1ValidatorApproval {
-  approver_address?: string;
-  enabled?: boolean;
 }
 
 /**

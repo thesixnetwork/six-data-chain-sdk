@@ -24,15 +24,6 @@ export interface Params {
    * signed) transactions can be executed on the state machine.
    */
   allow_unprotected_txs: boolean;
-  converter_params: ConverterParams | undefined;
-}
-
-export interface ConverterParams {
-  converter_contract: string;
-  event_name: string;
-  event_tuple: string;
-  event_abi: string;
-  enable: boolean;
 }
 
 /**
@@ -214,12 +205,6 @@ export const Params = {
     if (message.allow_unprotected_txs === true) {
       writer.uint32(48).bool(message.allow_unprotected_txs);
     }
-    if (message.converter_params !== undefined) {
-      ConverterParams.encode(
-        message.converter_params,
-        writer.uint32(58).fork()
-      ).ldelim();
-    }
     return writer;
   },
 
@@ -255,12 +240,6 @@ export const Params = {
           break;
         case 6:
           message.allow_unprotected_txs = reader.bool();
-          break;
-        case 7:
-          message.converter_params = ConverterParams.decode(
-            reader,
-            reader.uint32()
-          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -306,16 +285,6 @@ export const Params = {
     } else {
       message.allow_unprotected_txs = false;
     }
-    if (
-      object.converter_params !== undefined &&
-      object.converter_params !== null
-    ) {
-      message.converter_params = ConverterParams.fromJSON(
-        object.converter_params
-      );
-    } else {
-      message.converter_params = undefined;
-    }
     return message;
   },
 
@@ -337,10 +306,6 @@ export const Params = {
         : undefined);
     message.allow_unprotected_txs !== undefined &&
       (obj.allow_unprotected_txs = message.allow_unprotected_txs);
-    message.converter_params !== undefined &&
-      (obj.converter_params = message.converter_params
-        ? ConverterParams.toJSON(message.converter_params)
-        : undefined);
     return obj;
   },
 
@@ -379,153 +344,6 @@ export const Params = {
       message.allow_unprotected_txs = object.allow_unprotected_txs;
     } else {
       message.allow_unprotected_txs = false;
-    }
-    if (
-      object.converter_params !== undefined &&
-      object.converter_params !== null
-    ) {
-      message.converter_params = ConverterParams.fromPartial(
-        object.converter_params
-      );
-    } else {
-      message.converter_params = undefined;
-    }
-    return message;
-  },
-};
-
-const baseConverterParams: object = {
-  converter_contract: "",
-  event_name: "",
-  event_tuple: "",
-  event_abi: "",
-  enable: false,
-};
-
-export const ConverterParams = {
-  encode(message: ConverterParams, writer: Writer = Writer.create()): Writer {
-    if (message.converter_contract !== "") {
-      writer.uint32(10).string(message.converter_contract);
-    }
-    if (message.event_name !== "") {
-      writer.uint32(18).string(message.event_name);
-    }
-    if (message.event_tuple !== "") {
-      writer.uint32(26).string(message.event_tuple);
-    }
-    if (message.event_abi !== "") {
-      writer.uint32(34).string(message.event_abi);
-    }
-    if (message.enable === true) {
-      writer.uint32(40).bool(message.enable);
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): ConverterParams {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseConverterParams } as ConverterParams;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.converter_contract = reader.string();
-          break;
-        case 2:
-          message.event_name = reader.string();
-          break;
-        case 3:
-          message.event_tuple = reader.string();
-          break;
-        case 4:
-          message.event_abi = reader.string();
-          break;
-        case 5:
-          message.enable = reader.bool();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): ConverterParams {
-    const message = { ...baseConverterParams } as ConverterParams;
-    if (
-      object.converter_contract !== undefined &&
-      object.converter_contract !== null
-    ) {
-      message.converter_contract = String(object.converter_contract);
-    } else {
-      message.converter_contract = "";
-    }
-    if (object.event_name !== undefined && object.event_name !== null) {
-      message.event_name = String(object.event_name);
-    } else {
-      message.event_name = "";
-    }
-    if (object.event_tuple !== undefined && object.event_tuple !== null) {
-      message.event_tuple = String(object.event_tuple);
-    } else {
-      message.event_tuple = "";
-    }
-    if (object.event_abi !== undefined && object.event_abi !== null) {
-      message.event_abi = String(object.event_abi);
-    } else {
-      message.event_abi = "";
-    }
-    if (object.enable !== undefined && object.enable !== null) {
-      message.enable = Boolean(object.enable);
-    } else {
-      message.enable = false;
-    }
-    return message;
-  },
-
-  toJSON(message: ConverterParams): unknown {
-    const obj: any = {};
-    message.converter_contract !== undefined &&
-      (obj.converter_contract = message.converter_contract);
-    message.event_name !== undefined && (obj.event_name = message.event_name);
-    message.event_tuple !== undefined &&
-      (obj.event_tuple = message.event_tuple);
-    message.event_abi !== undefined && (obj.event_abi = message.event_abi);
-    message.enable !== undefined && (obj.enable = message.enable);
-    return obj;
-  },
-
-  fromPartial(object: DeepPartial<ConverterParams>): ConverterParams {
-    const message = { ...baseConverterParams } as ConverterParams;
-    if (
-      object.converter_contract !== undefined &&
-      object.converter_contract !== null
-    ) {
-      message.converter_contract = object.converter_contract;
-    } else {
-      message.converter_contract = "";
-    }
-    if (object.event_name !== undefined && object.event_name !== null) {
-      message.event_name = object.event_name;
-    } else {
-      message.event_name = "";
-    }
-    if (object.event_tuple !== undefined && object.event_tuple !== null) {
-      message.event_tuple = object.event_tuple;
-    } else {
-      message.event_tuple = "";
-    }
-    if (object.event_abi !== undefined && object.event_abi !== null) {
-      message.event_abi = object.event_abi;
-    } else {
-      message.event_abi = "";
-    }
-    if (object.enable !== undefined && object.enable !== null) {
-      message.enable = object.enable;
-    } else {
-      message.enable = false;
     }
     return message;
   },
