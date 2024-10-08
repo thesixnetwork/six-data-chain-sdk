@@ -5,7 +5,7 @@ globalThis.fetch = fetch
 export * from "./client/SixDataChainConnector"
 export * from "./helper/base64"
 // legacy code will be replicated and replaced with typesTxNFTManager
-export * as ITxNFTmngr from "./modules/sixnft/thesixnetwork.sixnft.nftmngr/module/types/nftmngr/tx"
+export * as ITxNFTmngr from "./modules/sixnft/thesixnetwork.sixnft.nftmngr/module/types/nftmngr/latest/tx"
 // legacy code will be replicated and replaced with typesTxNFTAdmin
 export * as ITxNFTadmin from "./modules/sixnft/thesixnetwork.sixnft.nftadmin/module/types/nftadmin/tx"
 // legacy code will be replicated and replaced with typesTxNFTOracle
@@ -57,12 +57,6 @@ export * as typesQueryEthermintEvm from "./modules/evmos/ethermint/ethermint.evm
 export * as typesQueryEthermintFeemarket from "./modules/evmos/ethermint/ethermint.feemarket.v1/module/types/ethermint/feemarket/v1/query"
 
 // ############### EVMOS ###############
-// ################### TX ##################
-export * as typesTxEvmosErc20 from "./modules/evmos/v6/evmos.erc20.v1/module/types/evmos/erc20/v1/tx"
-// ############### Query ################
-export * as typesQueryEvmosErc20 from "./modules/evmos/v6/evmos.erc20.v1/module/types/evmos/erc20/v1/query"
-export * as typesQueryEvmosRecovery from "./modules/evmos/v6/evmos.recovery.v1/module/types/evmos/recovery/v1/query"
-
 
 // ############### TENDERMINT IBC ###############
 // ################### TX ##################
@@ -87,23 +81,23 @@ export * as typesCoreIBCChannel from "./modules/ibc-go/v3/ibc.core.channel.v1/mo
 
 // ############### SIX PROTOCOL ###############
 // ################### TX ##################
-export * as typesTxTokenManager from "./modules/six-protocol/thesixnetwork.sixprotocol.tokenmngr/module/types/tokenmngr/tx"
+export * as typesTxTokenManager from "./modules/six-protocol/thesixnetwork.sixprotocol.tokenmngr.v2/module/types/tokenmngr/v2/tx"
 export * as typesTxProtocolAdmin from "./modules/six-protocol/thesixnetwork.sixprotocol.protocoladmin/module/types/protocoladmin/tx"
 
 // ################### Query ##################
 export * as typesQueryProtocolAdmin from "./modules/six-protocol/thesixnetwork.sixprotocol.protocoladmin/module/types/protocoladmin/query"
-export * as typesQueryTokenManager from "./modules/six-protocol/thesixnetwork.sixprotocol.tokenmngr/module/types/tokenmngr/query"
+export * as typesQueryTokenManager from "./modules/six-protocol/thesixnetwork.sixprotocol.tokenmngr.v2/module/types/tokenmngr/v2/query"
 
 
 // ############### SIXNFT ###############
 // ################### TX ##################
 // legacy code will be replicated and replaced with typesTxNFTOracle
 export * as ITxNFToracle from "./modules/sixnft/thesixnetwork.sixnft.nftoracle/module/types/nftoracle/tx"
-export * as typesTxNFTManager from "./modules/sixnft/thesixnetwork.sixnft.nftmngr/module/types/nftmngr/tx"
+export * as typesTxNFTManager from "./modules/sixnft/thesixnetwork.sixnft.nftmngr/module/types/nftmngr/latest/tx"
 export * as typesTxNFTAdmin from "./modules/sixnft/thesixnetwork.sixnft.nftadmin/module/types/nftadmin/tx"
 export * as typesTxNFTOracle from "./modules/sixnft/thesixnetwork.sixnft.nftoracle/module/types/nftoracle/tx"
 
 // ################### Query ##################
 export * as typesQueryNFTOracle from "./modules/sixnft/thesixnetwork.sixnft.nftoracle/module/types/nftoracle/query"
-export * as typesQueryNFTManager from "./modules/sixnft/thesixnetwork.sixnft.nftmngr/module/types/nftmngr/query"
+export * as typesQueryNFTManager from "./modules/sixnft/thesixnetwork.sixnft.nftmngr/module/types/nftmngr/latest/query"
 export * as typesQueryNFTAdmin from "./modules/sixnft/thesixnetwork.sixnft.nftadmin/module/types/nftadmin/query"
