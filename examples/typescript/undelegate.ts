@@ -27,8 +27,8 @@ const unDelegate = async () => {
         validator_address: validator_address
     }
 
-    const msg = await rpcClient.cosmosStakingModule.msgUndelegate(msgDelegate)
-    const txResponse = await rpcClient.nftmngrModule.signAndBroadcast([msg], {
+    const msg = rpcClient.cosmosStakingModule.msgUndelegate(msgDelegate)
+    const txResponse = await rpcClient.cosmosStakingModule.signAndBroadcast([msg], {
         fee: "auto",
         memo: "memo",
     });

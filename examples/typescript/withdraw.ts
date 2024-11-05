@@ -1,7 +1,7 @@
 import { SixDataChainConnector, BASE64, typesTxCosmosStaking, fee } from "../../src";
 import { Coin } from "../../src/modules/six-protocol/thesixnetwork.sixprotocol.tokenmngr/module/types/cosmos/base/v1beta1/coin";
 
-const delegate = async () => {
+const unDelegate = async () => {
     const sixConnector = new SixDataChainConnector();
     sixConnector.rpcUrl = "http://localhost:26657";
 
@@ -21,21 +21,21 @@ const delegate = async () => {
         denom: "usix"
     }
 
-    const msgDelegate: typesTxCosmosStaking.MsgDelegate = {
+    const msgDelegate: typesTxCosmosStaking.MsgUndelegate = {
         amount: delegate_amount,
         delegator_address: address,
         validator_address: validator_address
     }
 
-    const msg = rpcClient.cosmosStakingModule.msgDelegate(msgDelegate)
-    const txResponse = await rpcClient.cosmosStakingModule.signAndBroadcast([msg], {
+    const msg = rpcClient.cosmosStakingModule.msgUndelegate(msgDelegate)
+    const txResponse = await rpcClient.nftmngrModule.signAndBroadcast([msg], {
         fee: "auto",
         memo: "memo",
     });
     console.log(txResponse);
 }
 
-delegate().then(() => {
+unDelegate().then(() => {
     console.log
 }).catch(() => {
     console.log
