@@ -1,3 +1,7 @@
+## DEPRECATED
+This repository is no longer maintained. Please use the new repository [thesixnetwork/sixchain-sdk](https://github.com/thesixnetwork/sixchainJS) instead.
+
+
 <img src="https://six.network/wp-content/uploads/2022/04/NEW-six-web-Add-SIX-Protocol-08.png" width="200"/>
 <!-- This content will not appear in the rendered Markdown -->
 
